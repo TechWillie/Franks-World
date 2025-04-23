@@ -1,0 +1,38 @@
+.chat-box {
+    display: flexbox;
+    
+    width: 300px;
+    margin: 20rem auto;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 8px;
+    background: #f9f9f9;
+  }
+  
+  .messages {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+  }
+  
+  .message {
+    padding: 0.5rem;
+    background: #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .input-area {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .input-area input {
+    flex: 1;
+    padding: 0.5rem;
+  }
+  
+  .input-area button {
+    padding: 0.5rem 1rem;
+  }
+  
