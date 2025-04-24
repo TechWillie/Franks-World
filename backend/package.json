@@ -11,7 +11,6 @@
     "start:development": "nodemon ./bin/www",
     "start:production": "node ./bin/www",
     "build": "node psql-setup-script.js"
-
   },
   "repository": {
     "type": "git",
@@ -31,6 +30,7 @@
   "homepage": "https://github.com/TechWillie/Franks-World#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "csurf": "^1.11.0",
