@@ -14,6 +14,14 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true
       },
+      firstName: {
+        type: Sequelize.STRING(50),
+        allowNull: false
+      },
+      lastName: {
+        type: Sequelize.STRING(50),
+        allowNull: false
+      },
       username: {
         type: Sequelize.STRING(50),
         unique: true,
