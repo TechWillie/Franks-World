@@ -17,12 +17,12 @@ router.post('/test', function(req, res) {
     res.json({ requestBody: req.body });
   });
 
-// router.get(
-//   '/restore-user',
-//   (req, res) => {
-//     return res.json(req.user);
-//   }
-// );
+router.get(
+  '/restore-user',
+  (req, res) => {
+    return res.json(req.user);
+  }
+);
 
 //   // GET /api/set-token-cookie
 // const { setTokenCookie } = require('../../utils/auth.js');

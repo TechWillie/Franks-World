@@ -3,20 +3,35 @@ const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 // const csrf = require('csurf');
 // const csrfProtection = csrf({ cookie: true });
+const { check } = require('express-validator');
+const { handleValidationErrors } = require('../../utils/validation');
+// ...
 
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User } = require('../../db/models');
 // const user = require('../../db/models/user');
 
+const validateLogin = [
+  check('credential')
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage('Please provide Frank a valid email or username.'),
+  check('password')
+    .exists({ checkFalsy: true })
+    .withMessage('Please provide Frank a password.'),
+  handleValidationErrors
+];
+
 
 
 const router = express.Router();
 
 
-// Login User
+// Log in
 router.post(
   '/',
+  validateLogin,
   async (req, res, next) => {
     const { credential, password } = req.body;
 
@@ -30,9 +45,9 @@ router.post(
     });
 
     if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
-      const err = new Error('Login failed');
+      const err = new Error('Login to Franks World failed');
       err.status = 401;
-      err.title = 'Franks World Login failed';
+      err.title = 'Franks world Login failed';
       err.errors = { credential: 'The provided credentials were invalid.' };
       return next(err);
     }
@@ -50,7 +65,6 @@ router.post(
     });
   }
 );
-
 // Log out
 router.delete(
   '/',
@@ -59,7 +73,7 @@ router.delete(
     return res.json({ message: 'success' });
   }
 );
-
+// GET session user if any
 router.get(
   '/',
   (req, res) => {
