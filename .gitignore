@@ -37,3 +37,4 @@ Desktop.ini
 android/
 ios/
 build/
+backend/db/dev.db
