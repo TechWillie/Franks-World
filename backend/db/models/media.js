@@ -10,6 +10,11 @@ module.exports = (sequelize) => {
   }
 
   Media.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     url: {
       type: DataTypes.STRING,
       allowNull: false
