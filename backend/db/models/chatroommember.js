@@ -12,10 +12,12 @@ module.exports = (sequelize) => {
     },
     userId: {
       type: DataTypes.INTEGER,
+      references: { model: 'Users', key: 'id' },
       allowNull: false
     },
     chatRoomId: {
       type: DataTypes.INTEGER,
+      references: { model: 'ChatRooms', key: 'id' },  
       allowNull: false
     }
   }, {

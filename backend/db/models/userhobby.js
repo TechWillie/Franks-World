@@ -24,7 +24,7 @@ module.exports = (sequelize) => {
     hobbyId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: { model: 'Hobbie', key: 'id' },
+      references: { model: 'Hobbies', key: 'id' },
       onDelete: 'CASCADE'
     }
   }, {
