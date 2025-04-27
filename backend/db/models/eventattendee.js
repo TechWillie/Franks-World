@@ -5,18 +5,18 @@ module.exports = (sequelize) => {
   class EventAttendee extends Model {}
 
   EventAttendee.init({
-    event_Id: {
+    eventId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    user_Id: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false
     }
   }, {
     sequelize,
     modelName: 'EventAttendee',
-    tableName: 'Event_Attendees',
+    tableName: 'EventAttendees',
     timestamps: true
   });
 

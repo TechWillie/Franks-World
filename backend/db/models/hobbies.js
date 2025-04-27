@@ -17,11 +17,15 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false
     }
   }, {
     sequelize,
     modelName: 'Hobbie',
-    tableName: 'Hobbies', // Matches your table name in migration
+    tableName: 'hobbies', // Matches your table name in migration
     timestamps: true
   });
   return Hobbie;

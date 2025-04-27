@@ -14,11 +14,11 @@ module.exports = (sequelize) => {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    user_Id: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    chat_Room_Id: {
+    chatRoomId: {
       type: DataTypes.INTEGER,
       allowNull: false
     }

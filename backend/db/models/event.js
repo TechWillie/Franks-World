@@ -6,6 +6,7 @@ module.exports = (sequelize) => {
     static associate(models) {
       Event.belongsTo(models.Place, { foreignKey: 'placeId' });
       Event.belongsTo(models.ChatRoom, { foreignKey: 'chatRoomId' });
+      
       Event.belongsToMany(models.User, {
         through: 'EventAttendees',
         foreignKey: 'eventId',
@@ -34,7 +35,7 @@ module.exports = (sequelize) => {
   }, {
     sequelize,
     modelName: 'Event',
-    tableName: 'Events',
+    tableName: 'events',
     timestamps: true
   });
 

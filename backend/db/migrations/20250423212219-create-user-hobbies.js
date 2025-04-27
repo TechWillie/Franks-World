@@ -9,15 +9,15 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('user_hobbies', {
-      user_id: {
+    await queryInterface.createTable('UserHobbies', {
+      userId: {
         type: Sequelize.INTEGER,
-        references: { model: 'users', key: 'id' },
+        references: { model: 'Users', key: 'id' },
         onDelete: 'CASCADE'
       },
-      hobby_id: {
+      hobbyId: {
         type: Sequelize.INTEGER,
-        references: { model: 'hobbies', key: 'id' },
+        references: { model: 'Hobbies', key: 'id' },
         onDelete: 'CASCADE'
       },
       createdAt: {
@@ -32,7 +32,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    options.tableName = 'user_hobbies';
+    options.tableName = 'UserHobbies';
     await queryInterface.dropTable(options);
   }
 };

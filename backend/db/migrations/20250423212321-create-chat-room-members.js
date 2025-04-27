@@ -9,15 +9,15 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('chat_room_members', {
-      user_id: {
+    await queryInterface.createTable('ChatRoomMembers', {
+      userId: {
         type: Sequelize.INTEGER,
-        references: { model: 'users', key: 'id' },
+        references: { model: 'Users', key: 'id' },
         onDelete: 'CASCADE'
       },
-      chat_room_id: {
+      chatRoomId: {
         type: Sequelize.INTEGER,
-        references: { model: 'chat_rooms', key: 'id' },
+        references: { model: 'ChatRooms', key: 'id' },
         onDelete: 'CASCADE'
       },
       createdAt: {
@@ -28,7 +28,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    options.tableName = 'chat_room_members';
+    options.tableName = 'ChatRoomMembers';
     await queryInterface.dropTable(options);
   }
 };

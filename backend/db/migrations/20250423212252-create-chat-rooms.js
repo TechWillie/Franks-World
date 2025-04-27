@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('chat_rooms', {
+    await queryInterface.createTable('ChatRooms', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -19,7 +19,7 @@ module.exports = {
         type: Sequelize.STRING(100),
         allowNull: false
       },
-      is_private: {
+      isPrivate: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
@@ -35,7 +35,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    options.tableName = 'chat_rooms';
+    options.tableName = 'ChatRooms';
     await queryInterface.dropTable(options);
   }
 };

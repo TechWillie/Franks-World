@@ -5,7 +5,7 @@ module.exports = (sequelize) => {
   class ChatRoom extends Model {
     static associate(models) {
       ChatRoom.belongsToMany(models.User, {
-        through: 'Chat_Room_Members',
+        through: 'ChatRoomMembers',
         foreignKey: 'chatRoomId',
         otherKey: 'userId'
       });
@@ -19,11 +19,11 @@ module.exports = (sequelize) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false
-    }
+    },
   }, {
     sequelize,
     modelName: 'ChatRoom',
-    tableName: 'Chat_Rooms',
+    tableName: 'ChatRooms',
     timestamps: true
   });
 

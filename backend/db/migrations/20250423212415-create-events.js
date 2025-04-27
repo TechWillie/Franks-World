@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('events', {
+    await queryInterface.createTable('Events', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -20,23 +20,23 @@ module.exports = {
         type: Sequelize.STRING(100),
         allowNull: false
       },
-      place_id: {
+      placeId: {
         type: Sequelize.INTEGER,
-        references: { model: 'places', key: 'id' },
+        references: { model: 'Places', key: 'id' },
         onDelete: 'SET NULL'
       },
-      host_id: {
+      hostId: {
         type: Sequelize.INTEGER,
-        references: { model: 'users', key: 'id' },
+        references: { model: 'Users', key: 'id' },
         onDelete: 'SET NULL'
       },
-      chat_room_id: {
+      chatRoomId: {
         type: Sequelize.INTEGER,
-        references: { model: 'chat_rooms', key: 'id' },
+        references: { model: 'ChatRooms', key: 'id' },
         onDelete: 'SET NULL'
       },
       description: Sequelize.TEXT,
-      event_date: {
+      eventDate: {
         type: Sequelize.DATEONLY,
         allowNull: false
       },
@@ -52,7 +52,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    options.tableName = 'events';
+    options.tableName = 'Events';
     await queryInterface.dropTable(options);
   }
 };

@@ -10,15 +10,15 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('event_attendees', {
-      event_id: {
+    await queryInterface.createTable('EventAttendees', {
+      eventId: {
         type: Sequelize.INTEGER,
-        references: { model: 'events', key: 'id' },
+        references: { model: 'Events', key: 'id' },
         onDelete: 'CASCADE'
       },
-      user_id: {
+      userId: {
         type: Sequelize.INTEGER,
-        references: { model: 'users', key: 'id' },
+        references: { model: 'Users', key: 'id' },
         onDelete: 'CASCADE'
       },
       createdAt: {
@@ -33,7 +33,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    options.tableName = 'event_attendees';
+    options.tableName = 'EventAttendees';
     await queryInterface.dropTable(options);
   }
 };

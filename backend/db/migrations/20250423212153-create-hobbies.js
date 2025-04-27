@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('hobbies', {
+    await queryInterface.createTable('Hobbies', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -19,6 +19,10 @@ module.exports = {
         type: Sequelize.STRING(50),
         unique: true,
         allowNull: false
+      },
+      description: {
+        type: Sequelize.TEXT,
+        allowNull: true
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -32,7 +36,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    options.tableName = 'hobbies';
+    options.tableName = 'Hobbies';
     await queryInterface.dropTable(options);
   }
 };
