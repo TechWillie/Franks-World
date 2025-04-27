@@ -29,5 +29,5 @@ module.exports = (sequelize) => {
     timestamps: true
   });
 
-  return UserHobby;
+  return UserHobbie;
 };
