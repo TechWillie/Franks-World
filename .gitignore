@@ -38,4 +38,4 @@ android/
 ios/
 build/
 backend/db/dev.db
-!dist/
+!dist
