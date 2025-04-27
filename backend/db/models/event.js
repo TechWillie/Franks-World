@@ -4,8 +4,8 @@ const { Model, DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   class Event extends Model {
     static associate(models) {
-      Event.belongsTo(models.Place, { foreignKey: 'placeId' });
-      Event.belongsTo(models.ChatRoom, { foreignKey: 'chatRoomId' });
+      Event.belongsTo(models.Place, { foreignKey: 'id' });
+      Event.belongsTo(models.ChatRoom, { foreignKey: 'id' });
       
       Event.belongsToMany(models.User, {
         through: 'EventAttendees',
