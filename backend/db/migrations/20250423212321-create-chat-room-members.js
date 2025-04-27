@@ -10,6 +10,11 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable('ChatRoomMembers', {
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+      },
       userId: {
         type: Sequelize.INTEGER,
         references: { model: 'Users', key: 'id' },

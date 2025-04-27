@@ -3,10 +3,10 @@
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert('Places', [
-      { name: 'Central Park', location: 'NYC', createdAt: new Date(), updatedAt: new Date(), description: 'A large public park in the heart of Manhattan.' },
-      { name: 'Golden Gate Park', location: 'San Francisco', createdAt: new Date(), updatedAt: new Date(), description: 'A large urban park in San Francisco.' },
-      { name: 'Millennium Park', location: 'Chicago', createdAt: new Date(), updatedAt: new Date(), description: 'A large public park in the heart of Chicago.' },
-      { name: 'Balboa Park', location: 'San Diego', createdAt: new Date(), updatedAt: new Date(), description: 'A large urban park in San Diego.' }
+      { id: 1, name: 'Central Park', location: 'NYC', createdAt: new Date(), updatedAt: new Date(), description: 'A large public park in the heart of Manhattan.' },
+      { id: 2, name: 'Golden Gate Park', location: 'San Francisco', createdAt: new Date(), updatedAt: new Date(), description: 'A large urban park in San Francisco.' },
+      { id: 3, name: 'Millennium Park', location: 'Chicago', createdAt: new Date(), updatedAt: new Date(), description: 'A large public park in the heart of Chicago.' },
+      { id: 4, name: 'Balboa Park', location: 'San Diego', createdAt: new Date(), updatedAt: new Date(), description: 'A large urban park in San Diego.' }
     ]);
   },
   async down(queryInterface) {

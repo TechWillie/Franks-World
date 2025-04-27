@@ -11,6 +11,11 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable('EventAttendees', {
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+      },
       eventId: {
         type: Sequelize.INTEGER,
         references: { model: 'Events', key: 'id' },
