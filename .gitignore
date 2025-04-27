@@ -16,7 +16,7 @@ yarn-error.log*
 
 # === Frontend (React + Vite) ===
 /frontend/node_modules/
-/frontend/dist/
+
 /frontend/.env
 
 # === OS-specific ===
@@ -38,4 +38,3 @@ android/
 ios/
 build/
 backend/db/dev.db
-!dist
