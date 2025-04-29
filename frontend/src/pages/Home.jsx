@@ -30,7 +30,7 @@ function Home() {
       
       <h1 className='rotate'>Franks World</h1>
       <div>
-        <h1 className="card">Just sayin... {quotes[index]}</h1>
+        <h1 className="card">Just sayin... <div>{quotes[index]}</div></h1>
       </div>
       <ChatBox />
     </div>

@@ -16,4 +16,11 @@ export default defineConfig(({ mode }) => ({
   // server: {
   //   open: true
   // }
+
+  optimizeDeps: {
+    include: ['redux-thunk'],  // 👈 ADD THIS
+  },
+  // server: {
+  //   open: true
+  // }
 }));

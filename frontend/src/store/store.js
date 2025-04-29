@@ -1,6 +1,9 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension'; // <--- import this
-import thunk from 'redux-thunk';
+import {thunk} from 'redux-thunk';
+
+
+
 import logger from 'redux-logger'; // already good!
 
 // Dummy reducer
