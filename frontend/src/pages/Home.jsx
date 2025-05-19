@@ -26,7 +26,6 @@ function Home() {
   
   return (
     <div className='body'>
-      <Navbar />
       
       <h1 className='rotate'>Franks World</h1>
       <div>

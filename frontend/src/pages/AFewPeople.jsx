@@ -6,7 +6,7 @@
 
 function AFewPeople() {
   // ! Works but refactored for setIntervals
-  const [index, setIndex] = useState(0)
+  // const [index, setIndex] = useState(0)
   // const handleClick = () => {
   //   const randomIndex = Math.floor(Math.random() * quotes.length)
   //   setIndex(randomIndex)
