@@ -4,7 +4,7 @@ import App from './App';
 import './index.css';
 import { Provider } from 'react-redux';
 import configureStore from './store/store';
-import { BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter} from 'react-router-dom';
 // import Home from './pages/Home';
 
 
@@ -18,9 +18,9 @@ if (process.env.NODE_ENV !== 'production') {
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-      <Router>
-        <App />
-      </Router>
+      <BrowserRouter>         {/* Provides routing context */}
+        <App />               {/* Main app component */}
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>
 );
