@@ -1,13 +1,10 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from '@redux-devtools/extension';
-
-// const store = createStore(rootReducer, composeWithDevTools());
-
+// Import your reducers here
 import {thunk} from 'redux-thunk';
-
-
-
 import logger from 'redux-logger'; // already good!
+import sessionReducer from './session';
+import usersReducer from './users';
 
 // Dummy reducer
 const dummyReducer = (state = { message: "Hello from Redux!" }, action) => {
@@ -19,7 +16,9 @@ const dummyReducer = (state = { message: "Hello from Redux!" }, action) => {
 
 // Root reducer
 const rootReducer = combineReducers({
-  dummy: dummyReducer
+  dummy: dummyReducer,
+  session: sessionReducer,
+  users: usersReducer,
 });
 
 // Middleware enhancer

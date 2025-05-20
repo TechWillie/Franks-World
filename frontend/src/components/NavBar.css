@@ -1,5 +1,7 @@
 .navbar {
   background-image: url("../assets/media/pictures/globe1.avif");
+  background-size: cover;
+  
     display: flex;
     justify-content: space-between;
     align-items: center;

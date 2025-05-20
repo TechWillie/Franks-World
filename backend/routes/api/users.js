@@ -26,7 +26,7 @@ const validateSignup = [
     handleValidationErrors
 ];
 
-// Sign up
+//! Sign up
 router.post(
     '/', validateSignup,
     async (req, res) => {
@@ -50,5 +50,15 @@ router.post(
     }
   );
 
+  //! Get all users
+  router.get('/', async (req, res) => {
+  const users = await User.findAll();
+  return res.json(users);
+});
 
+//! Get a user by ID
+router.get('/:id', async (req, res) => {
+  const user = await User.findByPk(req.params.id);
+  return res.json(user);
+});
 module.exports = router;
