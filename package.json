@@ -9,7 +9,7 @@
   "dev:backend": "npm run --prefix backend dev",
   "sequelize": "npm run --prefix backend sequelize",
   "sequelize-cli": "npm run --prefix backend sequelize-cli"
-}
+},
 
 
   "repository": {
