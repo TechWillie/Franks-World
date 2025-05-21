@@ -1,11 +1,9 @@
 .navbar {
-  background-image: url("../assets/media/pictures/globe1.avif");
-  background-size: cover;
+    background-image: url(../assets/media/pictures/globe1.avif);
   
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* background-color: #8b1313; */
     padding: 1rem 1rem;
     color: rgb(239, 231, 231);
   }

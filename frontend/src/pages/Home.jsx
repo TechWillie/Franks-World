@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { quotes } from '../components/justSaying'
 import './Home.css'
 import ChatBox from '../components/ChatBox'
-import Navbar from '../components/NavBar'
 // import mypic from '../../../backend/media/pictures/me-standing.jpg';
 
 

@@ -13,6 +13,8 @@ export const setActiveUser = (user) => ({ type: SET_ACTIVE_USER, user });
 // Thunk Action Creators (example if using async API)
 export const fetchUsers = () => async (dispatch) => {
   const res = await fetch('/api/users');
+  console.log(res);
+  
   if (res.ok) {
     const data = await res.json();
     dispatch(setUsers(data));
