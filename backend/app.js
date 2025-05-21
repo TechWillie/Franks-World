@@ -44,14 +44,17 @@ app.use(routes);
 
 // --- Serve React static assets and catch-all in production ---
 if (isProduction) {
-  // Serve the static files from the React app
-  app.use(express.static(path.resolve(__dirname, '../frontend/dist')));
+  const distPath = path.resolve(__dirname, '../frontend/dist');
 
-  // Catch-all route to serve React's index.html for non-API routes
-  app.get(/^(?!\/?api).*/, (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../frontend/dist/index.html'));
+  // Serve static files (JS, CSS, images)
+  app.use(express.static(distPath));
+
+  // Catch-all *after* static: send index.html for non-file routes (React routing)
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
   });
 }
+
 
 // Catch unhandled requests and forward to error handler
 app.use((_req, _res, next) => {
