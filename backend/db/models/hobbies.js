@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Hobbie',
-    tableName: 'hobbies', // Matches your table name in migration
+    tableName: 'Hobbies', // Matches your table name in migration
     timestamps: true
   });
   return Hobbie;
