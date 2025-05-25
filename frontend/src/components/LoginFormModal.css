@@ -33,6 +33,7 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: transparent;
+    color: rgb(89, 159, 229);
 }
 
 .login-form button{

@@ -1,10 +1,17 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./LoginFormModal.css"
-
+import { useDispatch } from "react-redux";
+import { login } from "../store/session";
 
 
 function LoginFormModal({onClose}) {
     const modalRef = useRef();
+    const dispatch = useDispatch();
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [errors, setErrors] = useState([]);
+
+    
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -14,17 +21,47 @@ function LoginFormModal({onClose}) {
       }
     }
 
+    const userInfo = {
+        username: 'demo',
+        password: 'password'
+      };
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
+  const handleSubmit = async (e) => {
+        e.preventDefault();
+        const data = await dispatch(login(username, password));
+        if (data?.errors) {
+            console.log(errors);
+            setErrors(data.errors);
+        }
+        if (data) {
+            console.log('User logged in', data);
+            onClose();
+        }
+    };
+  
   return (
     <div className="backdrop">
         <div ref={modalRef} >
-            <form className="login-form">
+            <form className="login-form" onSubmit={handleSubmit}>
                 <h2>Login Form</h2>
-                <input type="text" placeholder="Username" />
-                <input type="password" placeholder="Password" />
+                <input 
+                type="text" 
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                />
+                <input 
+                type="password" 
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                 />
                 <button type="submit">Login</button>
             </form>
         </div>
