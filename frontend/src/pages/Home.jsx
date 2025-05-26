@@ -26,8 +26,9 @@ function Home() {
     <div className='home-body'>
       
       <h1 className='header'>Franks World</h1>
-      <div>
-        <h1 className="intro">Just sayin... <div>{quotes[index]}</div></h1>
+      <div className='quotes-container'>
+        <h3 className="intro">Just sayin... </h3>
+          <div className='quotes'>{quotes[index]}</div>
       </div>
     </div>
   )

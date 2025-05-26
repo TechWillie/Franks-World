@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUsers } from '../store/users'
-
+import './MyPeeps.css'
 
 function MyPeeps() {
   const dispatch = useDispatch()
@@ -21,7 +21,7 @@ function MyPeeps() {
               <p>{user.email}</p>
             </div>
           ))}
-      </div>
+        </div>
     </div>
   )
 }
