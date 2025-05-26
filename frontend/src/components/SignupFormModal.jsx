@@ -7,7 +7,6 @@ import { useDispatch } from "react-redux";
 const SignupFormModal = ({onClose}) => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState([]);
-  const [showModal, setShowModal] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -86,7 +85,7 @@ const SignupFormModal = ({onClose}) => {
                 <input type="password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} required />
               </label>
               <button type="submit">Sign Up</button>
-              <button type="button" onClick={() => setShowModal(false)}>Cancel</button>
+              <button type="button" onClick={() => onClose()}>Cancel</button>
             </form>
           </div>
         </div>
