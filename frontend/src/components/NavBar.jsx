@@ -7,6 +7,8 @@ import { FaRegUser } from "react-icons/fa6";
 import LoginFormModal from "./LoginFormModal";
 import { useState, useRef, useEffect } from "react";
 import SignupFormModal from "./SignupFormModal";
+import { BsFillHouseFill, BsPersonVcard, BsPersonWalking } from "react-icons/bs";
+
 
 
 
@@ -48,19 +50,19 @@ function Navbar() {
 
     {sessionUser ? (
           <li>
-            <button onClick={() => dispatch(setSessionUser(null))}>Logout</button>
+            <button onClick={() => dispatch(setSessionUser(null))}><BsPersonWalking /> Logout</button>
           </li>
         ) : (
           <li>
-            <div ref={dropDownMenu}>
-              <button onClick={() => setShowMenu(!showMenu)}><FaRegUser /> Please come in...</button>
+            <div ref={dropDownMenu} style={{ position: 'relative' }}>
+              <button onClick={() => setShowMenu(!showMenu)}><BsFillHouseFill /> Please come in...</button>
               {showMenu && (
                 <div className="dropdown-menu">
-                  <button onClick={() => setShowLoginModal(true)}>Login</button>
+                  <button onClick={() => setShowLoginModal(true)}><FaRegUser /> Login</button>
                   {showLoginModal && (
                     <LoginFormModal onClose={() => setShowLoginModal(false)}/>
                   )}
-                  <button onClick={() => setShowSignupModal(true)}>Signup</button>
+                  <button onClick={() => setShowSignupModal(true)}><BsPersonVcard /> Signup</button>
                   {showSignupModal && (
                     <SignupFormModal onClose={() => setShowSignupModal(false)}/>
                   )}

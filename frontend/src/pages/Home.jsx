@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { quotes } from '../components/justSaying'
 import './Home.css'
-import ChatBox from '../components/ChatBox'
 // import mypic from '../../../backend/media/pictures/me-standing.jpg';
 
 
@@ -24,13 +23,12 @@ function Home() {
 
   
   return (
-    <div className='body'>
+    <div className='home-body'>
       
-      <h1 className='rotate'>Franks World</h1>
+      <h1 className='header'>Franks World</h1>
       <div>
-        <h1 className="card">Just sayin... <div>{quotes[index]}</div></h1>
+        <h1 className="intro">Just sayin... <div>{quotes[index]}</div></h1>
       </div>
-      <ChatBox />
     </div>
   )
 }
