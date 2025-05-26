@@ -5,12 +5,12 @@ const bcrypt = require('bcryptjs');
 // const csrfProtection = csrf({ cookie: true });
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-// ...
-
-
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User } = require('../../db/models');
 // const user = require('../../db/models/user');
+
+
+
 
 const validateLogin = [
   check('credential')
@@ -23,16 +23,69 @@ const validateLogin = [
   handleValidationErrors
 ];
 
+const validateSignup = [
+    check('email')
+      .exists({ checkFalsy: true })
+      .isEmail()
+      .withMessage('Please provide a valid email.'),
+    check('username')
+      .exists({ checkFalsy: true })
+      .isLength({ min: 4 })
+      .withMessage('Please provide a username with at least 4 characters.'),
+    check('username')
+      .not()
+      .isEmail()
+      .withMessage('Username cannot be an email.'),
+    check('password')
+      .exists({ checkFalsy: true })
+      .isLength({ min: 6 })
+      .withMessage('Password must be 6 characters or more.'),
+    handleValidationErrors
+];
+
 
 
 const router = express.Router();
 
-
-// Log in
+//! Sign up
 router.post(
-  '/',
-  validateLogin,
+    '/', validateSignup,
+    async (req, res) => {
+      const { firstName, lastName, email, password, username, bio } = req.body;
+      const hashedPassword = await bcrypt.hashSync(password);
+      const user = await User.create({ 
+        firstName,
+        lastName,
+        email,
+        username,
+        hashedPassword,
+        bio 
+      });
+  
+      const safeUser = {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        email: user.email,
+        bio: user.bio || null
+      };
+      console.log("The user:", safeUser);
+      await setTokenCookie(res, safeUser);
+  
+      return res.json({
+        user: safeUser
+      });
+    }
+  );
+
+
+//! Log in
+router.post(
+  '/login',
+  // validateLogin,
   async (req, res, next) => {
+     console.log('BODY RECEIVED:', req.body);
     const { credential, password } = req.body;
     console.log("The request body:", req.body);
     
@@ -66,7 +119,7 @@ router.post(
     });
   }
 );
-// Log out
+// ! Log out
 router.delete(
   '/',
   (_req, res) => {
@@ -74,9 +127,9 @@ router.delete(
     return res.json({ message: 'success' });
   }
 );
-// GET session user if any
+//! GET session user if any
 router.get(
-  '/',
+  '/restore', restoreUser,
   (req, res) => {
     const { user } = req;
     if (user) {

@@ -1,42 +1,34 @@
 // backend/routes/index.js
 const express = require('express');
+const path = require('path');
 const router = express.Router();
 const apiRouter = require('./api');
 
+// Mount API routes
 router.use('/api', apiRouter);
 
-// Static routes
+// Always available: CSRF restore route
+router.get("/api/csrf/restore", (req, res) => {
+  const csrfToken = req.csrfToken();
+  res.cookie("XSRF-TOKEN", csrfToken);
+  res.status(200).json({ 'XSRF-Token': csrfToken });
+});
+
 // Serve React build files in production
 if (process.env.NODE_ENV === 'production') {
-  const path = require('path');
-  // Serve the frontend's index.html file at the root route
+  // Serve static assets
+  router.use(express.static(path.resolve(__dirname, '../../frontend/dist')));
+
+  // Serve index.html at root
   router.get('/', (req, res) => {
     res.cookie('XSRF-TOKEN', req.csrfToken());
-    res.sendFile(
-      path.resolve(__dirname, '../../frontend', 'dist', 'index.html')
-    );
+    res.sendFile(path.resolve(__dirname, '../../frontend/dist/index.html'));
   });
 
-  // Serve the static assets in the frontend's build folder
-  router.use(express.static(path.resolve("../frontend/dist")));
-
-  // Serve the frontend's index.html file at all other routes NOT starting with /api
+  // Serve index.html at all other non-API routes (React Router support)
   router.get(/^(?!\/?api).*/, (req, res) => {
     res.cookie('XSRF-TOKEN', req.csrfToken());
-    res.sendFile(
-      path.resolve(__dirname, '../../frontend', 'dist', 'index.html')
-    );
-  });
-}
-
-// Add a XSRF-TOKEN cookie in development
-if (process.env.NODE_ENV !== 'production') {
-  router.get("/api/csrf/restore", (req, res) => {
-    const csrfToken = req.csrfToken();
-    res.cookie("XSRF-TOKEN", csrfToken);
-    res.status(200).json({
-      'XSRF-Token': csrfToken
-    });
+    res.sendFile(path.resolve(__dirname, '../../frontend/dist/index.html'));
   });
 }
 

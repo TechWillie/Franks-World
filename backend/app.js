@@ -15,7 +15,6 @@ const isProduction = environment === 'production';
 const app = express();
 
 app.use(morgan('dev'));
-
 app.use(cookieParser());
 app.use(express.json());
 
@@ -28,7 +27,7 @@ app.use(
     policy: 'cross-origin',
   })
 );
-
+// ✅ CSRF RESTORE ROUTE BEFORE csrf middleware
 app.use(
   csurf({
     cookie: {
@@ -38,6 +37,16 @@ app.use(
     },
   })
 );
+
+// ✅ NOW apply CSRF protection middleware AFTER restore route
+app.get('/api/csrf/restore', (req, res) => {
+  const csrfToken = req.csrfToken();
+  res.cookie('XSRF-TOKEN', csrfToken);
+  res.status(200).json({ 'XSRF-Token': csrfToken });
+});
+
+
+
 
 // --- Register API routes first ---
 app.use(routes);

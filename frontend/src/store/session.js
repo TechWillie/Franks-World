@@ -1,5 +1,4 @@
-import { data } from "react-router-dom";
-import { csrfFetch } from "./csrf";
+import { csrfFetch } from './csrf';
 
 // src/store/session.js
 const SET_SESSION_USER = 'session/SET_SESSION_USER';
@@ -15,8 +14,11 @@ export const removeSessionUser = () => ({
   type: REMOVE_SESSION_USER
 });
 
+
+// Thunk action creators
+//! Login
 export const login = (creds, pass) => async (dispatch) => {
-  const response = await csrfFetch('/api/session', {
+  const response = await csrfFetch('/api/session/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -28,6 +30,35 @@ console.log("Response body", data);
     dispatch(setSessionUser(data.user));
   }
   return data;
+}
+
+
+// ! Sign up
+export const signup = (user) => async (dispatch) => {
+    // const { firstName, lastName, username, email, password, bio = null } = user;
+    const response = await csrfFetch('/api/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(user)
+  });
+
+  if (response.ok) {
+    const data = await response.json(); // { user: {...} }
+    dispatch(setSessionUser(data.user));
+    return data.user;
+  }
+
+  const errData = await response.json();
+  throw errData;
+};
+
+// ! restore User
+export const restoreUser = () => async (dispatch) => {
+  const response = await csrfFetch('/api/session/restore');
+  const data = await response.json();
+  dispatch(setSessionUser(data.user));
+  return data.user;
 }
 // Reducer
 const initialState = { user: null };

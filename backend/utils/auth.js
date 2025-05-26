@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
 const { User } = require('../db/models');
 
+
 const { secret, expiresIn } = jwtConfig;
 
 // This function will be used in the login and signup routes 
@@ -37,35 +38,36 @@ const setTokenCookie = (res, user) => {
 
   // This function will be used in the login and signup routes
   // to set the token cookie
-  const restoreUser = (req, res, next) => {
-    // The restoreUser middleware will be connected to the API router 
-    // so that all API route handlers will check if there is a current user logged in or not.
-    // token parsed from cookies
-    const { token } = req.cookies;
-    req.user = null;
-  
-    return jwt.verify(token, secret, null, async (err, jwtPayload) => {
-      if (err) {
-        return next();
+  const restoreUser = async (req, res, next) => {
+  const { token } = req.cookies;
+  req.user = null;
+
+  if (!token) return next();
+
+  try {
+    const payload = jwt.verify(token, secret);
+    const { id } = payload.data;
+
+    const user = await User.findByPk(id, {
+      attributes: {
+        include: ['email', 'createdAt', 'updatedAt']
       }
-  
-      try {
-        const { id } = jwtPayload.data;
-        req.user = await User.findByPk(id, {
-          attributes: {
-            include: ['email', 'createdAt', 'updatedAt']
-          }
-        });
-      } catch (e) {
-        res.clearCookie('token');
-        return next();
-      }
-  
-      if (!req.user) res.clearCookie('token');
-  
-      return next();
     });
-  };
+
+    if (user) {
+      req.user = user;
+    } else {
+      res.clearCookie('token');
+    }
+
+    return next();
+  } catch (err) {
+    res.clearCookie('token');
+    return next();
+  }
+};
+
+
 
   // If there is no current user, return an error
 const requireAuth = function (req, _res, next) {

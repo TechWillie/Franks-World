@@ -21,11 +21,6 @@ function LoginFormModal({onClose}) {
       }
     }
 
-    const userInfo = {
-        username: 'demo',
-        password: 'password'
-      };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
