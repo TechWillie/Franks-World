@@ -19,6 +19,7 @@ function MyPeeps() {
             <div key={user.id} className='peep'>
               <h3>{user.username}</h3>
               <p>{user.email}</p>
+              {user.bio && <p>{user.bio}</p>}
             </div>
           ))}
         </div>

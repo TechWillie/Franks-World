@@ -2,6 +2,16 @@
     border-style: dotted;
     border-color: rgb(130, 129, 222);
     left: 0%;
-    width: 35%;
+    width: 90%;
     color: antiquewhite;
 }
+
+.peep {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
+  gap: 20px; /* space between cards */
+  padding: 20px;
+  justify-items: center; /* centers individual cards */
+}
+
+
