@@ -25,10 +25,10 @@ function Home() {
   return (
     <div className='home-body'>
       
-      <h1 className='header'>Franks World</h1>
+      <h1 className='header'>What&apos;s going on...<br></br> What&apos;s fuss about..?</h1>
       <div className='quotes-container'>
         <h3 className="intro">Just sayin... </h3>
-          <div className='quotes'>{quotes[index]}</div>
+          <div className='quotes'><h1>{quotes[index]}</h1></div>
       </div>
     </div>
   )

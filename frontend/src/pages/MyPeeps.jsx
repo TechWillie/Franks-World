@@ -13,7 +13,7 @@ function MyPeeps() {
   console.log('Users array:', users);
   return (
     <div className='body'>
-        <h1 className='rotate'>My Peeps..</h1>
+        <h1 className='header/'>My Peeps..</h1>
         <div className='peeps'>
           {users.map(user => (
             <div key={user.id} className='peep'>

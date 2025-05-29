@@ -21,11 +21,20 @@
     gap: 1.5rem;
   }
   
-  .nav-links li a {
-    color: white;
-    text-decoration: none;
-    font-weight: 500, bold;
-  }
+ .nav-links li a {
+  font-family: 'Impact', 'Arial Black', sans-serif; /* Big bold font */
+  font-weight: 900; /* Maximum thickness */
+  color: rgba(250, 250, 250, 1.9); /* Font fill color */
+  text-decoration: none;
+  text-shadow:
+    -1px -1px 0 black,
+     1px -1px 0 black,
+    -1px  1px 0 black,
+     1px  1px 0 black; /* Outline effect */
+  font-size: 1.5rem; /* Adjust as needed */
+  letter-spacing: 2px; /* Adjust as needed */
+}
+
   
   .nav-links li a:hover {
     text-decoration: underline;

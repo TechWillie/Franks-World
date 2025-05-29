@@ -1,17 +1,28 @@
 .peeps{
-    border-style: dotted;
-    border-color: rgb(130, 129, 222);
-    left: 0%;
-    width: 90%;
-    color: antiquewhite;
+  left: 0%;  
+  width: 90%;
+  color: antiquewhite;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 equal-width columns */
+  gap: 10px;
+  padding: 20px;
+  justify-items: center;
+  width: 100%;
+ 
 }
 
-.peep {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columns */
-  gap: 20px; /* space between cards */
-  padding: 20px;
-  justify-items: center; /* centers individual cards */
+.peep{
+  border-color: antiquewhite;
+  border-style: double;
+  border-radius: .45cm;
+  box-sizing: border-box;
+  padding: 2%;
+  background-color: rgb(63, 65, 25, 0.6);
+}
+.peep:hover{
+  background-color: rgba(109, 113, 44, 0.8);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transform: scale(1.10);
 }
 
 
