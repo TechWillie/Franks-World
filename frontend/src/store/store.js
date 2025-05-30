@@ -5,7 +5,7 @@ import {thunk} from 'redux-thunk';
 import logger from 'redux-logger'; // already good!
 import sessionReducer from './session';
 import usersReducer from './users';
-// import messagesReducer from './messages';
+import messagesReducer from './messages';
 
 // Dummy reducer
 const dummyReducer = (state = { message: "Hello from Redux!" }, action) => {
@@ -20,7 +20,7 @@ const rootReducer = combineReducers({
   dummy: dummyReducer,
   session: sessionReducer,
   users: usersReducer,
-  // messages: messagesReducer,
+  messages: messagesReducer,
 });
 
 // Middleware enhancer
