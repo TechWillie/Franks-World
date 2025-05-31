@@ -59,6 +59,7 @@ export const updateMessageThunk = (message) => async (dispatch) => {
     const response = await csrfFetch('/api/messages');
     if (response.ok) {
       const messages = await response.json();
+      messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
       dispatch(setMessages(messages));
     }
   };
@@ -68,10 +69,11 @@ export const updateMessageThunk = (message) => async (dispatch) => {
       case SET_MESSAGE:
         console.log("SET_MESSAGES payload:", action.payload)
         return { ...state, ...action.payload };
-      case REMOVE_MESSAGE:
+      case REMOVE_MESSAGE: {
         const newState = { ...state };
         delete newState[action.payload];
         return newState;
+      }
       case UPDATE_MESSAGE:
         return { ...state, [action.payload.id]: action.payload };
       default:

@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import "../components/NavBar.css"
 // import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSessionUser } from "../store/session";
+// import { setSessionUser } from "../store/session";
 import { FaRegUser } from "react-icons/fa6";
 import LoginFormModal from "./LoginFormModal";
 import { useState, useRef, useEffect } from "react";

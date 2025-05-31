@@ -6,7 +6,6 @@ import { fetchChatboardThunk } from '../store/chatboard'
 
 
 
-
 function Home() {
   const dispatch = useDispatch()
   const [index, setIndex] = useState(0)
@@ -23,11 +22,8 @@ function Home() {
   useEffect(() => {
     dispatch(fetchChatboardThunk());
     console.log("charboards 1:", mesageBoards)
-}, []);
+  }, [dispatch, mesageBoards]);
 
-  useEffect(() => {
-  console.log("chatboards 2:", mesageBoards);
-}, [mesageBoards]);
   
   return (
     <>
@@ -39,9 +35,10 @@ function Home() {
       </div>
     </div>
     <div className='chatboard-container'>
+      <h1>Message Boards</h1>
       {mesageBoards.map((messageBoard) => (
         <div key={messageBoard.id} className="message-container">
-          <h3>{messageBoard.content}</h3>
+          <h3>{messageBoard.name}</h3>
           <p>{messageBoard.createdAt}</p>
         </div>
       ))}

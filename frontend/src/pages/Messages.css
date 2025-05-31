@@ -1,8 +1,26 @@
+.title{
+  color: azure;
+  background-color: rgb(84, 71, 95);
+}
+
+.image{
+   background-image: url("../assets/media/pictures/NewYorkNight.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  backdrop-filter: blur(5px);
+  width: 45%;
+}
 .message-container {
+  background-color: rgba(33, 54, 78, 0.4);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   /* height: 100vh; */
   color: beige;
+  /* font-size: 1.5rem; */
+  font-weight: 500;
+  
+
 }

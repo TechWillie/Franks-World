@@ -27,6 +27,11 @@ export const fetchChatboardThunk = () => async (dispatch) => {
   const response = await csrfFetch('/api/chatrooms');
   if (response.ok) {
     const chatboards = await response.json();
+    chatboards.forEach(board => {
+
+      console.log("chatboards foreach:", board.createdAt);
+    })
+    
     dispatch(setChatboard(chatboards));
     }};
 export const createChatboardThunk = (chatboard) => async (dispatch) => {
@@ -74,10 +79,11 @@ const chatBoardReducer = (state = [], action) => {
     return { ...state, [action.payload.id]: action.payload };
     case UPDATE_CHATBOARD:
     return { ...state, [action.payload.id]: action.payload };
-    case REMOVE_CHATBOARD:
+    case REMOVE_CHATBOARD:{
     const newState = { ...state };
     delete newState[action.payload];
     return newState;
+    }
     default:
     return state;
     }
