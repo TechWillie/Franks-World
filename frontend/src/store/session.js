@@ -60,6 +60,21 @@ export const restoreUser = () => async (dispatch) => {
   dispatch(setSessionUser(data.user));
   return data.user;
 }
+// ! logout
+// store/session.js or wherever you manage session state
+export const logout = () => async (dispatch) => {
+  const response = await csrfFetch('/api/session', {
+    method: 'DELETE',
+    credentials: 'include', // ensure cookies are included
+  });
+
+  if (response.ok) {
+    dispatch(setSessionUser(null));
+  }
+};
+
+
+
 // Reducer
 const initialState = { user: null };
 

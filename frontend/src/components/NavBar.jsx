@@ -8,10 +8,7 @@ import LoginFormModal from "./LoginFormModal";
 import { useState, useRef, useEffect } from "react";
 import SignupFormModal from "./SignupFormModal";
 import { BsFillHouseFill, BsPersonVcard, BsPersonWalking } from "react-icons/bs";
-
-
-
-
+import { logout } from "../store/session";
 
 function Navbar() {
   const dispatch = useDispatch();
@@ -32,12 +29,6 @@ function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // const handleClick = () => {
-  //   return (
-  //    <LoginFormModal />
-     
-  //   )
-  // }
 
   
   return (
@@ -50,7 +41,7 @@ function Navbar() {
 
     {sessionUser ? (
           <li>
-            <button onClick={() => dispatch(setSessionUser(null))}><BsPersonWalking /> Logout</button>
+            <button onClick={() => dispatch(logout())}><BsPersonWalking /> Logout</button>
           </li>
         ) : (
           <li>
