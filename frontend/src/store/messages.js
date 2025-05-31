@@ -29,7 +29,7 @@ export const createMessageThunk = (message) => async (dispatch) => {
   );
   if (response.ok) {
     const data = await response.json();
-    dispatch(setMessage(data));
+    dispatch(setMessages(data));
   }
 };
 export const updateMessageThunk = (message) => async (dispatch) => {

@@ -6,6 +6,7 @@ import logger from 'redux-logger'; // already good!
 import sessionReducer from './session';
 import usersReducer from './users';
 import messagesReducer from './messages';
+import chatBoardReducer from './chatboard';
 
 // Dummy reducer
 const dummyReducer = (state = { message: "Hello from Redux!" }, action) => {
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   session: sessionReducer,
   users: usersReducer,
   messages: messagesReducer,
+  chatBoard: chatBoardReducer,
 });
 
 // Middleware enhancer

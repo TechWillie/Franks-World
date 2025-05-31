@@ -3,6 +3,7 @@ const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
 const { restoreUser } = require("../../utils/auth.js");
 const messagesRouter = require('./messages.js');
+const chatroomsRouter = require('./chatrooms.js');
 
 
 // GET /api/restore-user
@@ -16,6 +17,7 @@ router.use('/users', usersRouter);
 
 router.use('/messages', messagesRouter);
 
+router.use("/chatrooms", chatroomsRouter)
 
 router.post('/test', function(req, res) {
     res.json({ requestBody: req.body });

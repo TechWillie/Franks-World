@@ -1,26 +1,26 @@
 import { useState, useEffect } from 'react'
 import { quotes } from '../components/justSaying'
 import './Home.css'
-// import mypic from '../../../backend/media/pictures/me-standing.jpg';
+import { useSelector, useDispatch } from 'react-redux'
+
 
 
 
 function Home() {
-  // ! Works but refactored for setIntervals
+  const dispatch = useDispatch()
   const [index, setIndex] = useState(0)
-  // const handleClick = () => {
-  //   const randomIndex = Math.floor(Math.random() * quotes.length)
-  //   setIndex(randomIndex)
-  // }
-
+  const mesageBoards = useSelector(state => state.messages)
+  
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prevIndex) => (prevIndex + 1) % quotes.length)
     }, 5000) // every 3 seconds
 
+  useEffect
     return () => clearInterval(interval) // cleanup on unmount
   }, [])
 
+  // useEffect()
   
   return (
     <div className='home-body'>

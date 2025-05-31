@@ -12,18 +12,20 @@ const Messages = () => {
     dispatch(fetchMessagesThunk());
   }, [dispatch]);
   console.log("msg fron db:", messages);
+  console.log("sessionUser:", sessionUser);
   
-
-
   return (
     <div>
       <h1>What&apos;s good... <br />What&apos;s Goin on..?</h1>
       {Object.values(messages).map((message) => (
         <div key={message.id} className="message-container">
-          <p>{message.content}</p>
+          <h3>{message.content}</h3>
           <p>{message.createdAt}</p>
-        </div>
+        </div> 
       ))}
+      <div>
+        <input type="text" placeholder="Let 'em know..." />
+      </div>
     </div>
   );
 };
