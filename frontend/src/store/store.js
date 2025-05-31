@@ -22,7 +22,7 @@ const rootReducer = combineReducers({
   session: sessionReducer,
   users: usersReducer,
   messages: messagesReducer,
-  chatBoard: chatBoardReducer,
+  chatboard: chatBoardReducer,
 });
 
 // Middleware enhancer
