@@ -7,6 +7,7 @@ import sessionReducer from './session';
 import usersReducer from './users';
 import messagesReducer from './messages';
 import chatBoardReducer from './chatboard';
+import eventsReducer from './events';
 
 // Dummy reducer
 const dummyReducer = (state = { message: "Hello from Redux!" }, action) => {
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   users: usersReducer,
   messages: messagesReducer,
   chatboard: chatBoardReducer,
+  events: eventsReducer,
 });
 
 // Middleware enhancer

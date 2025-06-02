@@ -3,13 +3,14 @@ import { quotes } from '../components/justSaying'
 import './Home.css'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchChatboardThunk } from '../store/chatboard'
-
+import pic from "../assets/media/pictures/globe1.avif"
 
 
 function Home() {
   const dispatch = useDispatch()
+  const sesUser = useSelector(state => state.session.user)
   const [index, setIndex] = useState(0)
-  const mesageBoards = useSelector(state => state.chatboard)
+  const mesageBoards = useSelector(state => state.chatboard || [])
   
   useEffect(() => {
     const interval = setInterval(() => {
@@ -21,9 +22,11 @@ function Home() {
 
   useEffect(() => {
     dispatch(fetchChatboardThunk());
-    console.log("charboards 1:", mesageBoards)
-  }, [dispatch, mesageBoards]);
+  }, [dispatch]);
 
+  useEffect(() => {
+    console.log("user info:", sesUser)
+  }, [sesUser]);
   
   return (
     <>
@@ -42,6 +45,17 @@ function Home() {
           <p>{messageBoard.createdAt}</p>
         </div>
       ))}
+      </div>
+      <div className='session'>
+      {!sesUser ? (
+        <div>
+          <h1>Welcome, Guest!</h1>
+        </div>) : (
+        <div>
+          <h1>Welcome, {sesUser.username}!</h1>
+          <img className='pic' src={pic} alt="" />
+        </div>
+      )}
       </div>
     </>
   )

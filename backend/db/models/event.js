@@ -25,17 +25,17 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    date: {
+    eventDate: {
       type: DataTypes.DATEONLY,
       allowNull: false
     },
     placeId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     chatRoomId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,

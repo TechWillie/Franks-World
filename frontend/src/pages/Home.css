@@ -67,3 +67,16 @@ height: 150px;
     background-color: rgba(255, 255, 255, 0.1);
     color: aliceblue;
 }
+
+.session{
+    background-color: rgb(121, 129, 129, 0.9);
+    color: antiquewhite;
+    display: flex;
+    max-width: fit-content;
+    padding: 10px;
+    height: 250px;
+}
+.pic{
+    width: 50px;
+    border-radius: 40%;
+}
