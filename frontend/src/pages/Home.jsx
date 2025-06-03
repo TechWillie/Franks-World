@@ -4,13 +4,19 @@ import './Home.css'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchChatboardThunk } from '../store/chatboard'
 import pic from "../assets/media/pictures/globe1.avif"
+import CreateEventModal from '../components/CreateEvents'
+import { fetchEventsThunk } from '../store/events'
 
 
 function Home() {
   const dispatch = useDispatch()
   const sesUser = useSelector(state => state.session.user)
-  const [index, setIndex] = useState(0)
+  const eventsObj = useSelector(state => state.events || [])
   const mesageBoards = useSelector(state => state.chatboard || [])
+  const [index, setIndex] = useState(0)
+  const [createEventsModal, setCreateEventsModal] = useState(false)
+  const eventsArr = Object.values(eventsObj)
+  
   
   useEffect(() => {
     const interval = setInterval(() => {
@@ -22,12 +28,18 @@ function Home() {
 
   useEffect(() => {
     dispatch(fetchChatboardThunk());
+    dispatch(fetchEventsThunk());
   }, [dispatch]);
 
   useEffect(() => {
     console.log("user info:", sesUser)
   }, [sesUser]);
   
+  const clickOnEvents = () => {
+    console.log("clicked on events", eventsArr)
+    setCreateEventsModal(true)
+  }
+
   return (
     <>
     <div className='home-body'>
@@ -54,6 +66,9 @@ function Home() {
         <div>
           <h1>Welcome, {sesUser.username}!</h1>
           <img className='pic' src={pic} alt="" />
+          <button onClick={clickOnEvents}>Create Event</button>
+          {createEventsModal && <CreateEventModal />}
+          
         </div>
       )}
       </div>
