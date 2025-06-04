@@ -1,0 +1,59 @@
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createEventThunk } from "../store/events";
+import "./CreateEvents.css"
+
+
+const CreateEventModal = ({ onClose }) => {
+  const dispatch = useDispatch();
+  const modalRef = useRef();
+  const sessionUser = useSelector((state) => state.session.user);
+  const [eventObj, setEventObj] = useState({
+    name: "",
+    description: "",
+    hostId: sessionUser.id,
+  });
+  const [errors, setErrors] = useState([]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
+        onClose(); 
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = await dispatch(createEventThunk(eventObj));
+    if (data?.errors) {
+      setErrors(data.errors);
+    }
+    if (data) {
+      console.log("Event created", data);
+      onClose();
+    }
+  };
+
+  return(
+    <div className="backdrop">
+        <div className="login-form" ref={modalRef}>
+            <h2>Create Event</h2>
+            <form onSubmit={handleSubmit}>
+              <h4>Name of event</h4>
+              <input type="text" value={eventObj.name} onChange={(e) => setEventObj({ ...eventObj, name: e.target.value })} />
+              <h4>Give us a brief description</h4>
+              <input type="text" value={eventObj.description} onChange={(e) => setEventObj({ ...eventObj, description: e.target.value })} />
+              <button type="submit">Create Event</button>
+            </form>
+        </div>
+    
+    </div>
+  )
+}
+export default CreateEventModal;

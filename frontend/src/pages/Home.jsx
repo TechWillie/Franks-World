@@ -4,7 +4,7 @@ import './Home.css'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchChatboardThunk } from '../store/chatboard'
 import pic from "../assets/media/pictures/globe1.avif"
-import CreateEventModal from '../components/CreateEvents'
+import CreateEventModal from '../components/CreateEventsModal'
 import { fetchEventsThunk } from '../store/events'
 
 
@@ -67,7 +67,7 @@ function Home() {
           <h1>Welcome, {sesUser.username}!</h1>
           <img className='pic' src={pic} alt="" />
           <button onClick={clickOnEvents}>Create Event</button>
-          {createEventsModal && <CreateEventModal />}
+          {createEventsModal && <CreateEventModal onClose={() => setCreateEventsModal(false)} />}
           
         </div>
       )}
