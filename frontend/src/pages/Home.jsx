@@ -16,6 +16,7 @@ function Home() {
   const [index, setIndex] = useState(0)
   const [createEventsModal, setCreateEventsModal] = useState(false)
   const eventsArr = Object.values(eventsObj)
+ 
   
   
   useEffect(() => {
@@ -31,9 +32,6 @@ function Home() {
     dispatch(fetchEventsThunk());
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log("user info:", sesUser)
-  }, [sesUser]);
   
   const clickOnEvents = () => {
     console.log("clicked on events", eventsArr)
@@ -66,7 +64,7 @@ function Home() {
         <div>
           <h1>Welcome, {sesUser.username}!</h1>
           <img className='pic' src={pic} alt="" />
-          <button onClick={clickOnEvents}>Create Event</button>
+          <button type='button' onClick={clickOnEvents}>Create Event</button>
           {createEventsModal && <CreateEventModal onClose={() => setCreateEventsModal(false)} />}
           
         </div>

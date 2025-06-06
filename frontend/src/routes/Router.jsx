@@ -5,6 +5,7 @@ import AFewPeople from '../pages/MyPeeps';
 import Navbar from '../components/NavBar';
 // import ChatBox from '../components/ChatBox';
 import Messages from '../pages/Messages';
+import Events from '../pages/Events';
 
 const MainLayout = () => (
   <div>
@@ -19,6 +20,7 @@ const Router = () => (
       <Route path="/" element={<Home />} />
       <Route path="/peeps" element={<AFewPeople />} />
       <Route path="/messages" element={<Messages />} />
+      <Route path='/events' element={<Events />} />
     </Route>
   </Routes>
 );

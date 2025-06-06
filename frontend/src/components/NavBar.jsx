@@ -36,6 +36,7 @@ function Navbar() {
         <li><NavLink to="/">Home</NavLink></li>
         <li><NavLink to="/peeps" >My Peeps</NavLink></li>
         <li><NavLink to="/messages" >Chatter Box</NavLink></li>
+        <li><NavLink to="/events" >Events</NavLink></li>
 
     {sessionUser ? (
           <li>

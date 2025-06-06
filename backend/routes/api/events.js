@@ -32,17 +32,18 @@ router.get('/:id', async (req, res) => {
 //! Create a new event
 router.post('/', requireAuth, async (req, res) => {
     try {
-        const { name, description, chatroomId, placeId } = req.body;
+        const { name, description, chatRoomId, placeId, hostId, eventDate } = req.body;
         const event = await Event.create({
             name,
             description,
-            hostId: req.user.id,
-            chatroomId,
+            hostId,
+            eventDate,
+            chatRoomId,
             placeId
         });
         return res.status(201).json(event);
     } catch (error) {
-        console.error('Error creating event:', error); // 👈 Check your terminal logs
+        console.error('Error creating event:', error); 
         return res.status(500).json({ error: 'Internal Server Error' }
         );
     }

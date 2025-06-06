@@ -11,8 +11,22 @@ const CreateEventModal = ({ onClose }) => {
   const [eventObj, setEventObj] = useState({
     name: "",
     description: "",
-    hostId: sessionUser.id,
+    eventDate: "",
+    placeId: null,
+    chatRoomId: null, 
   });
+ const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+  if (sessionUser?.id) {
+    setEventObj((prev) => ({
+      ...prev,
+      hostId: sessionUser.id
+    }));
+  }
+}, [sessionUser]);
+
+
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
@@ -29,16 +43,18 @@ const CreateEventModal = ({ onClose }) => {
   }, [onClose]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const data = await dispatch(createEventThunk(eventObj));
-    if (data?.errors) {
-      setErrors(data.errors);
-    }
-    if (data) {
-      console.log("Event created", data);
-      onClose();
-    }
-  };
+  e.preventDefault();
+  if (submitted) return;
+  setSubmitted(true); // prevent multiple submits
+
+  const data = await dispatch(createEventThunk(eventObj));
+  if (data?.errors) {
+    setErrors(data.errors);
+    setSubmitted(false); // allow retry
+  } else {
+    setTimeout(() => onClose(), 0); // defer close to next tick
+  }
+};
 
   return(
     <div className="backdrop">
@@ -46,9 +62,14 @@ const CreateEventModal = ({ onClose }) => {
             <h2>Create Event</h2>
             <form onSubmit={handleSubmit}>
               <h4>Name of event</h4>
-              <input type="text" value={eventObj.name} onChange={(e) => setEventObj({ ...eventObj, name: e.target.value })} />
+              <input type="text" value={eventObj.name} 
+              onChange={(e) => setEventObj({ ...eventObj, name: e.target.value })} />
               <h4>Give us a brief description</h4>
-              <input type="text" value={eventObj.description} onChange={(e) => setEventObj({ ...eventObj, description: e.target.value })} />
+              <input type="textarea" value={eventObj.description} 
+              onChange={(e) => setEventObj({ ...eventObj, description: e.target.value })} />
+              <h4>When is your event?</h4>
+              <input type="date" value={eventObj.eventDate} 
+              onChange={(e) => setEventObj({ ...eventObj, eventDate: e.target.value })} />
               <button type="submit">Create Event</button>
             </form>
         </div>

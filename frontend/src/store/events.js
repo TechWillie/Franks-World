@@ -33,6 +33,8 @@ export const fetchEventsThunk = () => async (dispatch) => {
     dispatch(setEvents(events));
   }}
 export const createEventThunk = (event) => async (dispatch) => {
+  console.log("event:", event);
+  
     const response = await csrfFetch('/api/events', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
