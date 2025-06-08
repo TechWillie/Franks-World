@@ -6,6 +6,7 @@ import { fetchEventsThunk } from "../store/events";
 const Events = () => {
   const dispatch = useDispatch();
   const events = useSelector((state) => state.events || {});
+  const sessionUser = useSelector((state) => state.session.user || {});
   const eventsArr = Object.values(events);
   console.log("events:", eventsArr, events);
 
@@ -21,9 +22,12 @@ const Events = () => {
           <div key={event.id} className="event-card">
             <h2>{event.name}</h2>
             <p>{event.description}</p>
-            <p>Date: {event.date}</p>
-            <p>Location: {event.location}</p>
-            <p>Organizer: {event.organizer}</p>
+            <p>Date: {event.eventDate}</p>
+            {event.hostId === sessionUser.id && 
+              <div>
+                 <button>Edit</button>
+              </div> 
+            }
           </div>
         ))}
 

@@ -39,22 +39,19 @@ function Home() {
   }
 
   return (
-    <>
-    <div className='home-body'>
-      <h1 className='header'>What&apos;s going on...<br></br> What&apos;s fuss about..?</h1>
+    <div className='home-box'>
       <div className='quotes-container'>
         <h3 className="intro">Just sayin... </h3>
           <div className='quotes'><h1>{quotes[index]}</h1></div>
       </div>
-    </div>
-    <div className='chatboard-container'>
-      <h1>Message Boards</h1>
-      {mesageBoards.map((messageBoard) => (
-        <div key={messageBoard.id} className="message-container">
-          <h3>{messageBoard.name}</h3>
-          <p>{messageBoard.createdAt}</p>
-        </div>
-      ))}
+      <div className='chatboard-container'>
+        <h1>Message Boards</h1>
+        {mesageBoards.map((messageBoard) => (
+          <div key={messageBoard.id} className="message-container">
+            <h3>{messageBoard.name}</h3>
+            <p>{messageBoard.createdAt}</p>
+          </div>
+        ))}
       </div>
       <div className='session'>
       {!sesUser ? (
@@ -70,7 +67,7 @@ function Home() {
         </div>
       )}
       </div>
-    </>
+   </div>
   )
 }
 export default Home
