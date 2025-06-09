@@ -27,7 +27,7 @@ const CreateEventModal = ({ onClose }) => {
 }, [sessionUser]);
 
 
-  const [errors, setErrors] = useState([]);
+ 
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -49,7 +49,7 @@ const CreateEventModal = ({ onClose }) => {
 
   const data = await dispatch(createEventThunk(eventObj));
   if (data?.errors) {
-    setErrors(data.errors);
+    // setErrors(data.errors);
     setSubmitted(false); // allow retry
   } else {
     setTimeout(() => onClose(), 0); // defer close to next tick
