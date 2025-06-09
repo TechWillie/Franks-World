@@ -18,5 +18,30 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  try {
+    const message = await Message.findByPk(req.params.id);
+    if (!message) {
+      return res.status(404).json({ error: 'theHype Message not found' });
+    }
+    return res.json(message);
+  } catch (error) {
+    console.error('Error fetching theHype message:', error);
+    return res.status(500).json({ error: 'Some Hype went wrong' });
+  }   
+  const message = await Message.findByPk(req.params.id);
+  return res.json(message);
+});
+router.post('/', async (req, res) => {
+  try {
+    const { message, userId, postId } = req.body;
+    const newMessage = await Message.create({ message, userId, postId });
+    return res.json(newMessage);
+  } catch (error) {
+    console.error('Error creating theHype message:', error);
+    return res.status(500).json({ error: 'Some Hype went wrong' });
+  }
+});
+
 
 module.exports = router;
