@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
   session: sessionReducer,
   users: usersReducer,
   messages: messagesReducer,
-  chatboard: chatBoardReducer,
+  chatBoard: chatBoardReducer,
   events: eventsReducer,
 });
 

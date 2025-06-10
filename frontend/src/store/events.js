@@ -74,13 +74,11 @@ export const deleteEventThunk = (eventId) => async (dispatch) => {
   const eventReducer = (state = initialState, action) => {
     switch (action.type) {
       case SET_EVENTS: {
-  const newState = {};
-  action.payload.forEach(event => {
-    newState[event.id] = event;
-  });
-  return newState;
-}
-
+        const newState = {};
+        action.payload.forEach(event => {
+          newState[event.id] = event;
+        });
+        return newState;}
       case ADD_EVENT:
         return { ...state, [action.payload.id]: action.payload };
       case REMOVE_EVENT:{
