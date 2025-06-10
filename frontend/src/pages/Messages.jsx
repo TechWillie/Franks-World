@@ -17,47 +17,22 @@ const Messages = () => {
   useEffect(() => {
     dispatch(fetchChatboardThunk());
   }, [dispatch]);
+
   console.log("msg fron db:", messages);
   console.log("sessionUser:", sessionUser);
   console.log("chatBoards:", chatBoards);
   
   return (
-    <div>
-        {/* <div className="image">
-        <h1 className="title">What&apos;s good... <br />What&apos;s Goin on..?</h1>
-        {Object.values(messages).map((message) => (
-        <div key={message.id} className="message-container">
-          <h2>{message.content}</h2>
-          <p>{message.createdAt}</p>
-          <p>{message.userId}</p>
-          {message.userId === sessionUser.id && (
-            <button>Delete</button>
-          )}
-        </div> 
-      ))}
-        <div>
-          <input type="text" placeholder="Let 'em know..." />
-        </div>
-        </div> */}
-        {Object.values(chatBoards).map((chatBoard) => (
-          <div key={chatBoard.id} className="message-container">
-            {chatBoard.userId === sessionUser.id 
-            ? ( 
-            <>
-            <h2>{chatBoard.content}</h2>
-            <button>Edit</button>
-            </> 
-              )
-            : (
-              <>
-                <h2>{chatBoard.content}</h2>
-                <p>{chatBoard.createdAt}</p>
-              </>
-            )}
-            
-          </div>
-        ))}
-    </div>
+    sessionUser ? (
+      <div>
+        <h1>Welcome {sessionUser.username}</h1>
+        <h2>Your message Boards</h2>
+      </div>
+    ):(
+      <div>
+        <h1>Please Log In or Sign Up to View Messages</h1>
+      </div>
+    )
   );
 };
 
