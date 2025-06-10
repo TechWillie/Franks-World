@@ -1,13 +1,11 @@
-import { NavLink } from "react-router-dom";
-import "../components/NavBar.css"
-// import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setSessionUser } from "../store/session";
-import { FaRegUser } from "react-icons/fa6";
-import LoginFormModal from "./LoginFormModal";
 import { useState, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
+import LoginFormModal from "./LoginFormModal";
 import SignupFormModal from "./SignupFormModal";
+import { FaRegUser } from "react-icons/fa6";
 import { BsFillHouseFill, BsPersonVcard, BsPersonWalking } from "react-icons/bs";
+import "../components/NavBar.css"
 import { logout } from "../store/session";
 
 function Navbar() {
@@ -38,6 +36,7 @@ function Navbar() {
         <li><NavLink to="/">Home</NavLink></li>
         <li><NavLink to="/peeps" >My Peeps</NavLink></li>
         <li><NavLink to="/messages" >Chatter Box</NavLink></li>
+        <li><NavLink to="/events" >Events</NavLink></li>
 
     {sessionUser ? (
           <li>

@@ -1,0 +1,22 @@
+.events-container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: azure;
+  }
+
+  .events-container h1{
+    font-size: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  .event-card{
+    border-style: double;
+  background-color: rgb(241, 241, 90, 0.2);
+  padding: 10px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  }

@@ -1,3 +1,14 @@
+.home-box{
+    border-style: double;
+    border-color: bisque;
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* left and right columns */
+    grid-template-rows: auto auto;
+    gap: 20px;
+    padding: 20px;
+}
+
+
 .home-body{
    position: relative;
    margin-top: 40px;
@@ -48,21 +59,39 @@ height: 150px;
     color: rgb(85, 75, 60);
     font-size: 15px;
     font-weight: 500;
-    border: .1cm;
-    border-style: double;
-    /* border-color: rgb(229, 225, 13); */
     background-color: rgba(118, 54, 228, 0.2);
     border-radius: 20px;
     padding: 15px;
     width: 50%;
+    grid-column: 1 / 2;
+    grid-row: 1;
 }
 
 .chatboard-container{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
-    width: 100%;
+    /* width: 30%; */
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: aliceblue;
+    grid-column: 1 / 2;
+    grid-row: 2;
+}
+
+
+.session{
+    background-color: rgb(121, 129, 129, 0.5);
+    color: antiquewhite;
+    /* position: relative; */
+    max-width: fit-content;
+    padding: 10px;
+    height: 250px;
+    border-radius: 20px;
+    /* margin-left: auto; */
+}
+.pic{
+    width: 50px;
+    border-radius: 40%;
 }

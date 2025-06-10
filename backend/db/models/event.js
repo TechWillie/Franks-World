@@ -4,8 +4,8 @@ const { Model, DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   class Event extends Model {
     static associate(models) {
-      Event.belongsTo(models.Place, { foreignKey: 'id' });
-      Event.belongsTo(models.ChatRoom, { foreignKey: 'id' });
+      Event.belongsTo(models.Place, { foreignKey: 'placeId' });
+      Event.belongsTo(models.ChatRoom, { foreignKey: 'chatRoomId' }); 
       
       Event.belongsToMany(models.User, {
         through: 'EventAttendees',
@@ -21,21 +21,29 @@ module.exports = (sequelize) => {
       primaryKey: true,
       autoIncrement: true,
     },
+    hostId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    date: {
-      type: DataTypes.DATEONLY,
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    eventDate: {
+      type: DataTypes.STRING,
       allowNull: false
     },
     placeId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     chatRoomId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,

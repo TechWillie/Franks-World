@@ -1,9 +1,9 @@
 export const quotes = [
-    "Get out your feelings.. Strictly business..",    
-    "A failure to plan... Is a plan to fail",
+    "Come join us.. Post your events..!",    
+    "What you got goin' on..? What's all theHype about..?",
     "Join the T. E. A. M... Trappin Everyday After Money..!",
-    "If you do all the cryin.... what the babies gone do..?",
-    "Struggle should equal progression.. If you're doin it right..?",
-    "Don't surround yourself with idiots.. Just because it's easy..."
+    "We in it to win..! There's no limits..",
+    "Leave a comment.. Let us know what theHype is..!",
+    "If you not Signed up and loged in.. What are you doing..?"
 
 ]
