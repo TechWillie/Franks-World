@@ -3,24 +3,21 @@
   background-color: rgb(84, 71, 95);
 }
 
-.image{
-   background-image: url("../assets/media/pictures/newyorknight.avif");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  backdrop-filter: blur(5px);
-  width: 45%;
-}
+
 .message-container {
-  background-color: rgba(81, 72, 91, 0.5);
+ border-style: double;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   /* height: 100vh; */
-  color: beige;
-  /* font-size: 1.5rem; */
+  color: rgb(242, 241, 244);
+  font-size: 1.5rem;
   font-weight: 500;
-  
+  width: 50%;
+}
 
+.main-container{
+  display: flex;
+  flex-direction: row;
 }

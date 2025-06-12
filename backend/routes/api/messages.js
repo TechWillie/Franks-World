@@ -34,8 +34,8 @@ router.get('/:id', async (req, res) => {
 });
 router.post('/', async (req, res) => {
   try {
-    const { message, userId, postId } = req.body;
-    const newMessage = await Message.create({ message, userId, postId });
+    const { content, userId, chatRoomId } = req.body;
+    const newMessage = await Message.create({ content, userId, chatRoomId });
     return res.json(newMessage);
   } catch (error) {
     console.error('Error creating theHype message:', error);

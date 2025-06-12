@@ -1,6 +1,7 @@
 const SET_MESSAGE = 'messages/SET_MESSAGE';
 const REMOVE_MESSAGE = 'messages/REMOVE_MESSAGE';
 const UPDATE_MESSAGE = 'messages/UPDATE_MESSAGE';
+const ADD_MESSAGE = "messages/ADD_MESSAGE";
 import { csrfFetch } from './csrf';
 
 //! Action creators
@@ -18,8 +19,14 @@ const updateMessage = (message) => ({
   payload: message
 });
 
+const addMessage = (message) => ({
+  type: ADD_MESSAGE,
+  payload: message
+});
 //! Thunk action creators
 export const createMessageThunk = (message) => async (dispatch) => {
+  console.log("from redux store thunk message:", message);
+  
   const response = await csrfFetch('/api/messages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -29,7 +36,7 @@ export const createMessageThunk = (message) => async (dispatch) => {
   );
   if (response.ok) {
     const data = await response.json();
-    dispatch(setMessages(data));
+     dispatch(addMessage(data));
   }
 };
 export const updateMessageThunk = (message) => async (dispatch) => {
@@ -74,6 +81,9 @@ export const updateMessageThunk = (message) => async (dispatch) => {
         delete newState[action.payload];
         return newState;
       }
+      case ADD_MESSAGE: {
+        return {...state, [action.payload.id]: action.payload}
+      };
       case UPDATE_MESSAGE:
         return { ...state, [action.payload.id]: action.payload };
       default:
