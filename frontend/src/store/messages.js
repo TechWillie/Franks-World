@@ -83,7 +83,7 @@ export const updateMessageThunk = (message) => async (dispatch) => {
       }
       case ADD_MESSAGE: {
         return {...state, [action.payload.id]: action.payload}
-      };
+      }
       case UPDATE_MESSAGE:
         return { ...state, [action.payload.id]: action.payload };
       default:
