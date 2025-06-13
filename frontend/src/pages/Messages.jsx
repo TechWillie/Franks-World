@@ -29,31 +29,22 @@ const Messages = () => {
 
   const boardMsgArr = Object.values(messages).filter(message => message.chatRoomId === boardId);
     console.log("clicked", boardMsgArr);
-    // if(boardMsgArr.length > 0){
-    //   setRoomName(roomName);
-    //   setRoomMSGs([])
-    //   userMsgArr.forEach(message => {
-    //       console.log("message:", message);
-    //       setRoomMSGs(prev => [...prev, message]);
-    //     })
-    // }else console.log("no messages");
-  
-
+   
   const putMsgTogether = () => {
-  const newMessage = {
-    content: messageInput,
-    userId: sessionUser.id,
-    chatRoomId: boardId,
-  };
+    const newMessage = {
+      content: messageInput,
+      userId: sessionUser.id,
+      chatRoomId: boardId,
+    };
 
-  try {
-    dispatch(createMessageThunk(newMessage));
-  }  
-  catch (err) {
-    console.log(err);
-  }
+    try {
+      dispatch(createMessageThunk(newMessage));
+    }  
+    catch (err) {
+      console.log(err);
+    }
 
-  setMessageInput("");
+    setMessageInput("");
 };
 
 
@@ -82,7 +73,15 @@ return (
           <h2>{roomName} Message Board</h2>
           {boardMsgArr.map((message) => (
             <div key={message.id}>
-              <p>{message.content}</p>
+              {sessionUser.id === message.userId ? (
+                <div>
+                  <p>{message.content}</p>
+                  <button>Edit</button>
+                  <button>Delete</button>
+                </div>
+              ) : (
+                <p>{message.content}</p>
+              )}
             </div>
           ))}
           <input type="text" value={messageInput} 
