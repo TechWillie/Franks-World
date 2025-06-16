@@ -43,5 +43,23 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.put('/:id', async (req, res) => {
+  try {
+    const { content, userId, chatRoomId } = req.body;
+    const message = await Message.findByPk(req.params.id);
+    if (!message) {
+      return res.status(404).json({ error: 'theHype Message not found' });
+    }
+    message.content = content;
+    message.userId = userId;
+    message.chatRoomId = chatRoomId;
+    await message.save();
+    return res.json(message);
+  } catch (error) {
+    console.error('Error updating theHype message:', error);
+    return res.status(500).json({ error: 'Some Hype went wrong' });
+  }
+});
+
 
 module.exports = router;

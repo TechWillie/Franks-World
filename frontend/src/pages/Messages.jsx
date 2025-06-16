@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMessagesThunk, createMessageThunk } from "../store/messages";
 import "./Messages.css"
 import { fetchChatboardThunk } from "../store/chatboard";
+import EditDelete from "../components/EditDeleteMessage";
 
-const Messages = () => {
+const Messages = ({onClose}) => {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user || null);
   const messages = useSelector((state) => state.messages);
@@ -12,6 +13,8 @@ const Messages = () => {
   const [roomName, setRoomName] = useState("");
   const [messageInput, setMessageInput] = useState("");
   const [boardId, setBoardId] = useState(0);
+  const [showEditDelete, setShowEditDelete] = useState(false);
+  const outsideEditRef = useRef(null);
   
   useEffect(() => {
     dispatch(fetchMessagesThunk());
@@ -47,6 +50,26 @@ const Messages = () => {
     setMessageInput("");
 };
 
+const editDelete = (message) => {
+  console.log("message from msg.jsx:", message);
+  return (
+    <>
+    <EditDelete message={message} onClose={() => {}} />
+    </>
+  );
+};
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (outsideEditRef.current && !outsideEditRef.current.contains(event.target)) {
+        setShowEditDelete(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  },[]);
 
   console.log("msg fron db:", messages);
   console.log("sessionUser:", sessionUser);
@@ -57,9 +80,9 @@ return (
   <div className="main-container">
     {sessionUser ? (
       <>
-        <div className="message-container">
+        <div className="board-container">
           <h1>Welcome {sessionUser.username}</h1>
-          <h2>Your Message Boards</h2>
+          <h2>All Message Boards</h2>
           {chatBoards.map((chatBoard) => (
             <div key={chatBoard.id}>
               <button onClick={() => enterRoom(chatBoard.id, chatBoard.name)}>
@@ -74,10 +97,19 @@ return (
           {boardMsgArr.map((message) => (
             <div key={message.id}>
               {sessionUser.id === message.userId ? (
-                <div>
-                  <p>{message.content}</p>
-                  <button>Edit</button>
-                  <button>Delete</button>
+                <div ref={outsideEditRef}>
+                    {showEditDelete ? (
+                      <>
+                      <EditDelete message={message} onClose={() => {setShowEditDelete(false)}} />
+                      </>
+                    ):(
+                      <>
+                      {message.content}
+                      </>
+                    )}
+                    <button onClick={() => {setShowEditDelete(true)}}>Edit</button>
+
+                  
                 </div>
               ) : (
                 <p>{message.content}</p>
@@ -94,11 +126,12 @@ return (
         <h1>Please Log In or Sign Up to Post Messages</h1>
         <h2>All Message Boards</h2>
         {chatBoards.map((chatBoard) => (
-          <div key={chatBoard.id}>
-            <h3>{chatBoard.name}</h3>
-            <p>{chatBoard.description}</p>
-          </div>
-        ))}
+            <div key={chatBoard.id}>
+              <button onClick={() => enterRoom(chatBoard.id, chatBoard.name)}>
+                {chatBoard.name}
+              </button>
+            </div>
+          ))}
       </div>
     )}
   </div>
