@@ -16,13 +16,19 @@ const EditDelete = ({ message, onClose }) => {
     dispatch(updateMessageThunk(updatedMessage));
     onClose();
   }
+
+  const deleteMessage = () => {
+    dispatch(deleteMessageThunk(message.id));
+    onClose();
+  }
   
 
   return (
     <div className="msg-backdrop">
     <input className="logibn-form-input" type="text" value={messageContent} 
     onChange={(e) => setMessageContent(e.target.value)} />
-    <button onClick={editContent} >Update / Delete</button>
+    <button onClick={editContent} >Update</button>
+    {/* <button onClick={deleteMessage}>Delete</button> */}
     </div>
   )
 }

@@ -13,7 +13,7 @@ const Messages = ({onClose}) => {
   const [roomName, setRoomName] = useState("");
   const [messageInput, setMessageInput] = useState("");
   const [boardId, setBoardId] = useState(0);
-  const [showEditDelete, setShowEditDelete] = useState(false);
+  const [showEditDeleteId, setShowEditDeleteId] = useState(null);
   const outsideEditRef = useRef(null);
   
   useEffect(() => {
@@ -50,19 +50,19 @@ const Messages = ({onClose}) => {
     setMessageInput("");
 };
 
-const editDelete = (message) => {
-  console.log("message from msg.jsx:", message);
-  return (
-    <>
-    <EditDelete message={message} onClose={() => {}} />
-    </>
-  );
-};
+// const editDelete = (message) => {
+//   console.log("message from msg.jsx:", message);
+//   return (
+//     <>
+//     <EditDelete message={message} onClose={() => {}} />
+//     </>
+//   );
+// };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (outsideEditRef.current && !outsideEditRef.current.contains(event.target)) {
-        setShowEditDelete(false);
+        setShowEditDeleteId(null);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -77,17 +77,16 @@ const editDelete = (message) => {
   console.log("ids:", ids);
   
 return (
-  <div className="main-container">
-    {sessionUser ? (
-      <>
+  <div>
+  {sessionUser ? (
+      <div className="main-container">
         <div className="board-container">
           <h1>Welcome {sessionUser.username}</h1>
           <h2>All Message Boards</h2>
           {chatBoards.map((chatBoard) => (
             <div key={chatBoard.id}>
-              <button onClick={() => enterRoom(chatBoard.id, chatBoard.name)}>
-                {chatBoard.name}
-              </button>
+              
+              <button onClick={() => enterRoom(chatBoard.id, chatBoard.name)}>{chatBoard.name}</button>
             </div>
           ))}
         </div>
@@ -98,16 +97,12 @@ return (
             <div key={message.id}>
               {sessionUser.id === message.userId ? (
                 <div ref={outsideEditRef}>
-                    {showEditDelete ? (
-                      <>
-                      <EditDelete message={message} onClose={() => {setShowEditDelete(false)}} />
-                      </>
-                    ):(
-                      <>
-                      {message.content}
-                      </>
+                  <p>{message.content}</p>
+                    {showEditDeleteId === message.id && (
+                      <EditDelete message={message} onClose={() => {setShowEditDeleteId(null);    
+                    }} />
                     )}
-                    <button onClick={() => {setShowEditDelete(true)}}>Edit</button>
+                    <button onClick={() => {setShowEditDeleteId(message.id)}}>Edit</button>
 
                   
                 </div>
@@ -120,18 +115,28 @@ return (
           onChange={(e) => setMessageInput(e.target.value)} />
           <button onClick={() => putMsgTogether(messageInput, boardId)}>Post</button>
         </div>
-      </>
+      </div>
     ) : (
-      <div className="message-container">
-        <h1>Please Log In or Sign Up to Post Messages</h1>
-        <h2>All Message Boards</h2>
-        {chatBoards.map((chatBoard) => (
-            <div key={chatBoard.id}>
-              <button onClick={() => enterRoom(chatBoard.id, chatBoard.name)}>
-                {chatBoard.name}
-              </button>
+      <div className="main-container">
+        <div className="board-container">
+          <h1>Please Log In or Sign Up to Post Messages</h1>
+          <h2>All Message Boards</h2>
+          {chatBoards.map((chatBoard) => (
+              <div key={chatBoard.id}>
+                <button onClick={() => enterRoom(chatBoard.id, chatBoard.name)}>
+                  {chatBoard.name}
+                </button>
+              </div>
+            ))}
+            <div className="message-container">
+            <h2>{roomName} Message Board</h2>
+            {boardMsgArr.map((message) => (
+              <div key={message.id}>
+                <p>{message.content}</p>
+              </div>
+            ))}
             </div>
-          ))}
+        </div>
       </div>
     )}
   </div>

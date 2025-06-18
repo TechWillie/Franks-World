@@ -73,9 +73,13 @@ export const updateMessageThunk = (message) => async (dispatch) => {
 
   const messageReducer = (state = {}, action) => {
     switch (action.type) {
-      case SET_MESSAGE:
-        console.log("SET_MESSAGES payload:", action.payload)
-        return { ...state, ...action.payload };
+      case SET_MESSAGE: {
+        const newMessages = {};
+        action.payload.forEach(msg => {
+          newMessages[msg.id] = msg;
+        });
+        return { ...state, ...newMessages };
+}
       case REMOVE_MESSAGE: {
         const newState = { ...state };
         delete newState[action.payload];
@@ -85,6 +89,7 @@ export const updateMessageThunk = (message) => async (dispatch) => {
         return {...state, [action.payload.id]: action.payload}
       }
       case UPDATE_MESSAGE:
+        
         return { ...state, [action.payload.id]: action.payload };
       default:
         return state;
