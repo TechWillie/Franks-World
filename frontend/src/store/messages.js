@@ -10,9 +10,9 @@ const setMessages = (message) => ({
   type: SET_MESSAGE,
   payload: message
 });
-const removeMessage = (messageId) => ({
+const removeMessage = (message) => ({
   type: REMOVE_MESSAGE,
-  payload: messageId
+  payload: message
 });
 const updateMessage = (message) => ({
   type: UPDATE_MESSAGE,
@@ -52,13 +52,15 @@ export const updateMessageThunk = (message) => async (dispatch) => {
   }
   };
 
-  export const deleteMessageThunk = (messageId) => async (dispatch) => {
-    const response = await csrfFetch(`/api/messages/${messageId}`, {
+  export const deleteMessageThunk = (message) => async (dispatch) => {
+    const response = await csrfFetch(`/api/messages/${message.id}`, {
       method: 'DELETE',
       credentials: "include"
     });
     if (response.ok) {
-      dispatch(removeMessage(messageId));
+      console.log("Deleted message Id:", message.id);
+      
+      dispatch(removeMessage(message.id));
     }
   };
 

@@ -7,6 +7,21 @@ const EditDelete = ({ message, onClose }) => {
   console.log("message from EDitDelete:", message.content, message);
   const dispatch = useDispatch();
   const [messageContent, setMessageContent] = useState(message.content);
+  const modalRef = useRef();
+
+ 
+
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [onClose]);
+  
   
   const editContent = () => {
     const updatedMessage = {
@@ -18,17 +33,19 @@ const EditDelete = ({ message, onClose }) => {
   }
 
   const deleteMessage = () => {
-    dispatch(deleteMessageThunk(message.id));
+    dispatch(deleteMessageThunk(message));
     onClose();
   }
   
 
   return (
-    <div className="msg-backdrop">
-    <input className="logibn-form-input" type="text" value={messageContent} 
-    onChange={(e) => setMessageContent(e.target.value)} />
-    <button onClick={editContent} >Update</button>
-    {/* <button onClick={deleteMessage}>Delete</button> */}
+    <div  ref={modalRef} className="msg-backdrop">
+      <div>
+        <input className="logibn-form-input" type="text" value={messageContent} 
+        onChange={(e) => setMessageContent(e.target.value)} />
+        <button onClick={editContent} >Update</button>
+        <button onClick={deleteMessage}>Delete</button>
+      </div>
     </div>
   )
 }

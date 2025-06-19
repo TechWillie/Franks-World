@@ -16,6 +16,19 @@ const Messages = ({onClose}) => {
   const [showEditDeleteId, setShowEditDeleteId] = useState(null);
   const outsideEditRef = useRef(null);
   
+     useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (outsideEditRef.current && !outsideEditRef.current.contains(event.target)) {
+          setShowEditDeleteId(null);
+        }
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    },[]);
+  
+  
   useEffect(() => {
     dispatch(fetchMessagesThunk());
   }, [dispatch]);
@@ -59,17 +72,7 @@ const Messages = ({onClose}) => {
 //   );
 // };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (outsideEditRef.current && !outsideEditRef.current.contains(event.target)) {
-        setShowEditDeleteId(null);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  },[]);
+ 
 
   console.log("msg fron db:", messages);
   console.log("sessionUser:", sessionUser);
@@ -96,11 +99,13 @@ return (
           {boardMsgArr.map((message) => (
             <div key={message.id}>
               {sessionUser.id === message.userId ? (
-                <div ref={outsideEditRef}>
+                <div>
                   <p>{message.content}</p>
                     {showEditDeleteId === message.id && (
-                      <EditDelete message={message} onClose={() => {setShowEditDeleteId(null);    
-                    }} />
+                      <div ref={outsideEditRef}>
+                        <EditDelete message={message} onClose={() => {setShowEditDeleteId(null); 
+                        }} />
+                      </div>
                     )}
                     <button onClick={() => {setShowEditDeleteId(message.id)}}>Edit</button>
 
@@ -112,7 +117,13 @@ return (
             </div>
           ))}
           <input type="text" value={messageInput} 
-          onChange={(e) => setMessageInput(e.target.value)} />
+          onChange={(e) => setMessageInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();  
+              putMsgTogether();    
+            }
+          }} />
           <button onClick={() => putMsgTogether(messageInput, boardId)}>Post</button>
         </div>
       </div>

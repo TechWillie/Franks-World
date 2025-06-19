@@ -61,5 +61,19 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+router.delete('/:id', async (req, res) => {
+  try {
+    const message = await Message.findByPk(req.params.id);
+    if (!message) {
+      return res.status(404).json({ error: 'theHype Message not found' });
+    }
+    await message.destroy();
+    return res.json({ message: 'theHype Message deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting theHype message:', error);
+    return res.status(500).json({ error: 'Some Hype went wrong' });
+  }
+});
+
 
 module.exports = router;
