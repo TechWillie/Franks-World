@@ -5,7 +5,7 @@ import "./Messages.css"
 import { fetchChatboardThunk } from "../store/chatboard";
 import EditDelete from "../components/EditDeleteMessage";
 
-const Messages = ({onClose}) => {
+const Messages = () => {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user || null);
   const messages = useSelector((state) => state.messages);
