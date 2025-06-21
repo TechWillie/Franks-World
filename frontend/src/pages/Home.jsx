@@ -12,7 +12,6 @@ function Home() {
   const dispatch = useDispatch()
   const sesUser = useSelector(state => state.session.user)
   const eventsObj = useSelector(state => state.events || [])
-  const mesageBoards = useSelector(state => state.chatboard || [])
   const [index, setIndex] = useState(0)
   const [createEventsModal, setCreateEventsModal] = useState(false)
   const eventsArr = Object.values(eventsObj)
