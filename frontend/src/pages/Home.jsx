@@ -44,9 +44,9 @@ function Home() {
         <h3 className="intro">Just sayin... </h3>
           <div className='quotes'><h1>{quotes[index]}</h1></div>
       </div>
-      <div className='chatboard-container'>
-        <h1>Message Boards</h1>
-        {mesageBoards.map((messageBoard) => (
+      <div className='event-container'>
+        <h1>Most Current Events</h1>
+        {eventsArr.map((messageBoard) => (
           <div key={messageBoard.id} className="message-container">
             <h3>{messageBoard.name}</h3>
             <p>{messageBoard.createdAt}</p>

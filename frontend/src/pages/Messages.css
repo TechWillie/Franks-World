@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Schoolbell&display=swap');
+
 
 .title{
   color: azure;
@@ -6,23 +8,38 @@
 
 
 .main-container{
-  display: flex;
-  flex-direction: row;
+  /* background-color: brown; */
+  display: grid;
+  flex-direction: column;
 }
 
 .message-container, .board-container {
  border-style: double;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  /* flex-direction: column; */
+  grid-row: 1/2;
   
   justify-content: center;
   /* height: 100vh; */
-  color: rgb(242, 241, 244);
+  color: rgb(8, 7, 8);
   font-size: 1.5rem;
   font-weight: 500;
-  width: 50%;
+  width: fit-content;
+  padding: 10px;
 }
 
 .board-container{
   align-items: center;
+}
+
+.schoolbell-regular {
+  font-family: "Schoolbell", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.msg-edit{
+  /* background-color: brown; */
+  display: flex;
+  flex-direction: row;
 }

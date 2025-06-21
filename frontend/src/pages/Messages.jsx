@@ -5,6 +5,7 @@ import "./Messages.css"
 import { fetchChatboardThunk } from "../store/chatboard";
 import EditDelete from "../components/EditDeleteMessage";
 
+
 const Messages = () => {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user || null);
@@ -30,12 +31,17 @@ const Messages = () => {
   
   
   useEffect(() => {
+    dispatch(fetchChatboardThunk());
     dispatch(fetchMessagesThunk());
+
+    const timer = setInterval(() => {
+      dispatch(fetchMessagesThunk());
+    }, 2000);
+    return () => clearInterval(timer);
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(fetchChatboardThunk());
-  }, [dispatch]);
+  // useEffect(() => {
+  // }, [dispatch]);
 
   const enterRoom = (chatBoardId, roomName) => {
     setBoardId(chatBoardId);
@@ -99,8 +105,8 @@ return (
           {boardMsgArr.map((message) => (
             <div key={message.id}>
               {sessionUser.id === message.userId ? (
-                <div>
-                  <p>{message.content}</p>
+                <div className="msg-edit">
+                  <p className="schoolbell-regular">{message.content}</p>
                     {showEditDeleteId === message.id && (
                       <div ref={outsideEditRef}>
                         <EditDelete message={message} onClose={() => {setShowEditDeleteId(null); 

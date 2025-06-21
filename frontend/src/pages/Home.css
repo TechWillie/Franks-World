@@ -67,15 +67,18 @@ height: 150px;
     grid-row: 1;
 }
 
-.chatboard-container{
+.event-container{
     display: flex;
     flex-direction: column;
     /* justify-content: center; */
     align-items: center;
     /* width: 30%; */
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: aliceblue;
+    background-color: rgba(255, 255, 255, 0.4);
+    color: rgb(16, 16, 17);
+    font-family: 'Impact', 'Arial Black', sans-serif; 
+    font-weight: 900;
+    letter-spacing: 2px;
     grid-column: 1 / 2;
     grid-row: 2;
 }

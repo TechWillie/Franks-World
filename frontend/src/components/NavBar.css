@@ -15,7 +15,7 @@
   
   .nav-links {
     /* background-color: burlywood; */
-    width: 15cm;
+    width: 50%;
     list-style: none;
     display: flex;
     justify-content: space-between;
@@ -33,7 +33,7 @@
     -1px  1px 0 black,
      1px  1px 0 black; /* Outline effect */
   font-size: 1.5rem; /* Adjust as needed */
-  letter-spacing: 2px; /* Adjust as needed */
+  letter-spacing: 4px; /* Adjust as needed */
 }
 
   
@@ -56,13 +56,14 @@
   width: 100%;
   padding: 10px;
   background: transparent;
-  color: antiquewhite;
+  font-family: 'Impact', 'Arial Black', sans-serif; 
+  color: rgb(15, 15, 14);
+  letter-spacing: 2px;
   border: none;
   border-bottom: 1px solid #444;
   text-align: center;
   box-sizing: border-box;
   cursor: pointer;
-  border-style: double;
 }
 
 button:hover {
