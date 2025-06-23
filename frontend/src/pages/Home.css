@@ -53,13 +53,13 @@ color: rgb(243, 192, 104);
 font-size: 20px;
 font-weight: 500;
 height: 150px;
-/* background-color: rgb(58, 51, 42, .3); */
 }
+
 .quotes-container{
     color: rgb(85, 75, 60);
     font-size: 15px;
     font-weight: 500;
-    background-color: rgba(118, 54, 228, 0.2);
+    /* background-color: rgba(102, 101, 104, 0.2); */
     border-radius: 20px;
     padding: 15px;
     width: 50%;
