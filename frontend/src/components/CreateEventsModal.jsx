@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createEventThunk } from "../store/events";
 import "./CreateEvents.css"
-
+import { useNavigate } from "react-router-dom";
 
 const CreateEventModal = ({ onClose }) => {
   const navigate = useNavigate();
