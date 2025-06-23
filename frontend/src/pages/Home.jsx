@@ -3,22 +3,25 @@ import { quotes } from '../components/justSaying'
 import './Home.css'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchChatboardThunk } from '../store/chatboard'
-import pic from "../assets/media/pictures/globe1.avif"
 import CreateEventModal from '../components/CreateEventsModal'
 import { fetchEventsThunk } from '../store/events'
+import { fetchMediaThunk } from '../store/media'
 
 
 function Home() {
   const dispatch = useDispatch()
   const sesUser = useSelector(state => state.session.user)
   const eventsObj = useSelector(state => state.events || [])
+  const mediaObj = useSelector(state => state.media || {})
   const [index, setIndex] = useState(0)
   const [createEventsModal, setCreateEventsModal] = useState(false)
   const eventsArr = Object.values(eventsObj)
  
   
   
+  console.log("MEDIA***", mediaObj);
   useEffect(() => {
+    
     const interval = setInterval(() => {
       setIndex((prevIndex) => (prevIndex + 1) % quotes.length)
     }, 5000) // every 3 seconds
@@ -29,6 +32,7 @@ function Home() {
   useEffect(() => {
     dispatch(fetchChatboardThunk());
     dispatch(fetchEventsThunk());
+    dispatch(fetchMediaThunk());
   }, [dispatch]);
 
   
@@ -59,7 +63,13 @@ function Home() {
         </div>) : (
         <div>
           <h1>Welcome, {sesUser.username}!</h1>
-          <img className='pic' src={pic} alt="" />
+          {Object.values(mediaObj).map((media) => (
+            <div key={media.id}>
+              {media.type === 'image' && sesUser.id === media.userId && (
+                <img src={media.url} alt={media.name} className='pic' />
+              )}
+            </div>
+          ))}
           <button type='button' onClick={clickOnEvents}>Create Event</button>
           {createEventsModal && <CreateEventModal onClose={() => setCreateEventsModal(false)} />}
           

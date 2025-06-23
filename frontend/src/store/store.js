@@ -8,6 +8,7 @@ import usersReducer from './users';
 import messagesReducer from './messages';
 import chatBoardReducer from './chatboard';
 import eventsReducer from './events';
+import mediaReducer from './media';
 
 // Dummy reducer
 const dummyReducer = (state = { message: "Hello from Redux!" }, action) => {
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   messages: messagesReducer,
   chatBoard: chatBoardReducer,
   events: eventsReducer,
+  media: mediaReducer,
 });
 
 // Middleware enhancer
