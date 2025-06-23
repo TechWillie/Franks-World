@@ -5,6 +5,7 @@ import "./CreateEvents.css"
 
 
 const CreateEventModal = ({ onClose }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const modalRef = useRef();
   const sessionUser = useSelector((state) => state.session.user);
@@ -54,6 +55,8 @@ const CreateEventModal = ({ onClose }) => {
     setSubmitted(false); // allow retry
   } else {
     setTimeout(() => onClose(), 0); // defer close to next tick
+    // navigate(`/events/${data.id}`);
+    navigate(`/events`);
   }
 };
 
