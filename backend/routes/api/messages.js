@@ -2,15 +2,24 @@ const express = require('express')
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Message } = require('../../db/models');
+const { Message, User } = require('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 router.get('/', async (req, res) => {
   try {
-    const messages = await Message.findAll();
+    const messages = await Message.findAll(
+      {
+        include: [
+          {
+            model: User,
+            attributes: ['id', 'username', 'email'],
+          },
+        ],
+      }
+    );
     const plainMessagesArr = messages.map(message => message.toJSON());
-    console.log(plainMessagesArr); // Log the plain messages array
+    console.log(plainMessagesArr);
     return res.json(plainMessagesArr);
   } catch (error) {
     console.error('Error fetching messages:', error);

@@ -5,6 +5,7 @@ const { restoreUser } = require("../../utils/auth.js");
 const messagesRouter = require('./messages.js');
 const chatroomsRouter = require('./chatrooms.js');
 const eventsRouter = require('./events.js');
+const mediaRouter = require('./media.js');
 
 
 // GET /api/restore-user
@@ -21,6 +22,8 @@ router.use('/messages', messagesRouter);
 router.use("/chatrooms", chatroomsRouter)
 
 router.use('/events', eventsRouter);
+
+router.use('/media', mediaRouter);
 
 router.post('/test', function(req, res) {
     res.json({ requestBody: req.body });

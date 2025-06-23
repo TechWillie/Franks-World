@@ -10,6 +10,7 @@ const CreateEventModal = ({ onClose }) => {
   const sessionUser = useSelector((state) => state.session.user);
   const [eventObj, setEventObj] = useState({
     name: "",
+    hostId: sessionUser?.id,
     description: "",
     eventDate: "",
     placeId: null,

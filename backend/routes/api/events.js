@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     const events = await Event.findAll();
     return res.json(events);
   } catch (error) {
-    console.error('Error fetching events:', error); // 👈 Check your terminal logs
+    console.error('Error fetching events:', error); 
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -18,13 +18,19 @@ router.get('/', async (req, res) => {
 //! Get one event by id
 router.get('/:id', async (req, res) => {
     try {
-        const event = await Event.findByPk(req.params.id);
+        const event = await Event.findByPk(req.params.id, {
+            include:{
+                model: User,
+                attributes: ['id', 'username'],
+            }
+        });
+        
         if (!event) {
             return res.status(404).json({ error: 'Event not found' });
         }
         return res.json(event);
     } catch (error) {
-        console.error('Error fetching event:', error); // 👈 Check your terminal logs
+        console.error('Error fetching event:', error);
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 });
@@ -68,7 +74,7 @@ router.put('/:id', requireAuth, async (req, res) => {
         });
         return res.json(event);
     } catch (error) {
-        console.error('Error updating event:', error); // 👈 Check your terminal logs
+        console.error('Error updating event:', error);
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 });
@@ -86,7 +92,7 @@ router.delete('/:id', requireAuth, async (req, res) => {
         await event.destroy();
         return res.json({ message: 'Event deleted successfully' });
     } catch (error) {
-        console.error('Error deleting event:', error); // 👈 Check your terminal logs
+        console.error('Error deleting event:', error);
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 });

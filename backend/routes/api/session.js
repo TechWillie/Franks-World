@@ -95,7 +95,7 @@ router.post(
           username: credential,
           email: credential
         }
-      }
+      } 
     });
 
     if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
@@ -144,5 +144,23 @@ router.get(
     } else return res.json({ user: null });
   }
 );
+
+router.post("/demouser", async (req, res) => {
+  const { email, username, password } = req.body;
+  const user = await User.create({
+    email,
+    username,
+    hashedPassword: bcrypt.hashSync(password),
+  });
+  const safeUser = {
+    id: user.id,
+    email: user.email,
+    username: user.username,
+  };
+  await setTokenCookie(res, safeUser);
+  return res.json({
+    user: safeUser,
+  });
+});
 
 module.exports = router;

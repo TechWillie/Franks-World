@@ -9,7 +9,30 @@ router.get('/', async (req, res) => {
     const chatrooms = await ChatRoom.findAll();
     return res.json(chatrooms);
   } catch (error) {
-    console.error('Error fetching chatrooms:', error); // 👈 Check your terminal logs
+    console.log('Error fetching chatrooms:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  try {
+    const chatroom = await ChatRoom.findByPk(req.params.id, {
+      include: [
+        {
+          model: Message,
+          include: [User],
+        },
+      ],
+    });
+
+    if (!chatroom) {
+      return res.status(404).json({ error: 'Chatroom not found' });
+    }
+
+    return res.json(chatroom);
+
+  } catch (error) {
+    console.log('Error fetching chatroom:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
