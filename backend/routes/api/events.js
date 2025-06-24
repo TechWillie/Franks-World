@@ -7,7 +7,9 @@ const { requireAuth } = require('../../utils/auth');
 // ! Get all events
 router.get('/', async (req, res) => {
   try {
-    const events = await Event.findAll();
+    const events = await Event.findAll({
+        order: [['eventDate', 'DESC']],
+  });
     return res.json(events);
   } catch (error) {
     console.error('Error fetching events:', error); 

@@ -118,7 +118,7 @@ return (
                   
                 </div>
               ) : (
-                <p>{message.User.username}: {message.content}</p>
+                <p>{message.User?.username || "Unkown User"}: {message.content}</p>
               )}
             </div>
           ))}
