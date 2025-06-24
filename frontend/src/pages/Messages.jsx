@@ -106,7 +106,7 @@ return (
             <div key={message.id}>
               {sessionUser.id === message.userId ? (
                 <div className="msg-edit">
-                  <p className="schoolbell-regular">{message.User.username}:e {message.content}</p>
+                  <p className="schoolbell-regular">{message.User?.username || "unknown"}:e {message.content}</p>
                     {showEditDeleteId === message.id && (
                       <div ref={outsideEditRef}>
                         <EditDelete message={message} onClose={() => {setShowEditDeleteId(null); 
