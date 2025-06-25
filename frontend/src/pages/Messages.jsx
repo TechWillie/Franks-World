@@ -102,26 +102,28 @@ return (
 
         <div className="message-container">
           <h2>{roomName} Message Board</h2>
-          {boardMsgArr.map((message) => (
-            <div key={message.id}>
-              {sessionUser.id === message.userId ? (
-                <div className="msg-edit">
-                  <p className="schoolbell-regular">{message.User?.username || "unknown"}:e {message.content}</p>
-                    {showEditDeleteId === message.id && (
-                      <div ref={outsideEditRef}>
-                        <EditDelete message={message} onClose={() => {setShowEditDeleteId(null); 
-                        }} />
-                      </div>
-                    )}
-                    <button onClick={() => {setShowEditDeleteId(message.id)}}>Edit</button>
+          <div className="the-messages">
+            {boardMsgArr.map((message) => (
+              <div key={message.id}>
+                {sessionUser.id === message.userId ? (
+                  <div className="msg-edit">
+                    <p className="schoolbell-regular">{message.User?.username || "unknown"}: {message.content}</p>
+                      {showEditDeleteId === message.id && (
+                        <div ref={outsideEditRef}>
+                          <EditDelete message={message} onClose={() => {setShowEditDeleteId(null); 
+                          }} />
+                        </div>
+                      )}
+                      <button onClick={() => {setShowEditDeleteId(message.id)}}>Edit</button>
 
-                  
-                </div>
-              ) : (
-                <p>{message.User?.username || "Unkown User"}: {message.content}</p>
-              )}
-            </div>
-          ))}
+                    
+                  </div>
+                ) : (
+                  <p className="schoolbell-regular">{message.User?.username || "Unkown User"}: {message.content}</p>
+                )}
+              </div>
+            ))}
+          </div>
           <input type="text" value={messageInput} 
           onChange={(e) => setMessageInput(e.target.value)}
           onKeyDown={(e) => {
@@ -130,6 +132,7 @@ return (
               putMsgTogether();    
             }
           }} />
+
           <button onClick={() => putMsgTogether(messageInput, boardId)}>Post</button>
         </div>
       </div>
