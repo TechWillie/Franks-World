@@ -50,7 +50,7 @@ function Home() {
       <div className='event-container'>
         <h1>Most Current Events</h1>
         {eventsArr.map((messageBoard) => (
-          <div key={messageBoard.id} className="message-container">
+          <div key={messageBoard.id} >
             <h3>{messageBoard.name}</h3>
             <p>{messageBoard.createdAt}</p>
           </div>
