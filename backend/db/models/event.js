@@ -44,6 +44,10 @@ module.exports = (sequelize) => {
     chatRoomId: {
       type: DataTypes.INTEGER,
       allowNull: true
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
     }
   }, {
     sequelize,

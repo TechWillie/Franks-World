@@ -35,6 +35,8 @@ export const fetchChatboardThunk = () => async (dispatch) => {
     dispatch(setChatboard(chatboards));
     }};
 export const createChatboardThunk = (chatboard) => async (dispatch) => {
+  console.log("chatboard to thunk:", chatboard);
+  
     const response = await csrfFetch('/api/chatrooms', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

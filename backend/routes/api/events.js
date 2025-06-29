@@ -4,23 +4,43 @@ const { Event, ChatRoom, Message, User } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 
 
+
 // ! Get all events
 router.get('/', async (req, res) => {
   try {
     const events = await Event.findAll({
-        order: [['eventDate', 'DESC']],
-  });
-    return res.json(events);
+      order: [['createdAt', 'DESC']],
+    });
+
+    const formatted = events.map(event => {
+      const e = event.toJSON();
+      return {
+        ...e,
+        createdAt: new Date(e.createdAt).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+        }),
+        eventDate: new Date(e.eventDate).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+        })
+      };
+    });
+    res.json(formatted); 
   } catch (error) {
     console.error('Error fetching events:', error); 
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
+
 //! Get one event by id
 router.get('/:id', async (req, res) => {
     try {
         const event = await Event.findByPk(req.params.id, {
+            // order: [['createdAt', 'DESC']],
             include:{
                 model: User,
                 attributes: ['id', 'username'],
@@ -39,6 +59,11 @@ router.get('/:id', async (req, res) => {
 
 //! Create a new event
 router.post('/', requireAuth, async (req, res) => {
+    const formattedDate = new Date().toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+    });
     try {
         const { name, description, chatRoomId, placeId, hostId, eventDate } = req.body;
         const event = await Event.create({
@@ -47,7 +72,9 @@ router.post('/', requireAuth, async (req, res) => {
             hostId,
             eventDate,
             chatRoomId,
-            placeId
+            placeId,
+            createdAt: formattedDate,
+            updatedAt: formattedDate
         });
         return res.status(201).json(event);
     } catch (error) {

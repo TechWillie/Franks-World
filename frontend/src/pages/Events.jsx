@@ -45,7 +45,7 @@ const Events = () => {
             <h2>{event.name}</h2>
             <p>{event.description}</p>
             <p>Date: {event.eventDate}</p>
-            <img src={photosArr[event.id].img_src} alt="no pic" />
+            <img src={photosArr[event.id]?.img_src} alt="no pic" />
             {event.hostId === sessionUser.id && 
               <div>
                 <button onClick={() => setIsEvent(event)}>Edit</button>
