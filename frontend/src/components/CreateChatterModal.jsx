@@ -26,7 +26,7 @@ const CreateChatboardModal = ({ onClose }) => {
     if (name) {
       setChatboardObj({ name });
       dispatch(createChatboardThunk(chatboardObj));
-      // navigate('/messages')
+      navigate('/messages')
       onClose();
     } else {
       console.log("Name is required");
