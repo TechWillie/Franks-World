@@ -56,7 +56,8 @@ function Home() {
       </div> */}
       <div className='event-container'>
         <h1>Most Current Events</h1>
-        {eventsArr.map((event) => (
+        {/* {eventsArr.map((event) => ( */}
+         {sortedEvents.map((event) => (
           <div key={event.id} >
             <h3>{event.name}</h3>
             <p>Created: {event?.createdAt}</p>
