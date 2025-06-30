@@ -74,20 +74,24 @@ export const updateChatboardThunk = (chatboard) => async (dispatch) => {
 };
 
 const chatBoardReducer = (state = [], action) => {
-    switch (action.type) {
+  switch (action.type) {
     case SET_CHATBOARD:
-    return [...action.payload];
+      return [...action.payload];
+
     case ADD_CHATBOARD:
-    return { ...state, [action.payload.id]: action.payload };
+      return [...state, action.payload];
+
     case UPDATE_CHATBOARD:
-    return { ...state, [action.payload.id]: action.payload };
-    case REMOVE_CHATBOARD:{
-    const newState = { ...state };
-    delete newState[action.payload];
-    return newState;
-    }
+      return state.map(board =>
+        board.id === action.payload.id ? action.payload : board
+      );
+
+    case REMOVE_CHATBOARD:
+      return state.filter(board => board.id !== action.payload);
+
     default:
-    return state;
-    }
+      return state;
+  }
 };
+
 export default chatBoardReducer;

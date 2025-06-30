@@ -69,19 +69,9 @@ const Messages = () => {
     setMessageInput("");
 };
 
-// const editDelete = (message) => {
-//   console.log("message from msg.jsx:", message);
-//   return (
-//     <>
-//     <EditDelete message={message} onClose={() => {}} />
-//     </>
-//   );
-// };
-
- 
-
   console.log("msg fron db:", messages);
   console.log("sessionUser:", sessionUser);
+  console.log("chatBoards:", chatBoards);
   const ids = chatBoards.map((chatBoard) => chatBoard.id);
   console.log("ids:", ids);
   

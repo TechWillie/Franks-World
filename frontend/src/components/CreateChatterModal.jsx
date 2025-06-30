@@ -22,10 +22,12 @@ const CreateChatboardModal = ({ onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+    
     if (name) {
-      setChatboardObj({ name });
-      dispatch(createChatboardThunk(chatboardObj));
+      const newChatt = {name, isPrivate: false};
+      console.log("Form submitted", name);
+      // setChatboardObj({ name });
+      dispatch(createChatboardThunk(newChatt));
       navigate('/messages')
       onClose();
     } else {

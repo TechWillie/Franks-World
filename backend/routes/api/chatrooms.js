@@ -40,13 +40,13 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', requireAuth, async (req, res) => {
   try {
-    const { name, isPrivate } = req.body;
+    const { name, isPrivate = false } = req.body;
     const chatroom = await ChatRoom.create(
       { 
         name, 
-        isPrivat,
-        updatedAt,
-        createdAt: format(new Date(), 'yyyy-MM-dd HH:mm:ss')
+        isPrivate
+        // updatedAt: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+        // createdAt: format(new Date(), 'yyyy-MM-dd HH:mm:ss')
        });
        return res.json(chatroom);
       }
