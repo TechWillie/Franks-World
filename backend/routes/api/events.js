@@ -59,11 +59,7 @@ router.get('/:id', async (req, res) => {
 
 //! Create a new event
 router.post('/', requireAuth, async (req, res) => {
-    const formattedDate = new Date().toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric"
-    });
+   
     try {
         const { name, description, chatRoomId, placeId, hostId, eventDate } = req.body;
         const event = await Event.create({
@@ -73,8 +69,6 @@ router.post('/', requireAuth, async (req, res) => {
             eventDate,
             chatRoomId,
             placeId,
-            createdAt: formattedDate,
-            updatedAt: formattedDate
         });
         return res.status(201).json(event);
     } catch (error) {
