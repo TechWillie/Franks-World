@@ -15,10 +15,10 @@ const CreateChatboardModal = ({ onClose }) => {
   const modalRef = useRef();
 //   const sessionUser = useSelector((state) => state.session.user);
 
-  const [chatboardObj, setChatboardObj] = useState({
-    name: "",
-    isPrivate: false,
-  });
+  // const [chatboardObj, setChatboardObj] = useState({
+  //   name: "",
+  //   isPrivate: false,
+  // });
 
   const handleSubmit = (e) => {
     e.preventDefault();
