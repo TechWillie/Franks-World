@@ -1,11 +1,15 @@
 .navbar {
-    /* background-image: url(../assets/media/pictures/globe1.avif); */
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: .1rem 1rem;
     color: rgb(239, 231, 231);
-    
+    backdrop-filter: blur(10px);
+    z-index: 100;
   }
   
   .logo {

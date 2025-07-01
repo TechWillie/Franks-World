@@ -54,7 +54,9 @@
   width: 100%;
 }
 .the-messages{
+  /* max-height: 100%; */
   overflow: auto;
+  overflow-y: auto;
 }
 
 .the-messages p{
@@ -78,4 +80,8 @@
   flex-direction: row;
   justify-content: space-between;
   
+}
+
+.boardrooms{
+  overflow: auto;
 }

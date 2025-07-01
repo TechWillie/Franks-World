@@ -36,29 +36,29 @@ const Events = () => {
 
 
   return (
-    <>
-        <h1 className="header">Events</h1>
-    <div className="events-container">
-      {/* {console.log("event IDs:", eventsArr.map(e => e.id))} */}
-        {eventsArr.map((event) => (
-          <div key={event.id} className="event-card">
-            <h2>{event.name}</h2>
-            <p>{event.description}</p>
-            <p>Date: {event.eventDate}</p>
-            <img src={photosArr[event.id]?.img_src} alt="no pic" />
-            {event.hostId === sessionUser.id && 
-              <div>
-                <button onClick={() => setIsEvent(event)}>Edit</button>
-                
-              </div> 
-            }
-          </div>
-        ))}
-          {isEvent && 
-          <UpdateDelete event={isEvent} onClose={() => setIsEvent(null)} />}
-       
+    <div className="body">
+      <h1 className="header">Events</h1>
+      <div className="events-container">
+        {/* {console.log("event IDs:", eventsArr.map(e => e.id))} */}
+          {eventsArr.map((event) => (
+            <div key={event.id} className="event-card">
+              <h2>{event.name}</h2>
+              <p>{event.description}</p>
+              <p>Date: {event.eventDate}</p>
+              <img src={photosArr[event.id]?.img_src} alt="no pic" />
+              {event.hostId === sessionUser.id && 
+                <div>
+                  <button onClick={() => setIsEvent(event)}>Edit</button>
+
+                </div> 
+              }
+            </div>
+          ))}
+            {isEvent && 
+            <UpdateDelete event={isEvent} onClose={() => setIsEvent(null)} />}
+
+      </div>
     </div>
-    </>
   )
 }
   export default Events;

@@ -4,7 +4,8 @@ import { useDispatch } from "react-redux";
 import { login } from "../store/session";
 
 
-function LoginFormModal({onClose}) {
+function LoginFormModal({show, onClose}) {
+  
     const modalRef = useRef();
     const dispatch = useDispatch();
     const [username, setUsername] = useState("");
@@ -15,16 +16,20 @@ function LoginFormModal({onClose}) {
 
   useEffect(() => {
     function handleClickOutside(event) {
-         console.log('Clicked:', event.target);
       if (modalRef.current && !modalRef.current.contains(event.target)) {
+        console.log('Clicked:', event.target);
         onClose(); // Close modal if click is outside the form
-      }
+      }else {
+    console.log("Clicked inside");
+  }
     }
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
+  if (!show) return null;
+  
   const handleSubmit = async (e) => {
         e.preventDefault();
         const data = await dispatch(login(username, password));
@@ -40,8 +45,8 @@ function LoginFormModal({onClose}) {
   
   return (
     <div className="backdrop">
-        <div ref={modalRef} >
-            <form className="login-form" onSubmit={handleSubmit}>
+        <div>
+            <form className="login-form" ref={modalRef} onSubmit={handleSubmit} onClick={(e) => e.stopPropagation()}>
                 <h2>Login Form</h2>
                 <input 
                 type="text" 

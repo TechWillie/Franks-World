@@ -4,7 +4,8 @@ import "./SignupForm.css"
 import { useDispatch } from "react-redux";
 
 
-const SignupFormModal = ({onClose}) => {
+const SignupFormModal = ({show, onClose}) => {
+ 
   const dispatch = useDispatch();
   const [errors, setErrors] = useState([]);
   const [firstName, setFirstName] = useState("");
@@ -30,6 +31,8 @@ const SignupFormModal = ({onClose}) => {
       return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [onClose]);
 
+    if (!show) return null;
+    
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newUser = { 
@@ -48,11 +51,11 @@ const SignupFormModal = ({onClose}) => {
    return (
     <>
         <div className="modal-background">
-          <div className="modal-content" ref={signupForm}>
-            <form onSubmit={handleSubmit}>
+          <div className="modal-content">
+            <form onSubmit={handleSubmit} ref={signupForm}>
               <h2>Sign Up</h2>
               <ul>
-                {errors.map((error, idx) => (
+                {Array.isArray(errors) && errors.map((error, idx) => (
                   <li key={idx}>{error}</li>
                 ))}
               </ul>
