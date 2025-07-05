@@ -39,7 +39,7 @@
 .board-container button{
   background-color: rgb(107, 107, 107, 0.4);
   color: rgb(255, 255, 255);
-  border: none;
+  border: double;
   border-radius: 5px;
   padding: 5px 10px;
   margin-top: 10px;

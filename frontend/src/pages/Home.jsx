@@ -50,13 +50,8 @@ function Home() {
 
   return (
     <div className='home-box'>
-      {/* <div className='quotes-container'>
-        <h3 className="intro">Just sayin... </h3>
-          <div className='quotes'><h1>{quotes[index]}</h1></div>
-      </div> */}
       <div className='event-container'>
         <h1>Most Current Events</h1>
-        {/* {eventsArr.map((event) => ( */}
          {sortedEvents.map((event) => (
           <div key={event.id} >
             <h3>{event.name}</h3>

@@ -80,6 +80,15 @@ useEffect(() => {
   console.log("chatBoards:", chatBoards);
   const ids = chatBoards.map((chatBoard) => chatBoard.id);
   console.log("ids:", ids);
+
+  const numOfmsgs = board => {
+    console.log("ID for button counter", board);
+    let count = 0;
+    Object.values(messages).forEach(msg => {
+      if(msg.chatRoomId === board) ++count
+    })
+    return count
+  }
   
 return (
   <div className="body">
@@ -91,7 +100,9 @@ return (
         {chatBoards.map((chatBoard) => (
           <div key={chatBoard.id}>
             
-            <button onClick={() => enterRoom(chatBoard.id, chatBoard.name)}>{chatBoard.name}</button>
+            <button onClick={() => enterRoom(chatBoard.id, chatBoard.name)}>
+              {chatBoard.name}
+            </button>
           </div>
         ))}
       </div>
@@ -140,7 +151,7 @@ return (
           {chatBoards.map((chatBoard) => (
               <div key={chatBoard.id}>
                 <button onClick={() => enterRoom(chatBoard.id, chatBoard.name)}>
-                  {chatBoard.name}
+                  {chatBoard.name}: {numOfmsgs(chatBoard.id)}
                 </button>
               </div>
             ))}

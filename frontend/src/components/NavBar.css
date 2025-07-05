@@ -1,31 +1,64 @@
 .navbar {
-   position: fixed;
-   top: 0;
-   left: 0;
-   width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: .1rem 1rem;
-    color: rgb(239, 231, 231);
-    backdrop-filter: blur(10px);
-    z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .1rem 1rem;
+  color: rgb(239, 231, 231);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.menu-toggle{
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: white;
+}
+
+.nav-links {
+  /* background-color: burlywood; */
+  width: 70%;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle{
+    display: block;
+    
   }
-  
-  .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
+
   .nav-links {
-    /* background-color: burlywood; */
-    width: 70%;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    gap: 1.5rem;
+    display: none;
+    flex-direction: column;      /* Stack nav items vertically */
+    width: 100%;                 /* Full width */
+    gap: 1rem;                   /* Smaller gap */
+    align-items: flex-start;     /* Align text to the left */
+    padding: 1rem;
   }
-  
+
+
+ 
+
+  .nav-links.open {
+    display: flex; /* show when toggled */
+  }
+}
+
+
+
  .nav-links li a {
   font-family: 'Impact', 'Arial Black', sans-serif; /* Big bold font */
   font-weight: 900; /* Maximum thickness */

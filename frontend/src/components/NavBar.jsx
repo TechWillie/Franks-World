@@ -15,6 +15,7 @@ function Navbar({loginClick, signupClick}) {
   // const [showLoginModal, setShowLoginModal] = useState(false);
   // const [showSignupModal, setShowSignupModal] = useState(false);
   const dropDownMenu = useRef();
+  const [isOpen, setIsOpen] = useState(false)
   
    // Close dropdown when clicking outside
   useEffect(() => {
@@ -32,7 +33,11 @@ function Navbar({loginClick, signupClick}) {
   return (
     <nav className="navbar">
       <h2 className="logo">theHype</h2>
-      <ul className="nav-links">
+      <button className="menu-toggle" onClick={() => setIsOpen(!isOpen)}>
+        hello
+      </button>
+      <ul className={`nav-links ${isOpen ? "open" : ""}`}>
+      {/* <ul className='nav-links'> */}
         <li><NavLink to="/">Home</NavLink></li>
         <li><NavLink to="/events" >Events</NavLink></li>
         <li><NavLink to="/messages" >Chatter Box</NavLink></li>
