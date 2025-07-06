@@ -53,7 +53,13 @@
  
 
   .nav-links.open {
-    display: flex; /* show when toggled */
+    /* display: flex; */
+    display: flex;
+    position: absolute;
+    margin-top: 60%;
+    background-color: rgb(177, 190, 102, 0.8);
+    /* max-width: fit-content; */
+    
   }
 }
 

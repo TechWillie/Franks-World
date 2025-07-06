@@ -7,6 +7,7 @@ import { FaRegUser } from "react-icons/fa6";
 import { BsFillHouseFill, BsPersonVcard, BsPersonWalking } from "react-icons/bs";
 import "../components/NavBar.css"
 import { logout } from "../store/session";
+import { FiMenu } from "react-icons/fi";
 
 function Navbar({loginClick, signupClick}) {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ function Navbar({loginClick, signupClick}) {
   // const [showSignupModal, setShowSignupModal] = useState(false);
   const dropDownMenu = useRef();
   const [isOpen, setIsOpen] = useState(false)
+  const mobileOutsideTouch = useRef()
   
    // Close dropdown when clicking outside
   useEffect(() => {
@@ -28,26 +30,38 @@ function Navbar({loginClick, signupClick}) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-
+  useEffect(() => {
+    function outsideToggle(ev){
+      if(mobileOutsideTouch.current && !mobileOutsideTouch.current.contains(ev.target)){
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", outsideToggle);
+    return () => document.removeEventListener("mousedown", outsideToggle)
+  })
   
   return (
     <nav className="navbar">
       <h2 className="logo">theHype</h2>
       <button className="menu-toggle" onClick={() => setIsOpen(!isOpen)}>
-        hello
+        <FiMenu />
       </button>
-      <ul className={`nav-links ${isOpen ? "open" : ""}`}>
+      <ul className={`nav-links ${isOpen ? "open" : ""}`} ref={mobileOutsideTouch}>
       {/* <ul className='nav-links'> */}
         <li><NavLink to="/">Home</NavLink></li>
         <li><NavLink to="/events" >Events</NavLink></li>
         <li><NavLink to="/messages" >Chatter Box</NavLink></li>
         <li><NavLink to="/peeps" >My Peeps</NavLink></li>
+      </ul>
 
     {sessionUser ? (
+        <ul >
           <li>
             <button onClick={() => dispatch(logout())}><BsPersonWalking /> Logout</button>
           </li>
+        </ul>
         ) : (
+        <ul>
           <li>
             <div ref={dropDownMenu} style={{ position: 'relative' }}>
               <button onClick={() => setShowMenu(!showMenu)}><BsFillHouseFill /> Please come in...</button>
@@ -65,8 +79,8 @@ function Navbar({loginClick, signupClick}) {
               )}
             </div>
           </li>
-        )}
       </ul>
+        )}
     </nav>
   );
 }
