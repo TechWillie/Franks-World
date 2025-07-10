@@ -42,10 +42,10 @@
 
   .nav-links {
     display: none;
-    flex-direction: column;      /* Stack nav items vertically */
-    width: 100%;                 /* Full width */
-    gap: 1rem;                   /* Smaller gap */
-    align-items: flex-start;     /* Align text to the left */
+    flex-direction: column;      
+    width: 100%;                 
+    gap: 1rem;                   
+    align-items: flex-start;     
     padding: 1rem;
   }
 

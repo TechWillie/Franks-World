@@ -18,6 +18,7 @@ function Navbar({loginClick, signupClick}) {
   const dropDownMenu = useRef();
   const [isOpen, setIsOpen] = useState(false)
   const mobileOutsideTouch = useRef()
+  const mobileMenu = useRef()
   
    // Close dropdown when clicking outside
   useEffect(() => {
@@ -32,18 +33,31 @@ function Navbar({loginClick, signupClick}) {
 
   useEffect(() => {
     function outsideToggle(ev){
-      if(mobileOutsideTouch.current && !mobileOutsideTouch.current.contains(ev.target)){
-        setIsOpen(false)
+      ev.preventDefault()
+      setTimeout(() => {
+      if (
+        mobileOutsideTouch.current &&
+        !mobileOutsideTouch.current.contains(ev.target) &&
+        mobileMenu.current &&
+        !mobileMenu.current.contains(ev.target)
+      ) {
+        setIsOpen(false);
       }
+    }, 0);
     }
     document.addEventListener("mousedown", outsideToggle);
     return () => document.removeEventListener("mousedown", outsideToggle)
-  })
+  }, [])
+
+  const mobileMenuToggle = (e) => {
+    e.preventDefault()
+    setIsOpen(!isOpen)
+  }
   
   return (
     <nav className="navbar">
       <h2 className="logo">theHype</h2>
-      <button className="menu-toggle" onClick={() => setIsOpen(!isOpen)}>
+      <button className="menu-toggle" onClick={mobileMenuToggle} ref={mobileMenu}>
         <FiMenu />
       </button>
       <ul className={`nav-links ${isOpen ? "open" : ""}`} ref={mobileOutsideTouch}>
