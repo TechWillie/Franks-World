@@ -52,7 +52,7 @@ const SignupFormModal = ({show, onClose}) => {
     <>
         <div className="modal-background">
           <div className="modal-content">
-            <form onSubmit={handleSubmit} ref={signupForm}>
+            <form onSubmit={handleSubmit} ref={signupForm} onMouseDown={(e) => e.stopPropagation()}>
               <h2>Sign Up</h2>
               <ul>
                 {Array.isArray(errors) && errors.map((error, idx) => (

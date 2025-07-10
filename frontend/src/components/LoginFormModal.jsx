@@ -25,13 +25,14 @@ function LoginFormModal({show, onClose}) {
     }
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedowb", handleClickOutside);
   }, [onClose]);
 
   if (!show) return null;
   
   const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log('Form submitted');
         const data = await dispatch(login(username, password));
         if (data?.errors) {
             console.log(errors);
@@ -46,7 +47,11 @@ function LoginFormModal({show, onClose}) {
   return (
     <div className="backdrop">
         <div>
-            <form className="login-form" ref={modalRef} onSubmit={handleSubmit} onClick={(e) => e.stopPropagation()}>
+            <form className="login-form" 
+            onClick={(e) => e.stopPropagation()}
+            ref={modalRef} onSubmit={handleSubmit} 
+            onMouseDown={(e) => e.stopPropagation()}
+            >
                 <h2>Login Form</h2>
                 <input 
                 type="text" 

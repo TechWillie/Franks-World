@@ -131,15 +131,17 @@ return (
           ))}
           <div ref={bottomOfMsgs} />
         </div>
-        <input type="text" value={messageInput} 
-        onChange={(e) => setMessageInput(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault();  
-            putMsgTogether();    
-          }
-        }} />
-        <button onClick={() => putMsgTogether(messageInput, boardId)}>Post</button>
+          <div className="input-field">
+            <input type="text" value={messageInput}
+            onChange={(e) => setMessageInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();  
+                putMsgTogether();    
+              }
+            }} />
+            <button onClick={() => putMsgTogether(messageInput, boardId)}>Post</button>
+          </div>
       </div>
     </div>
     ) : (
