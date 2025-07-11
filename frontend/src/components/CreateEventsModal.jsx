@@ -64,7 +64,7 @@ const CreateEventModal = ({ onClose }) => {
     <div className="backdrop">
         <div className="login-form" ref={modalRef}>
             <h2>Create Event</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} onMouseDown={(e) => e.stopPropagation()}>
               <h4>Name of event</h4>
               <input type="text" value={eventObj.name} 
               onChange={(e) => setEventObj({ ...eventObj, name: e.target.value })} />

@@ -59,8 +59,18 @@
     cursor: not-allowed;
   }
 
-  .single-event-container{
-    background-color: rgba(217, 203, 98, 0.2);
+.event-body{
+  /* background-color: aqua; */
+  display: flex; 
+  justify-content: space-around;
+}
+
+  .single-container{
+    background-color: rgba(217, 203, 98, 0.3);
+    padding: 10px;
+    border-radius: 15px;
+    width: 100%;
+
   }
 
 @media (max-width: 768px) {
@@ -72,5 +82,9 @@
 
   .event-card{
     max-width: fit-content;
+  }
+
+  .event-body{
+    display: block;
   }
 }

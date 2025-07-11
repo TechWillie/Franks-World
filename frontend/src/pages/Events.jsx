@@ -55,26 +55,28 @@ const Events = () => {
   return (
     <div className="body">
       <h1 className="header">Events</h1>
-      <div className="events-container">
-        {/* {console.log("event IDs:", eventsArr.map(e => e.id))} */}
-          {eventsArr.map((event) => (
-            <button key={event.id} className="event-card" onClick={() => setSelectEvent(event)}>  
-              <h2>{event.name}</h2>
-              <p>{event.description}</p>
-              <p>Date: {event.eventDate}</p>
-              <img src={photosArr[event.id]?.img_src} alt="no pic" />
-              {event.hostId === sessionUser.id && 
-                <div>
-                  <button onClick={() => setIsEvent(event)}>Edit</button>
-                </div> 
-              }
-            </button>
-          ))}
-            {isEvent && 
-            <UpdateDelete event={isEvent} onClose={() => setIsEvent(null)} />}
-      </div>
-      <div>
-        {selectEvent && <EventPage evenObj={selectEvent} />}
+      <div className="event-body">
+        <div className="events-container">
+          {/* {console.log("event IDs:", eventsArr.map(e => e.id))} */}
+            {eventsArr.map((event) => (
+              <button key={event.id} className="event-card" onClick={() => setSelectEvent(event)}>  
+                <h2>{event.name}</h2>
+                <p>{event.description}</p>
+                <p>Date: {event.eventDate}</p>
+                <img src={photosArr[event.id]?.img_src} alt="no pic" />
+                {event.hostId === sessionUser.id && 
+                  <div>
+                    <button onClick={() => setIsEvent(event)}>Edit</button>
+                  </div> 
+                }
+              </button>
+            ))}
+              {isEvent && 
+              <UpdateDelete event={isEvent} onClose={() => setIsEvent(null)} />}
+        </div>
+        <div className="single-container">
+          {selectEvent && <EventPage evenObj={selectEvent} />}
+        </div>
       </div>
     </div>
   )

@@ -49,7 +49,8 @@ const CreateChatboardModal = ({ onClose }) => {
  
   return (
      <div className="backdrop">
-        <form onSubmit={handleSubmit} className="login-form" ref={modalRef}>
+        <form onSubmit={handleSubmit} className="login-form" 
+        ref={modalRef} onMouseDown={(e) => e.stopPropagation()}>
         <h1>Create Mesage Board</h1>
             <label>
                 Name
