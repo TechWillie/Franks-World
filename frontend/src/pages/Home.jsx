@@ -63,7 +63,8 @@ function Home() {
       <div className='session'>
       {!sesUser ? (
         <div>
-          <h1>Welcome, Guest!</h1>
+          <h1>Welcome to theHype...!</h1>
+          <h3>Look around. Become a member.</h3>
         </div>) : (
         <div>
           <h1>Welcome, {sesUser.username}!</h1>
@@ -81,18 +82,21 @@ function Home() {
         </div>
       )}
         <>
-        <h1>Your Events</h1>
           {sesUser && 
+            <>
+            <h1>Your Events</h1>
             
-            eventsArr.filter(event => event.hostId === sesUser.id)
+            {eventsArr.filter(event => event.hostId === sesUser.id)
                       .map((event) => (
+              
               <div key={event.id} className="user-event-card">
                 <h3>{event.name}</h3>
                 <p>{event.description}</p>
                 <p>{event.eventDate}</p>
-                
               </div>
             ))}
+            </>
+          }
             
         </>
       </div>

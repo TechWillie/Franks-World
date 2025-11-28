@@ -34,16 +34,16 @@
   }
 
   .event-card button{
-    background-color: #e2ef28;
-    color: #1b1a1a;
+    background-color: #646460;
+    color: #ede8e8;
     border: none;
     padding: 0.5rem 1rem;
-    border-radius: 4px;
     cursor: pointer;
+    border-radius: 10px;
   }
 
   .event-card button:hover{
-    background-color: #0056b3;
+    background-color: #a9ab9f;
   }
 
   .event-card button:focus{
@@ -51,7 +51,7 @@
   }
 
   .event-card button:active{
-    background-color: #003d80;
+    background-color: #878b5a;
   }
 
   .event-card button:disabled{
