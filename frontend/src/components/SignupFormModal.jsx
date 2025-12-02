@@ -34,15 +34,20 @@ const SignupFormModal = ({show, onClose}) => {
     if (!show) return null;
     
   const handleSubmit = async (e) => {
+    console.log("Submnit button hit");
+    
     e.preventDefault();
     const newUser = { 
         firstName, lastName, email, username, password, bio:bio || null
     };
+    console.log(newUser);
+    
     if (password === repeatPassword) {
       const data = await dispatch(signup(newUser));
       if (data) {
         setErrors(data);
       }
+      onClose()
     } else {
       setErrors(["Passwords do not match"]);
     }

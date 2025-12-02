@@ -51,7 +51,7 @@ const router = express.Router();
 router.post(
     '/', validateSignup,
     async (req, res) => {
-      const { firstName, lastName, email, password, username, bio } = req.body;
+      const { firstName, lastName, email, password, username, bio = null } = req.body;
       const hashedPassword = await bcrypt.hashSync(password);
       const user = await User.create({ 
         firstName,
