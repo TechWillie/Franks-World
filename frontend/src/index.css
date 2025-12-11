@@ -8,4 +8,5 @@ body {
     background-repeat: no-repeat;
     /* min-height: 100vb; */
     background-attachment: fixed;
+    z-index: 1;
 }

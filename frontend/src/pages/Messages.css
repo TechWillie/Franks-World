@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Schoolbell&display=swap');
 
 
+/* make sure no background container can sit above UI */
+
 .title{
   color: azure;
   background-color: rgb(84, 71, 95);
@@ -51,13 +53,18 @@
 }
 
 .message-container{
-  /* background-color: brown; */
-  width: 90%;
+ display: flex;
+  flex-direction: column;
+  height: 100%;       /* Controls entire message panel height */
+  position: relative;
+  z-index: 1;
 }
+
 .the-messages{
-  /* max-height: 100%; */
-  overflow: auto;
-  overflow-y: auto;
+   flex: 1;            /* Takes all available space */
+  overflow-y: auto;   /* Scrolls messages */
+  padding-right: 5px;
+  /* z-index: 100; */
 }
 
 .the-messages p{
@@ -89,17 +96,52 @@
 
 .input-field{
   display: flex;
-  /* background-color: cadetblue; */
-  width: 100%;
+  gap: 10px;
+  z-index: 9999;      /* Always clickable */
+  background: white;  /* Prevents see-through overlap */
+  padding: 10px;
+  border-top: double;
+  pointer-events: auto;
 }
 
 @media (max-width: 768px) {
-  /* .message-container, .board-container {
+  .message-container, .board-container {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
-  } */
+  } 
   
-  .main-container{
-    background-color: blue;
+  .message-container{
+    
   }
+  
 }
+
+/* ---------- DROP-IN OVERRIDE (paste at very end of your CSS) ---------- */
+
+/* make message container a column so header -> scroll -> input is enforced */
+.message-container {
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+  height: 80vh !important;    /* keeps the panel height stable */
+  overflow: hidden !important;
+}
+
+/* messages area: scroll inside panel and sit behind the input */
+.the-messages {
+  position: relative !important;
+  z-index: 1 !important;         /* make sure messages are under the input */
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  padding-bottom: 12px !important;
+}
+
+/* input: guarantee it's on top and receives pointer events */
+.input-field {
+  position: relative !important;
+  z-index: 2147483647 !important; /* highest safe integer z-index to beat other rules */
+  pointer-events: auto !important;
+
+}
+
+

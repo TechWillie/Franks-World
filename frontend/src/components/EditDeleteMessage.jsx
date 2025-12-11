@@ -8,7 +8,11 @@ const EditDelete = ({ message, onClose }) => {
   const dispatch = useDispatch();
   const [messageContent, setMessageContent] = useState(message.content);
   const modalRef = useRef();
-
+  const inputRef = useRef();  // Focus on the input field when the modal opens  
+   
+  useEffect(() => {    if (inputRef.current) {      
+    inputRef.current.focus();
+      }  }, []);
  
 
 
@@ -37,11 +41,13 @@ const EditDelete = ({ message, onClose }) => {
     onClose();
   }
   
-
+ 
   return (
     <div  ref={modalRef} className="msg-backdrop">
       <div>
-        <input className="logibn-form-input" type="text" value={messageContent} 
+        <input className="logibn-form-input" type="text"
+        ref={inputRef}
+        value={messageContent} 
         onChange={(e) => setMessageContent(e.target.value)} />
         <button onClick={editContent} >Update</button>
         <button onClick={deleteMessage}>Delete</button>

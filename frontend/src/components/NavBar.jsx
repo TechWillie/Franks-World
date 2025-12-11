@@ -56,17 +56,19 @@ function Navbar({loginClick, signupClick}) {
   
   return (
     <nav className="navbar">
-      <h2 className="logo">theHype</h2>
+      <h2 className="logo">theHype...</h2>
       <button className="menu-toggle" onClick={mobileMenuToggle} ref={mobileMenu}>
         <FiMenu />
       </button>
-      <ul className={`nav-links ${isOpen ? "open" : ""}`} ref={mobileOutsideTouch}>
-      {/* <ul className='nav-links'> */}
-        <li><NavLink to="/">Home</NavLink></li>
-        <li><NavLink to="/events" >Events</NavLink></li>
-        <li><NavLink to="/messages" >Chatter Box</NavLink></li>
-        <li><NavLink to="/peeps" >My Peeps</NavLink></li>
-      </ul>
+      
+        <ul className={`nav-links ${isOpen ? "open" : ""}`} ref={mobileOutsideTouch}>
+        {/* <ul className='nav-links'> */}
+          <li><NavLink to="/">Home</NavLink></li>
+          <li><NavLink to="/events" >Events</NavLink></li>
+          <li><NavLink to="/messages" >Chatter Box</NavLink></li>
+          <li><NavLink to="/peeps" >My Peeps</NavLink></li>
+        </ul>
+      
 
     {sessionUser ? (
         <ul >

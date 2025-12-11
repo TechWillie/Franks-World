@@ -90,6 +90,8 @@ useEffect(() => {
     return count
   }
   
+
+  const inputRef = useRef(null);   useEffect(() => {     if (inputRef.current) {       inputRef.current.focus();     }   }, [boardId]); // Focus whenever the boardId changes
 return (
   <div className="body">
     {sessionUser ? (
@@ -133,6 +135,7 @@ return (
         </div>
           <div className="input-field">
             <input type="text" value={messageInput}
+            ref={inputRef}
             onChange={(e) => setMessageInput(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
@@ -140,7 +143,8 @@ return (
                 putMsgTogether();    
               }
             }} />
-            <button onClick={() => putMsgTogether(messageInput, boardId)}>Post</button>
+            {/* <button onClick={() => putMsgTogether(messageInput, boardId)}>Post</button> */}
+            <button onClick={putMsgTogether}>Post</button>
           </div>
       </div>
     </div>
