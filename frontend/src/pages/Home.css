@@ -11,9 +11,12 @@
 
 @media (max-width: 768px) {
   .home-box {
-    grid-template-columns: 1fr; /* stack into one column */
-    grid-template-rows: auto;   /* auto rows will handle the flow */
+    grid-template-columns: 1fr; 
+     
+    
   }
+
+  
 }
 
 

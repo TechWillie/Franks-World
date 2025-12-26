@@ -105,13 +105,27 @@
 }
 
 @media (max-width: 768px) {
-  .message-container, .board-container {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-  } 
-  
-  .message-container{
-    
+   .main-container {   
+     display: flex;    
+     flex-direction: column; /* Stack elements vertically */    
+    width: 100%; /* Ensure it takes full width */  
+  }  
+  .board-container {    
+    width: 100%; /* Make the board container full width */    
+    order: 1; /* Ensure it comes first */  
+  }  
+  .message-container {    
+    width: 100%; /* Make the message container full width */    
+    order: 2; /* Ensure it comes second */    
+    display: flex; /* Use flex to allow scrolling */    
+    flex-direction: column; /* Stack messages vertically */  
+  }  
+  .the-messages {    
+    flex: 1; /* Allow messages to take available space */    
+    overflow-y: auto; /* Enable scrolling for messages */  
+  }  
+  .input-field {    width: 100%; /* Full width for the input field */    
+    padding: 10px; /* Adjust padding as needed */  
   }
   
 }

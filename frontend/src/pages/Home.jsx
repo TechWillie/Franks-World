@@ -64,7 +64,7 @@ function Home() {
       {!sesUser ? (
         <div>
           <h1>Welcome to theHype...!</h1>
-          <h3>Look around. Become a member.</h3>
+          <h3>Look around... Become a member...</h3>
         </div>) : (
         <div>
           <h1>Welcome, {sesUser.username}!</h1>

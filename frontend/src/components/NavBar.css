@@ -54,8 +54,13 @@
     /* display: flex; */
     display: flex;
     position: absolute;
+    top: 10%; /* Moves top edge down 50% of parent's height */
+    left: 50%; /* Moves left edge right 50% of parent's width */
+    transform: translate(-50%, -50%); /* Shifts element back up/left by 50% of *its own* size */
+
     
-    margin-top: 60%;
+    margin-top: 40%;
+    
     background-color: rgb(177, 190, 102, 0.8);
     
   }

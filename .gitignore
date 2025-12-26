@@ -38,3 +38,7 @@ android/
 ios/
 build/
 backend/db/dev.db
+
+mobile/node_modules
+mobile/.expo
+mobile/dist
