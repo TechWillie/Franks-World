@@ -1,0 +1,3 @@
+## Franks World
+
+# A full-stack, cross-platform application with a Node/Express backend, database migrations via Sequelize, and a mobile client built with Expo/React Native. The project is structured to support development and production environments, as well as web and mobile clients.
