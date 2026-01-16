@@ -7,7 +7,7 @@ import CreateEventModal from '../components/CreateEventsModal'
 import CreateChatboardModal from '../components/CreateChatterModal'
 import { fetchEventsThunk } from '../store/events'
 import { fetchMediaThunk } from '../store/media'
-
+import UploadFile from "../components/UploadFile";
 
 
 function Home() {
@@ -68,6 +68,12 @@ function Home() {
         </div>) : (
         <div>
           <h1>Welcome, {sesUser.username}!</h1>
+          <UploadFile
+          folder={`users/${sesUser.id}/profile`}
+          accept="image/*"
+          maxMB={10}
+          onUploaded={(url) => console.log("Uploaded URL:", url)}
+          />
           {Object.values(mediaObj).map((media) => (
             <div key={media.id}>
               {media.type === 'image' && sesUser.id === media.userId && (
