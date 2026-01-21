@@ -1,33 +1,33 @@
 "use strict";
 
-const Sequelize = require("sequelize");
+const { QueryTypes } = require("sequelize");
 
 let options = { tableName: "Media" };
-
 if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA;
 }
 
 module.exports = {
   async up(queryInterface) {
+    const schema = options.schema || "public";
+
+    // ✅ Reset Media every deploy (prevents duplicates / unique / FK weirdness)
+    await queryInterface.sequelize.query(
+      `TRUNCATE TABLE "${schema}"."Media" RESTART IDENTITY CASCADE;`
+    );
+
     // ✅ Grab real user ids (so FK never fails)
     const users = await queryInterface.sequelize.query(
-      process.env.NODE_ENV === "production"
-        ? `SELECT id FROM "${options.schema}"."Users" ORDER BY id`
-        : `SELECT id FROM "Users" ORDER BY id`,
-      { type: Sequelize.QueryTypes.SELECT }
+      `SELECT id FROM "${schema}"."Users" ORDER BY id`,
+      { type: QueryTypes.SELECT }
     );
-
     if (!users.length) throw new Error("No users found to seed Media.userId");
 
-    // ✅ Grab real event ids (so FK never fails if eventId is required)
+    // ✅ Grab real event ids (eventId is nullable in your schema, but we can still attach)
     const events = await queryInterface.sequelize.query(
-      process.env.NODE_ENV === "production"
-        ? `SELECT id FROM "${options.schema}"."Events" ORDER BY id`
-        : `SELECT id FROM "Events" ORDER BY id`,
-      { type: Sequelize.QueryTypes.SELECT }
+      `SELECT id FROM "${schema}"."Events" ORDER BY id`,
+      { type: QueryTypes.SELECT }
     );
-
     if (!events.length) throw new Error("No events found to seed Media.eventId");
 
     const userIds = users.map((u) => u.id);
@@ -94,6 +94,9 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.bulkDelete(options, null, {});
+    const schema = options.schema || "public";
+    await queryInterface.sequelize.query(
+      `TRUNCATE TABLE "${schema}"."Media" RESTART IDENTITY CASCADE;`
+    );
   },
 };

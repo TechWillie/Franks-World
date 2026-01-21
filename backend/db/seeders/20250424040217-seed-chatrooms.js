@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 let options = { tableName: "ChatRooms" };
 if (process.env.NODE_ENV === "production") {
@@ -7,14 +7,30 @@ if (process.env.NODE_ENV === "production") {
 
 module.exports = {
   async up(queryInterface) {
-    await queryInterface.bulkInsert(options, [
-      { name: 'General', createdAt: new Date(), updatedAt: new Date() },
-      { name: 'Travel Buddies', createdAt: new Date(), updatedAt: new Date() },
-      { name: 'Gamers Unite', createdAt: new Date(), updatedAt: new Date() },
-      { name: 'Foodies Chat', createdAt: new Date(), updatedAt: new Date() }
-    ]);
+    const schema = options.schema || "public";
+
+    // ✅ Reset table to avoid UNIQUE(name) conflicts
+    await queryInterface.sequelize.query(
+      `TRUNCATE TABLE "${schema}"."ChatRooms" RESTART IDENTITY CASCADE;`
+    );
+
+    await queryInterface.bulkInsert(
+      options,
+      [
+        { name: "General", createdAt: new Date(), updatedAt: new Date() },
+        { name: "Travel Buddies", createdAt: new Date(), updatedAt: new Date() },
+        { name: "Gamers Unite", createdAt: new Date(), updatedAt: new Date() },
+        { name: "Foodies Chat", createdAt: new Date(), updatedAt: new Date() },
+      ],
+      {}
+    );
   },
+
   async down(queryInterface) {
-    await queryInterface.bulkDelete(options, null, {});
-  }
+    const schema = options.schema || "public";
+    await queryInterface.sequelize.query(
+      `TRUNCATE TABLE "${schema}"."ChatRooms" RESTART IDENTITY CASCADE;`
+    );
+  },
 };
+
