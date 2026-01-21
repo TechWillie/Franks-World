@@ -8,10 +8,9 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   async up(queryInterface, Sequelize) {
+    console.log(" Users SCHEMA ENV:", process.env.SCHEMA, "OPTIONS:", options),
     await queryInterface.createTable(
       'Users',
-      console.log(" Users SCHEMA ENV:", process.env.SCHEMA, "OPTIONS:", options),
-
       {
         id: {
           type: Sequelize.INTEGER,
