@@ -7,10 +7,9 @@ if (process.env.NODE_ENV === "production") {
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // IMPORTANT: pass `options` to createTable so schema works in production
+    console.log("MEDIA SCHEMA ENV:", process.env.SCHEMA, "OPTIONS:", options),
     await queryInterface.createTable(
       "Media",
-      console.log("MEDIA SCHEMA ENV:", process.env.SCHEMA, "OPTIONS:", options),
       {
         id: {
           type: Sequelize.INTEGER,
