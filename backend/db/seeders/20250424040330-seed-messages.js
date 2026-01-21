@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === "production") {
 
 module.exports = {
   async up(queryInterface) {
-    await queryInterface.bulkInsert(, [
+    await queryInterface.bulkInsert(options, [
       { userId: 1, chatRoomId: 1, content: 'Hey everyone!', createdAt: new Date(), updatedAt: new Date() },
       { userId: 2, chatRoomId: 2, content: 'Ready to plan our trip?', createdAt: new Date(), updatedAt: new Date() },
       { userId: 3, chatRoomId: 3, content: 'What game are we playing tonight?', createdAt: new Date(), updatedAt: new Date() },
