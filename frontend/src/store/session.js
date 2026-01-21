@@ -109,14 +109,15 @@ const initialState = { user: null };
 
 const sessionReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_SESSION_USER:
-      state.user = action.payload?.user ?? action.payload;
-      return state;
+    case SET_SESSION_USER: {
+      const user = action.payload?.user ?? action.payload;
+      return { ...state, user }; // ✅ new object
+    }
     case REMOVE_SESSION_USER:
-      return { ...state, user: null };
+      return { ...state, user: null }; // ✅ new object
     default:
       return state;
   }
-}
+};
 
 export default sessionReducer;
