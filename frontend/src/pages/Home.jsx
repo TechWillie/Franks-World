@@ -13,9 +13,9 @@ import logo from "../assets/media/pictures/frankslogo.png"
 
 function Home() {
   const dispatch = useDispatch()
-  const sesUser = useSelector(state => state.session.user)
-  console.log("SESSION USER:", sesUser);
-  console.log("SESSION USER PHOTO:", sesUser?.photo);
+  const sessionUser = useSelector(state => state.session.user)
+  console.log("SESSION USER:", sessionUser);
+  console.log("SESSION USER PHOTO:", sessionUser?.photo);
   const eventsObj = useSelector(state => state.events || [])
   const mediaObj = useSelector(state => state.media || {})
   // const [index, setIndex] = useState(0)
@@ -64,24 +64,24 @@ function Home() {
         ))}
       </div>
       <div className='session'>
-      {!sesUser ? (
+      {!sessionUser ? (
         <div>
           <h1>Welcome to theHype...!</h1>
           <h3>Look around... Become a member...</h3>
         </div>) : (
         <div>
-          <h1>Welcome, {sesUser.username}!</h1>
+          <h1>Welcome, {sessionUser.username}!</h1>
           <img
             className="propic"
-            src={sesUser?.photo || logo}
+            src={sessionUser?.photo || logo}
             alt="profile"
-            onError={() => console.log("❌ image failed:", sesUser?.photo)}
+            onError={() => console.log("❌ image failed:", sessionUser?.photo)}
           />
 
           
           {Object.values(mediaObj).map((media) => (
             <div key={media.id}>
-              {media.type === 'image' && sesUser.id === media.userId && (
+              {media.type === 'image' && sessionUser.id === media.userId && (
                 <img src={media.url} alt={media.name} className='pic' />
               )}
             </div>
@@ -93,11 +93,11 @@ function Home() {
         </div>
       )}
         <>
-          {sesUser && 
+          {sessionUser && 
             <>
             <h1>Your Events</h1>
             
-            {eventsArr.filter(event => event.hostId === sesUser.id)
+            {eventsArr.filter(event => event.hostId === sessionUser.id)
                       .map((event) => (
               
               <div key={event.id} className="user-event-card">
