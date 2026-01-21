@@ -25,7 +25,7 @@ module.exports = {
         },
 
         // example columns — keep yours
-        title: { type: Sequelize.STRING, allowNull: false },
+        name: { type: Sequelize.STRING, allowNull: false },
         description: { type: Sequelize.TEXT, allowNull: true },
 
         // ✅ if you have a host user
