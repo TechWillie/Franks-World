@@ -73,7 +73,7 @@ function Home() {
           <h1>Welcome, {sesUser.username}!</h1>
           <img
             className="propic"
-            src={sesUser?.photo}
+            src={sesUser?.photo || logo}
             alt="profile"
             onError={() => console.log("❌ image failed:", sesUser?.photo)}
           />
