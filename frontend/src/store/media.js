@@ -32,31 +32,40 @@ const addMedia = (media) => ({
 // { eventId?, url, path, folder?, contentType?, size?, originalName?, mediaType? }
 export const createMediaThunk = (mediaPayload) => async (dispatch) => {
   try {
+    const normalized = {
+      url: mediaPayload.url,
+      storagePath: mediaPayload.storagePath ?? mediaPayload.path, // 🔥
+      folder: mediaPayload.folder ?? null,
+      contentType: mediaPayload.contentType ?? null,
+      sizeBytes: mediaPayload.sizeBytes ?? mediaPayload.size,      // 🔥
+      originalName: mediaPayload.originalName ?? null,
+      mediaType: mediaPayload.mediaType ?? "image",
+      eventId: mediaPayload.eventId ?? null,
+    };
+
     const res = await csrfFetch("/api/media", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(mediaPayload),
+      body: JSON.stringify(normalized),
       credentials: "include",
     });
 
-    //  Error check
     if (!res.ok) {
-    let err;
-    try { err = await res.json(); } catch { err = await res.text(); }
-    console.error("❌ createMediaThunk failed:", res.status, err);
-    throw err;
-  }
-
-    if (res.ok) {
-      const data = await res.json();
-      dispatch(addMedia(data));
-      return data;
+      let err;
+      try { err = await res.json(); } catch { err = await res.text(); }
+      console.error("❌ createMediaThunk failed:", res.status, err);
+      throw err;
     }
+
+    const data = await res.json();
+    dispatch(addMedia(data));
+    return data;
   } catch (error) {
     console.error("Error creating media:", error);
     throw error;
   }
 };
+
 
 export const updateMediaThunk = (mediaPayload) => async (dispatch) => {
   try {
