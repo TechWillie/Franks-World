@@ -17,11 +17,11 @@ module.exports = {
     await queryInterface.bulkInsert(
       options,
       [
-        { userId: 1, chatRoomId: 1, createdAt: new Date(), updatedAt: new Date() },
-        { userId: 2, chatRoomId: 2, createdAt: new Date(), updatedAt: new Date() },
-        { userId: 3, chatRoomId: 3, createdAt: new Date(), updatedAt: new Date() },
-        { userId: 4, chatRoomId: 4, createdAt: new Date(), updatedAt: new Date() },
-        { userId: 5, chatRoomId: 1, createdAt: new Date(), updatedAt: new Date() }, // optional
+        { userId: 1, chatRoomId: 1, createdAt: new Date() },
+        { userId: 2, chatRoomId: 2, createdAt: new Date() },
+        { userId: 3, chatRoomId: 3, createdAt: new Date() },
+        { userId: 4, chatRoomId: 4, createdAt: new Date() },
+        { userId: 5, chatRoomId: 1, createdAt: new Date() }, // optional
       ],
       {}
     );
