@@ -27,6 +27,10 @@ module.exports = {
         // example columns — keep yours
         name: { type: Sequelize.STRING, allowNull: false },
         description: { type: Sequelize.TEXT, allowNull: true },
+        eventDate: {
+          type: Sequelize.DATE,
+          allowNull: false,
+        },
 
         // ✅ if you have a host user
         hostId: {
