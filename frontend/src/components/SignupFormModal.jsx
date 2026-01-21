@@ -74,14 +74,17 @@ const SignupFormModal = ({show, onClose}) => {
           const mediaRow = await dispatch(
             createMediaThunk({
               url: profileUpload.url,
-              path: profileUpload.path,
+              storagePath: profileUpload.path,            // ✅ rename
               folder: profileUpload.folder,
               contentType: profileUpload.contentType,
-              size: profileUpload.size,
+              sizeBytes: profileUpload.size,              // ✅ rename
               originalName: profileUpload.originalName,
+              mediaType: (profileUpload.contentType || "").startsWith("video/")
+                ? "video"
+                : "image",                                // ✅ required
             })
           );
-        
+       
           // ✅ update user.photo
           await dispatch(updateMyProfileImageThunk(mediaRow.url));
         

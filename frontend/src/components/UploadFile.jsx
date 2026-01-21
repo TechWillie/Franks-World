@@ -67,15 +67,14 @@ export default function UploadFile({
       // ✅ notify parent
       const payload = {
         url: downloadUrl,
-        path,
+        storagePath: path,        // ✅ rename
         folder,
         contentType: file.type,
-        size: file.size,
+        sizeBytes: file.size,     // ✅ rename
         originalName: file.name,
       };
-
-      console.log("✅ UploadFile onUploaded payload:", payload);
       onUploaded?.(payload);
+
     } catch (e) {
       console.error("❌ Upload error:", e);
       setErr(e?.message || String(e));
