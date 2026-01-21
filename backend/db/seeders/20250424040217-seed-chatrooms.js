@@ -1,8 +1,13 @@
 'use strict';
 
+let options = { tableName: "ChatRooms" };
+if (process.env.NODE_ENV === "production") {
+  options.schema = process.env.SCHEMA;
+}
+
 module.exports = {
   async up(queryInterface) {
-    await queryInterface.bulkInsert('ChatRooms', [
+    await queryInterface.bulkInsert(options, [
       { id: 1, name: 'General', createdAt: new Date(), updatedAt: new Date() },
       { id: 2, name: 'Travel Buddies', createdAt: new Date(), updatedAt: new Date() },
       { id: 3, name: 'Gamers Unite', createdAt: new Date(), updatedAt: new Date() },
@@ -10,6 +15,6 @@ module.exports = {
     ]);
   },
   async down(queryInterface) {
-    await queryInterface.bulkDelete('ChatRooms');
+    await queryInterface.bulkDelete(options, null, {});
   }
 };

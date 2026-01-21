@@ -3,6 +3,12 @@
 const bcrypt = require('bcryptjs');
 
 /** @type {import('sequelize-cli').Migration} */
+
+let options = { tableName: "Users" };
+if (process.env.NODE_ENV === "production") {
+  options.schema = process.env.SCHEMA;
+}
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     const hashedPasswords = await Promise.all([
@@ -57,6 +63,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Users', null, {});
+    await queryInterface.bulkDelete(options, null, {});
   }
 };
