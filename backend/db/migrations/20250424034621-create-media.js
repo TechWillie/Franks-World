@@ -69,13 +69,20 @@ module.exports = {
           onDelete: "CASCADE",
         },
 
-        eventId: {
-          type: Sequelize.INTEGER,
-          allowNull: true,
-          references: { model: "Events", key: "id" },
-          onUpdate: "CASCADE",
-          onDelete: "CASCADE",
+       eventId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model:
+            process.env.NODE_ENV === "production"
+              ? { tableName: "Events", schema: options.schema }
+              : "Events",
+          key: "id",
         },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
+
 
         createdAt: {
           type: Sequelize.DATE,

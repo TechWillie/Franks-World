@@ -1,9 +1,15 @@
 "use strict";
 
+let options = { tableName: "Media" };
+
+if (process.env.NODE_ENV === "production") {
+  options.schema = process.env.SCHEMA;
+}
+
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert(
-      "Media",
+      options,
       [
         {
           userId: 1,
@@ -21,7 +27,7 @@ module.exports = {
         {
           userId: 2,
           eventId: 2,
-          url: "hhttps://picsum.photos/200/300",
+          url: "https://picsum.photos/200/300", // ✅ fixed the "hhttps"
           storagePath: "web-uploads/seed2.jpg",
           folder: "web-uploads",
           contentType: "image/jpeg",
@@ -63,7 +69,7 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.bulkDelete("Media", null, {});
+    await queryInterface.bulkDelete(options, null, {});
   },
 };
 
