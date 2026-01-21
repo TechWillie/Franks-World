@@ -10,6 +10,7 @@ module.exports = {
     // IMPORTANT: pass `options` to createTable so schema works in production
     await queryInterface.createTable(
       "Media",
+      console.log("MEDIA SCHEMA ENV:", process.env.SCHEMA, "OPTIONS:", options),
       {
         id: {
           type: Sequelize.INTEGER,

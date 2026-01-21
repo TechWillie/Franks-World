@@ -10,6 +10,8 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable(
       'Users',
+      console.log(" Users SCHEMA ENV:", process.env.SCHEMA, "OPTIONS:", options),
+
       {
         id: {
           type: Sequelize.INTEGER,
