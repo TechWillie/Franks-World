@@ -37,6 +37,7 @@ module.exports = {
         allowNull: false
       },
       bio: Sequelize.TEXT,
+      photo: Sequelize.TEXT,
       createdAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')

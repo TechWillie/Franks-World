@@ -8,9 +8,12 @@ module.exports = {
       { id: 3, name: 'LAN Party', eventDate: '2025-06-20', placeId: 3, hostId: 3, chatRoomId: 3, createdAt: new Date("2025-02-12"), updatedAt: new Date() },
       { id: 4, name: 'Food Festival', eventDate: '2025-07-10', placeId: 4, hostId: 4, chatRoomId: 4, createdAt: new Date("2026-07-14"), updatedAt: new Date() }
     ]);
-     await queryInterface.sequelize.query(`
-      SELECT setval('"Events_id_seq"', (SELECT MAX(id) FROM "Events"));
-    `);
+     if (queryInterface.sequelize.getDialect() === "postgres") {
+        await queryInterface.sequelize.query(
+          `SELECT setval('"Events_id_seq"', (SELECT MAX(id) FROM "Events"));`
+        );
+}
+
   },
   async down(queryInterface) {
     await queryInterface.bulkDelete('Events');

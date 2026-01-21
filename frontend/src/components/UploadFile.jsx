@@ -2,7 +2,12 @@ import { useState } from "react";
 import { storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-export default function UploadFile({ folder = "web-uploads" }) {
+export default function UploadFile({
+  folder = "web-uploads",
+  accept = "image/*",
+  maxMB = 10,
+  onUploaded,
+}) {
   const [file, setFile] = useState(null);
   const [pct, setPct] = useState(0);
   const [url, setUrl] = useState("");
@@ -12,35 +17,19 @@ export default function UploadFile({ folder = "web-uploads" }) {
     setErr("");
     setUrl("");
     setPct(0);
+
     const f = e.target.files?.[0];
     if (!f) return;
-    setFile(f);
-  };
 
-  async function saveUploadToBackend({ folder, path, downloadUrl, contentType, size }) {
-    const res = await fetch("/api/uploads", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      // ✅ If you use cookie auth / CSRF, uncomment this:
-      // credentials: "include",
-      body: JSON.stringify({
-        folder,
-        path,
-        url: downloadUrl,
-        contentType,
-        size,
-      }),
-    });
-
-    if (!res.ok) {
-      const text = await res.text().catch(() => "");
-      throw new Error(
-        `Backend save failed (${res.status}): ${text || res.statusText}`
-      );
+    const maxBytes = maxMB * 1024 * 1024;
+    if (f.size > maxBytes) {
+      setFile(null);
+      setErr(`File too large. Max ${maxMB}MB.`);
+      return;
     }
 
-    return await res.json();
-  }
+    setFile(f);
+  };
 
   const onUpload = async () => {
     if (!file) return;
@@ -50,7 +39,6 @@ export default function UploadFile({ folder = "web-uploads" }) {
       setUrl("");
       setPct(0);
 
-      // keep extension (helps previews)
       const ext = file.name.includes(".") ? file.name.split(".").pop() : "";
       const path = `${folder}/${Date.now()}-${Math.random()
         .toString(16)
@@ -73,20 +61,23 @@ export default function UploadFile({ folder = "web-uploads" }) {
         );
       });
 
-      // ✅ Save the download URL to your backend DB
-      const savedRow = await saveUploadToBackend({
-        folder,
-        path,
-        downloadUrl,
-        contentType: file.type || null,
-        size: file.size || null,
-      });
-
-      console.log("✅ Saved upload in DB:", savedRow);
-
-      // ✅ still show image preview
+      // ✅ show preview
       setUrl(downloadUrl);
+
+      // ✅ notify parent
+      const payload = {
+        url: downloadUrl,
+        path,
+        folder,
+        contentType: file.type,
+        size: file.size,
+        originalName: file.name,
+      };
+
+      console.log("✅ UploadFile onUploaded payload:", payload);
+      onUploaded?.(payload);
     } catch (e) {
+      console.error("❌ Upload error:", e);
       setErr(e?.message || String(e));
     }
   };
@@ -95,7 +86,7 @@ export default function UploadFile({ folder = "web-uploads" }) {
     <div style={{ display: "grid", gap: 12, maxWidth: 520 }}>
       <h3 style={{ margin: 0 }}>Upload to Firebase Storage</h3>
 
-      <input type="file" accept="image/*" onChange={onPick} />
+      <input type="file" accept={accept} onChange={onPick} />
 
       <button onClick={onUpload} disabled={!file}>
         Upload {pct ? `(${pct}%)` : ""}
@@ -106,7 +97,11 @@ export default function UploadFile({ folder = "web-uploads" }) {
       {url ? (
         <div style={{ display: "grid", gap: 8 }}>
           <div style={{ fontSize: 12, wordBreak: "break-all" }}>{url}</div>
-          <img src={url} style={{ width: "100%", borderRadius: 12 }} />
+          <img
+            src={url}
+            alt="upload preview"
+            style={{ width: "100%", borderRadius: 12 }}
+          />
         </div>
       ) : null}
     </div>

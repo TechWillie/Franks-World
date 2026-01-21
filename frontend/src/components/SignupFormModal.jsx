@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from "react";
-import { signup } from "../store/session";
+import { signup, updateMyProfileImageThunk, restoreUser } from "../store/session";
+import { createMediaThunk } from "../store/media";
 import "./SignupForm.css"
 import { useDispatch } from "react-redux";
+import UploadFile from "../components/UploadFile";
 
 
 const SignupFormModal = ({show, onClose}) => {
@@ -15,6 +17,10 @@ const SignupFormModal = ({show, onClose}) => {
   const [bio, setBio] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+
+  const [profileUpload, setProfileUpload] = useState(null);
+// profileUpload will be { url, path, contentType, size, originalName }
+
   
 
   const signupForm = useRef();
@@ -33,25 +39,63 @@ const SignupFormModal = ({show, onClose}) => {
 
     if (!show) return null;
     
-  const handleSubmit = async (e) => {
-    console.log("Submnit button hit");
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      setErrors([]);
+
+      const newUser = {
+        firstName,
+        lastName,
+        email,
+        username,
+        password,
+        bio: bio || null,
+      };
     
-    e.preventDefault();
-    const newUser = { 
-        firstName, lastName, email, username, password, bio:bio || null
-    };
-    console.log(newUser);
-    
-    if (password === repeatPassword) {
-      const data = await dispatch(signup(newUser));
-      if (data) {
-        setErrors(data);
+      if (password !== repeatPassword) {
+        setErrors(["Passwords do not match"]);
+        return;
       }
-      onClose()
-    } else {
-      setErrors(["Passwords do not match"]);
-    }
-  };
+    
+      try {
+        const signupResult = await dispatch(signup(newUser));
+      
+        if (Array.isArray(signupResult)) {
+          setErrors(signupResult);
+          return;
+        }
+        if (signupResult?.errors) {
+          setErrors(signupResult.errors);
+          return;
+        }
+      
+        // ✅ User is authenticated at this point
+        if (profileUpload?.url && profileUpload?.path) {
+          const mediaRow = await dispatch(
+            createMediaThunk({
+              url: profileUpload.url,
+              path: profileUpload.path,
+              folder: profileUpload.folder,
+              contentType: profileUpload.contentType,
+              size: profileUpload.size,
+              originalName: profileUpload.originalName,
+            })
+          );
+        
+          // ✅ update user.photo
+          await dispatch(updateMyProfileImageThunk(mediaRow.url));
+        
+          // 🔄 sync session everywhere (navbar, etc.)
+          await dispatch(restoreUser());
+        }
+      
+        onClose();
+      } catch (err) {
+        console.error("Signup failed:", err);
+        setErrors(["Signup failed. Please try again."]);
+      }
+    };
+
 
    return (
     <>
@@ -80,6 +124,16 @@ const SignupFormModal = ({show, onClose}) => {
                 <input type="text" value={username} placeholder=" Username"
                 onChange={(e) => setUsername(e.target.value)} required />
               </label>
+              <UploadFile
+                folder={`temp-signups/${username || "new-user"}`}
+                accept="image/*"
+                maxMB={10}
+                onUploaded={(payload) => {
+                  console.log("✅ parent received upload payload:", payload);
+                  setProfileUpload(payload)
+                }}
+              />
+
               <label>
                 <textarea value={bio} placeholder=" Bio (optional)"
                 onChange={(e) => setBio(e.target.value)} />

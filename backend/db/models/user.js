@@ -70,6 +70,10 @@ module.exports = (sequelize, DataTypes) => {
         len: [60, 60],
       },
     },
+    photo: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   }, {
     sequelize,
     modelName: 'User',

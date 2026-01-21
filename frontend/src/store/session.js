@@ -60,6 +60,35 @@ export const restoreUser = () => async (dispatch) => {
   dispatch(setSessionUser(data.user));
   return data.user;
 }
+
+// ! Add profile pic
+export const updateMyProfileImageThunk = (photo) => async (dispatch) => {
+  console.log("New User Photo", photo);
+
+  const res = await csrfFetch("/api/users/me/photo", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ photo }),
+  });
+
+  const data = await res.json();
+  console.log("PUT /api/users/me/photo RESPONSE:", data);
+
+  if (!res.ok) {
+    console.error("❌ updateMyProfileImageThunk failed:", res.status, data);
+    throw data;
+  }
+
+  // ✅ normalize payload shape: supports {user: {...}} or {...}
+  const updatedUser = data.user ?? data;
+
+  dispatch(setSessionUser(updatedUser));
+  return updatedUser;
+};
+
+
+
 // ! logout
 // store/session.js or wherever you manage session state
 export const logout = () => async (dispatch) => {
@@ -81,7 +110,8 @@ const initialState = { user: null };
 const sessionReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_SESSION_USER:
-      return { ...state, user: action.payload };
+      state.user = action.payload?.user ?? action.payload;
+      return state;
     case REMOVE_SESSION_USER:
       return { ...state, user: null };
     default:

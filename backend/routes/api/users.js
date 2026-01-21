@@ -29,4 +29,34 @@ router.get('/:id', async (req, res) => {
   const user = await User.findByPk(req.params.id);
   return res.json(user);
 });
+
+// ! Add the pic if uploaded
+router.put("/me/photo", requireAuth, async (req, res) => {
+  console.log("🔥 HIT /api/users/me/photo", {
+    userId: req.user?.id,
+    body: req.body,
+  });
+
+  const { photo } = req.body;
+
+  if (!photo) {
+    return res.status(400).json({ error: "A picture is required" });
+  }
+
+  req.user.photo = photo;
+  await req.user.save();
+
+  return res.json({
+    id: req.user.id,
+    username: req.user.username,
+    photo: req.user.photo,
+    firstName: req.user.firstName,
+    lastName: req.user.lastName,
+    email: req.user.email,
+    bio: req.user.bio
+  });
+});
+
+
 module.exports = router;
+

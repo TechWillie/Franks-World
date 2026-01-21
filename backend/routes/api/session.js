@@ -64,14 +64,16 @@ router.post(
   
       const safeUser = {
         id: user.id,
+        email: user.email,
+        username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
-        username: user.username,
-        email: user.email,
-        bio: user.bio || null
+        bio: user.bio || null,
+        photo: user.photo || null,
       };
+
       console.log("The user:", safeUser);
-      await setTokenCookie(res, safeUser);
+      await setTokenCookie(res, user);
   
       return res.json({
         user: safeUser
@@ -110,9 +112,14 @@ router.post(
       id: user.id,
       email: user.email,
       username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      bio: user.bio || null,
+      photo: user.photo || null,
     };
 
-    await setTokenCookie(res, safeUser);
+
+    await setTokenCookie(res, user);
 
     return res.json({
       user: safeUser
@@ -128,22 +135,24 @@ router.delete(
   }
 );
 //! GET session user if any
-router.get(
-  '/restore', restoreUser,
-  (req, res) => {
-    const { user } = req;
-    if (user) {
-      const safeUser = {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-      };
-      return res.json({
-        user: safeUser
-      });
-    } else return res.json({ user: null });
-  }
-);
+router.get('/restore', restoreUser, (req, res) => {
+  const { user } = req;
+
+  if (!user) return res.json({ user: null });
+
+  const safeUser = {
+    id: user.id,
+    email: user.email,
+    username: user.username,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    bio: user.bio || null,
+    photo: user.photo || null, // ✅ THIS FIXES YOUR AVATAR
+  };
+
+  return res.json({ user: safeUser });
+});
+
 
 router.post("/demouser", async (req, res) => {
   const { email, username, password } = req.body;
@@ -156,8 +165,10 @@ router.post("/demouser", async (req, res) => {
     id: user.id,
     email: user.email,
     username: user.username,
+    photo: user.photo || null,
   };
-  await setTokenCookie(res, safeUser);
+
+  await setTokenCookie(res, user);
   return res.json({
     user: safeUser,
   });
