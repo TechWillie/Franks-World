@@ -11,6 +11,14 @@ if (process.env.NODE_ENV === "production") {
 
 module.exports = {
   async up(queryInterface, Sequelize) {
+
+    // ✅ Force a clean slate in production (prevents id collisions forever)
+    if (process.env.NODE_ENV === "production") {
+      await queryInterface.sequelize.query(
+        `TRUNCATE TABLE "${options.schema}"."Users" RESTART IDENTITY CASCADE;`
+      );
+    }
+
     const hashedPasswords = await Promise.all([
       bcrypt.hash('password', 10),
       bcrypt.hash('password', 10),
