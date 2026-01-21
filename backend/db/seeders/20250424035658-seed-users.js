@@ -1,8 +1,6 @@
-'use strict';
-
-const bcrypt = require('bcryptjs');
-
-/** @type {import('sequelize-cli').Migration} */
+"use strict";
+const bcrypt = require("bcryptjs");
+const Sequelize = require("sequelize");
 
 let options = { tableName: "Users" };
 if (process.env.NODE_ENV === "production") {
@@ -10,67 +8,70 @@ if (process.env.NODE_ENV === "production") {
 }
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface) {
+    // ✅ Figure out EXACT fully qualified table name
+    const schema = options.schema || "public";
+    const table = options.tableName;
 
-    // ✅ Force a clean slate in production (prevents id collisions forever)
-    if (process.env.NODE_ENV === "production") {
-      await queryInterface.sequelize.query(
-        `TRUNCATE TABLE "${options.schema}"."Users" RESTART IDENTITY CASCADE;`
-      );
-    }
+    console.log("SEED-USERS schema/table:", schema, table);
 
-    const hashedPasswords = await Promise.all([
-      bcrypt.hash('password', 10),
-      bcrypt.hash('password', 10),
-      bcrypt.hash('password', 10),
-      bcrypt.hash('password', 10)
-    ]);
+    // ✅ Hard reset the exact table we will insert into
+    // CASCADE clears dependent rows; RESTART IDENTITY resets ids
+    await queryInterface.sequelize.query(
+      `TRUNCATE TABLE "${schema}"."${table}" RESTART IDENTITY CASCADE;`
+    );
 
-    await queryInterface.bulkInsert('Users', [
-      {
-        // id: 1,
-        username: 'alice',
-        firstName: 'Alice',
-        lastName: 'Smith',
-        email: 'alice@example.com',
-        hashedPassword: hashedPasswords[0],
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        // id: 2,
-        username: 'bobby',
-        firstName: 'Bobbyish',
-        lastName: 'Brownie',
-        email: 'bobby@example.com',
-        hashedPassword: hashedPasswords[1],
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        // id: 3,
-        username: 'carol',
-        firstName: 'Diddy',
-        lastName: 'Didit',
-        email: 'carol@example.com',
-        hashedPassword: hashedPasswords[2],
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        // id: 4,
-        username: 'dave',
-        firstName: 'Dave',
-        lastName: 'Busters',
-        email: 'dave@example.com',
-        hashedPassword: hashedPasswords[3],
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
-    ]);
+    // ✅ PROOF: show what's in the table after truncation (should be empty)
+    const after = await queryInterface.sequelize.query(
+      `SELECT id FROM "${schema}"."${table}" ORDER BY id;`,
+      { type: Sequelize.QueryTypes.SELECT }
+    );
+    console.log("Users AFTER TRUNCATE:", after); // must be []
+
+    // ✅ Insert WITHOUT id fields
+    await queryInterface.bulkInsert(
+      options,
+      [
+        {
+          firstName: "Demo",
+          lastName: "User",
+          username: "demo",
+          email: "demo@user.io",
+          hashedPassword: bcrypt.hashSync("password"),
+          bio: null,
+          photo: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          firstName: "Test",
+          lastName: "User2",
+          username: "demo2",
+          email: "demo2@user.io",
+          hashedPassword: bcrypt.hashSync("password"),
+          bio: null,
+          photo: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ],
+      {}
+    );
+
+    // ✅ PROOF: show ids after insert
+    const final = await queryInterface.sequelize.query(
+      `SELECT id, username FROM "${schema}"."${table}" ORDER BY id;`,
+      { type: Sequelize.QueryTypes.SELECT }
+    );
+    console.log("Users AFTER INSERT:", final);
   },
 
-  async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete(options, null, {});
-  }
+  async down(queryInterface) {
+    const schema = options.schema || "public";
+    const table = options.tableName;
+    await queryInterface.sequelize.query(
+      `TRUNCATE TABLE "${schema}"."${table}" RESTART IDENTITY CASCADE;`
+    );
+  },
 };
+
