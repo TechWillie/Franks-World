@@ -19,6 +19,8 @@ module.exports = {
         require: true,
         rejectUnauthorized: false,
       },
+      // ✅ THIS makes runtime queries use your schema instead of public
+      options: `-c search_path=${process.env.SCHEMA}`,
     },
   },
 };
