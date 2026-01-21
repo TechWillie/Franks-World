@@ -13,14 +13,24 @@ module.exports = {
   production: {
     use_env_variable: "DATABASE_URL",
     dialect: "postgres",
+
+    // ✅ Make BOTH migrations + seed metadata tables live in your schema
+    migrationStorage: "sequelize",
     seederStorage: "sequelize",
+    migrationStorageTableSchema: process.env.SCHEMA,
+    seederStorageTableSchema: process.env.SCHEMA,
+
     dialectOptions: {
       ssl: {
         require: true,
         rejectUnauthorized: false,
       },
-      // ✅ THIS makes runtime queries use your schema instead of public
+
+      // ✅ Force runtime queries to use your schema first (instead of public)
+      // (including User.create, Media.create, etc.)
       options: `-c search_path=${process.env.SCHEMA}`,
     },
   },
 };
+
+
