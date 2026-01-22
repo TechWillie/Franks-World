@@ -14,8 +14,7 @@ import logo from "../assets/media/pictures/frankslogo.png"
 function Home() {
   const dispatch = useDispatch()
   const sessionUser = useSelector(state => state.session.user)
-  console.log("SESSION USER:", sessionUser);
-  console.log("SESSION USER PHOTO:", sessionUser?.photo);
+ 
   const eventsObj = useSelector(state => state.events || [])
   const mediaObj = useSelector(state => state.media || {})
   // const [index, setIndex] = useState(0)
