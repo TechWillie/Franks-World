@@ -73,10 +73,19 @@ function Home() {
           <h1>Welcome, {sessionUser.username}!</h1>
           <img
             className="propic"
-            src={sessionUser?.photo || logo}
+            key={sessionUser?.photo || "default"} // 🔑 forces re-render
+            src={
+              sessionUser?.photo?.trim()
+                ? `${sessionUser.photo}?v=${Date.now()}` // 🔥 cache bust
+                : logo
+            }
             alt="profile"
-            onError={() => console.log("❌ image failed:", sessionUser?.photo)}
+            onError={(e) => {
+              console.error("❌ image failed:", sessionUser?.photo);
+              e.currentTarget.src = logo; // fallback
+            }}
           />
+
 
           
           {Object.values(mediaObj).map((media) => (
