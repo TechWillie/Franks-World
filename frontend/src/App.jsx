@@ -10,19 +10,22 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      // ✅ must dispatch if restoreCSRF is a thunk
-      await dispatch(restoreCSRF());
+      try {
+        // ✅ if restoreCSRF is a normal function (not a thunk), call it directly
+        await restoreCSRF();
 
-      // ✅ restores session user into redux if cookie exists
-      await dispatch(restoreUser());
-
-      // ✅ now allow UI to render
-      setIsLoaded(true);
+        // ✅ restore the session (this may 401 if no cookie, that's fine)
+        await dispatch(restoreUser());
+      } catch (e) {
+        console.error("App init failed:", e);
+      } finally {
+        // ✅ ALWAYS render the app
+        setIsLoaded(true);
+      }
     })();
   }, [dispatch]);
 
-  // ✅ prevents "sessionUser null" flash + wrong UI render
-  if (!isLoaded) return null;
+  if (!isLoaded) return null; // or return a loading div/spinner
 
   return <Router />;
 }
