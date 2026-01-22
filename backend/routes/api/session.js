@@ -140,14 +140,16 @@ router.get('/restore', restoreUser, (req, res) => {
 
   if (!user) return res.json({ user: null });
 
+  const freshUser = await User.findByPk(req.user.id);
+
   const safeUser = {
-    id: user.id,
-    email: user.email,
-    username: user.username,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    bio: user.bio || null,
-    photo: user.photo || null, // ✅ THIS FIXES YOUR AVATAR
+    id: freshUser.id,
+    email: freshUser.email,
+    username: freshUser.username,
+    firstName: freshUser.firstName,
+    lastName: freshUser.lastName,
+    bio: freshUser.bio || null,
+    photo: freshUser.photo || null,
   };
 
   return res.json({ user: safeUser });
