@@ -135,10 +135,8 @@ router.delete(
   }
 );
 //! GET session user if any
-router.get('/restore', restoreUser, (req, res) => {
-  const { user } = req;
-
-  if (!user) return res.json({ user: null });
+router.get('/restore', restoreUser, async (req, res) => {
+  if (!req.user) return res.json({ user: null });
 
   const freshUser = await User.findByPk(req.user.id);
 
