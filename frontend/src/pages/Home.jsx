@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 // import { quotes } from '../components/justSaying'
 import './Home.css'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, useStore } from 'react-redux'
 import { fetchChatboardThunk } from '../store/chatboard'
 import CreateEventModal from '../components/CreateEventsModal'
 import CreateChatboardModal from '../components/CreateChatterModal'
@@ -12,6 +12,20 @@ import logo from "../assets/media/pictures/frankslogo.png"
 
 
 function Home() {
+
+  export default function DebugSession() {
+  const store = useStore();
+  const sessionFromSelector = useSelector((state) => state.session?.user);
+
+  useEffect(() => {
+    console.log("🧠 selector session.user:", sessionFromSelector);
+    console.log("🏪 store.getState().session.user:", store.getState().session?.user);
+    console.log("🏪 store object identity:", store);
+  }, [sessionFromSelector, store]);
+
+  return null;
+}
+
   const dispatch = useDispatch()
   const sessionUser = useSelector(state => state.session.user)
  
