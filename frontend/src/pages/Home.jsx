@@ -10,8 +10,13 @@ import { fetchMediaThunk } from '../store/media'
 // import UploadFile from "../components/UploadFile";
 import logo from "../assets/media/pictures/frankslogo.png"
 
-  export function DebugSession() {
-  const store = useStore();
+
+ 
+
+
+function Home() {
+
+   const store = useStore();
   const sessionFromSelector = useSelector((state) => state.session?.user);
 
   useEffect(() => {
@@ -19,11 +24,6 @@ import logo from "../assets/media/pictures/frankslogo.png"
     console.log("🏪 store.getState().session.user:", store.getState().session?.user);
     console.log("🏪 store object identity:", store);
   }, [sessionFromSelector, store]);
-
-  return null;
-}
-
-function Home() {
 
   const dispatch = useDispatch()
   const sessionUser = useSelector(state => state.session.user)
