@@ -10,9 +10,6 @@ import { fetchMediaThunk } from '../store/media'
 // import UploadFile from "../components/UploadFile";
 import logo from "../assets/media/pictures/frankslogo.png"
 
-
-function Home() {
-
   export default function DebugSession() {
   const store = useStore();
   const sessionFromSelector = useSelector((state) => state.session?.user);
@@ -25,6 +22,8 @@ function Home() {
 
   return null;
 }
+
+function Home() {
 
   const dispatch = useDispatch()
   const sessionUser = useSelector(state => state.session.user)
