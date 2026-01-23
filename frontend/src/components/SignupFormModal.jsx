@@ -83,13 +83,11 @@ const SignupFormModal = ({show, onClose}) => {
                 ? "video"
                 : "image",                                // ✅ required
             })
+            
           );
        
           // ✅ update user.photo
           await dispatch(updateMyProfileImageThunk(mediaRow.url));
-        
-          // 🔄 sync session everywhere (navbar, etc.)
-          await dispatch(restoreUser());
         }
       
         onClose();
