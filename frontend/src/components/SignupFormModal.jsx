@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { signup, updateMyProfileImageThunk, restoreUser } from "../store/session";
+import { signup, updateMyProfileImageThunk } from "../store/session";
 import { createMediaThunk } from "../store/media";
 import "./SignupForm.css"
 import { useDispatch } from "react-redux";
