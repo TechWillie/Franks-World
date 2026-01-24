@@ -8,11 +8,23 @@ if (process.env.NODE_ENV === "production") {
 module.exports = {
   async up(queryInterface) {
     const schema = options.schema || "public";
+    const table = options.tableName;
+    const dialect = queryInterface.sequelize.getDialect();
 
-    // ✅ Reset table to avoid UNIQUE(name) conflicts
-    await queryInterface.sequelize.query(
-      `TRUNCATE TABLE "${schema}"."ChatRooms" RESTART IDENTITY CASCADE;`
-    );
+    // ✅ Reset table safely per dialect
+    if (dialect === "postgres") {
+      await queryInterface.sequelize.query(
+        `TRUNCATE TABLE "${schema}"."${table}" RESTART IDENTITY CASCADE;`
+      );
+    } else if (dialect === "sqlite") {
+      await queryInterface.sequelize.query(`DELETE FROM "${table}";`);
+      // reset autoincrement counter (safe even if not used)
+      await queryInterface.sequelize.query(
+        `DELETE FROM sqlite_sequence WHERE name='${table}';`
+      );
+    } else {
+      await queryInterface.bulkDelete(options, null, {});
+    }
 
     await queryInterface.bulkInsert(
       options,
@@ -28,9 +40,20 @@ module.exports = {
 
   async down(queryInterface) {
     const schema = options.schema || "public";
-    await queryInterface.sequelize.query(
-      `TRUNCATE TABLE "${schema}"."ChatRooms" RESTART IDENTITY CASCADE;`
-    );
+    const table = options.tableName;
+    const dialect = queryInterface.sequelize.getDialect();
+
+    if (dialect === "postgres") {
+      await queryInterface.sequelize.query(
+        `TRUNCATE TABLE "${schema}"."${table}" RESTART IDENTITY CASCADE;`
+      );
+    } else if (dialect === "sqlite") {
+      await queryInterface.sequelize.query(`DELETE FROM "${table}";`);
+      await queryInterface.sequelize.query(
+        `DELETE FROM sqlite_sequence WHERE name='${table}';`
+      );
+    } else {
+      await queryInterface.bulkDelete(options, null, {});
+    }
   },
 };
-

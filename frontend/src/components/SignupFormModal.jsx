@@ -25,22 +25,12 @@ const SignupFormModal = ({show, onClose}) => {
 
   const signupForm = useRef();
   
-  useEffect(() => {
-      function handleClickOutside(event) {
-           console.log('Clicked:', event.target);
-        if (signupForm.current && !signupForm.current.contains(event.target)) {
-          onClose(); // Close modal if click is outside the form
-        }
-      }
-  
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [onClose]);
-
     if (!show) return null;
     
     const handleSubmit = async (e) => {
       e.preventDefault();
+      e.stopPropagation();
+      console.log("🧾 handleSubmit fired")
       setErrors([]);
 
       const newUser = {
@@ -69,38 +59,44 @@ const SignupFormModal = ({show, onClose}) => {
           return;
         }
       
-        // ✅ User is authenticated at this point
-        if (profileUpload?.url && profileUpload?.path) {
+        console.log("✅ User is authenticated at this point", profileUpload);
+        
+        if (profileUpload?.url && profileUpload?.storagePath) {
+          console.log("🚀 about to POST /api/media with:", profileUpload);
           const mediaRow = await dispatch(
             createMediaThunk({
               url: profileUpload.url,
-              storagePath: profileUpload.path,            // ✅ rename
+              storagePath: profileUpload.storagePath,              // ✅ must be path
               folder: profileUpload.folder,
               contentType: profileUpload.contentType,
-              sizeBytes: profileUpload.size,              // ✅ rename
+              sizeBytes: profileUpload.sizeBytes,              // ✅ must be size
               originalName: profileUpload.originalName,
               mediaType: (profileUpload.contentType || "").startsWith("video/")
                 ? "video"
-                : "image",                                // ✅ required
+                : "image",
             })
-            
           );
-       
-          // ✅ update user.photo
+
+          console.log("✅ mediaRow returned:", mediaRow);
           await dispatch(updateMyProfileImageThunk(mediaRow.url));
+          onClose();
+          return mediaRow
         }
-      
-        onClose();
+        
       } catch (err) {
         console.error("Signup failed:", err);
         setErrors(["Signup failed. Please try again."]);
       }
     };
-
+    
 
    return (
     <>
-        <div className="modal-background">
+        <div className="modal-background"
+              onMouseDown={(e) => {
+          // only close if they clicked the background itself
+          if (e.target === e.currentTarget) onClose();
+        }}>
           <div className="modal-content">
             <form onSubmit={handleSubmit} ref={signupForm} onMouseDown={(e) => e.stopPropagation()}>
               <h2>Sign Up</h2>
@@ -126,7 +122,7 @@ const SignupFormModal = ({show, onClose}) => {
                 onChange={(e) => setUsername(e.target.value)} required />
               </label>
               <UploadFile
-                folder={`temp-signups/${username || "new-user"}`}
+                folder={`signups/${email || "new-user"}`}
                 accept="image/*"
                 maxMB={10}
                 onUploaded={(payload) => {
@@ -147,7 +143,9 @@ const SignupFormModal = ({show, onClose}) => {
                 <input type="password" value={repeatPassword} placeholder=" Confirm Password"
                 onChange={(e) => setRepeatPassword(e.target.value)} required />
               </label>
-              <button type="submit">Sign Up</button>
+              <button type="button"
+              onClick={handleSubmit}
+              >Sign Up</button>
               <button type="button" onClick={() => onClose()}>Cancel</button>
             </form>
           </div>

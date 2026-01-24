@@ -47,7 +47,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /api/media/:id
+//! GET /api/media/:id
 router.get("/:id", async (req, res) => {
   try {
     const media = await Media.findByPk(req.params.id);
@@ -59,35 +59,22 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-/**
- * POST /api/media
- * This is the endpoint your frontend should call after Firebase upload.
- * Expected body:
- * {
- *   eventId?: number,
- *   url: string,
- *   path: string,        // firebase storage path
- *   folder?: string,
- *   contentType?: string,
- *   size?: number,
- *   originalName?: string,
- *   mediaType?: "image" | "video"
- * }
- */
+
+// ! Create new media
 router.post("/", requireAuth, async (req, res) => {
   try {
     const {
       eventId = null,
       url,
-      path, // <-- client sends "path" from your UploadFile component
+      storagePath, // <-- client sends "path" from your UploadFile component
       folder = null,
       contentType = null,
-      size = null,
+      sizeBytes = null,
       originalName = null,
       mediaType = null,
     } = req.body;
 
-    if (!url || !path) {
+    if (!url || !storagePath) {
       return res.status(400).json({ error: "url and path are required" });
     }
 
@@ -101,26 +88,27 @@ router.post("/", requireAuth, async (req, res) => {
       userId: req.user.id,            // ✅ do NOT trust userId from req.body
       eventId,
       url,
-      storagePath: path,              // ✅ map path -> storagePath
+      storagePath,          
       folder,
       contentType,
-      sizeBytes: Number.isFinite(+size) ? +size : null,
+      sizeBytes: Number.isFinite(+sizeBytes) ? +sizeBytes : null,
       originalName,
       mediaType: mediaType || inferMediaType(contentType),
     });
 
+    const user = await User.findByPk(req.user.id);
+    user.photo = url;
+    await user.save();
+
     return res.status(201).json(created);
   } catch (error) {
     console.error("Error creating media:", error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    return res.status(500).json({ error: "new media Internal Server Error" });
   }
 });
 
-/**
- * PUT /api/media/:id
- * Usually you do NOT want to let users change url/path after upload,
- * but here's a safe version: only updates metadata, not storagePath/url unless you want it.
- */
+
+// ! Update media
 router.put("/:id", requireAuth, async (req, res) => {
   try {
     const media = await Media.findByPk(req.params.id);
@@ -135,7 +123,7 @@ router.put("/:id", requireAuth, async (req, res) => {
       eventId,
       folder,
       contentType,
-      size,
+      sizeBytes,
       originalName,
       mediaType,
       // If you WANT to allow updating url/path, uncomment these:
@@ -146,7 +134,7 @@ router.put("/:id", requireAuth, async (req, res) => {
     if (eventId !== undefined) media.eventId = eventId;
     if (folder !== undefined) media.folder = folder;
     if (contentType !== undefined) media.contentType = contentType;
-    if (size !== undefined) media.sizeBytes = Number.isFinite(+size) ? +size : null;
+    if (sizeBytes !== undefined) media.sizeBytes = Number.isFinite(+sizeBytes) ? +sizeBytes : null;
     if (originalName !== undefined) media.originalName = originalName;
     if (mediaType !== undefined) media.mediaType = mediaType;
 
@@ -161,7 +149,7 @@ router.put("/:id", requireAuth, async (req, res) => {
   }
 });
 
-// DELETE /api/media/:id
+//! DELETE /api/media/:id
 router.delete("/:id", requireAuth, async (req, res) => {
   try {
     const media = await Media.findByPk(req.params.id);

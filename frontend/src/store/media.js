@@ -31,22 +31,12 @@ const addMedia = (media) => ({
 // media payload expected:
 // { eventId?, url, path, folder?, contentType?, size?, originalName?, mediaType? }
 export const createMediaThunk = (mediaPayload) => async (dispatch) => {
+  console.log("🟦 createMediaThunk payload:", mediaPayload);
   try {
-    const normalized = {
-      url: mediaPayload.url,
-      storagePath: mediaPayload.storagePath ?? mediaPayload.path, // 🔥
-      folder: mediaPayload.folder ?? null,
-      contentType: mediaPayload.contentType ?? null,
-      sizeBytes: mediaPayload.sizeBytes ?? mediaPayload.size,      // 🔥
-      originalName: mediaPayload.originalName ?? null,
-      mediaType: mediaPayload.mediaType ?? "image",
-      eventId: mediaPayload.eventId ?? null,
-    };
-
     const res = await csrfFetch("/api/media", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(normalized),
+      body: JSON.stringify(mediaPayload),
       credentials: "include",
     });
 

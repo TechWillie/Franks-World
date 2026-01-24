@@ -92,12 +92,16 @@ export const updateMyProfileImageThunk = (photo) => async (dispatch) => {
 // ! logout
 // store/session.js or wherever you manage session state
 export const logout = () => async (dispatch) => {
+  console.log("Hit logout thunk");
+  
   const response = await csrfFetch('/api/session', {
     method: 'DELETE',
     credentials: 'include', // ensure cookies are included
   });
 
   if (response.ok) {
+    console.log("ACTuallyloggged out");
+    
     dispatch(setSessionUser(null));
   }
 };

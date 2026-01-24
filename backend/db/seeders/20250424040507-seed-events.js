@@ -8,11 +8,24 @@ if (process.env.NODE_ENV === "production") {
 module.exports = {
   async up(queryInterface) {
     const schema = options.schema || "public";
+    const table = options.tableName;
+    const dialect = queryInterface.sequelize.getDialect();
 
-    // ✅ Reset Events every deploy (and dependent rows if any)
-    await queryInterface.sequelize.query(
-      `TRUNCATE TABLE "${schema}"."Events" RESTART IDENTITY CASCADE;`
-    );
+    // ✅ Reset table per dialect
+    if (dialect === "postgres") {
+      await queryInterface.sequelize.query(
+        `TRUNCATE TABLE "${schema}"."${table}" RESTART IDENTITY CASCADE;`
+      );
+    } else if (dialect === "sqlite") {
+      await queryInterface.sequelize.query(`DELETE FROM "${table}";`);
+      await queryInterface.sequelize.query(
+        `DELETE FROM sqlite_sequence WHERE name='${table}';`
+      );
+    } else {
+      await queryInterface.bulkDelete(options, null, {});
+    }
+
+    const now = new Date();
 
     await queryInterface.bulkInsert(
       options,
@@ -23,8 +36,8 @@ module.exports = {
           placeId: 1,
           hostId: 1,
           chatRoomId: 1,
-          createdAt: new Date("2025-01-21"), // ✅ fixed invalid date string
-          updatedAt: new Date(),
+          createdAt: new Date("2025-01-21"),
+          updatedAt: now,
         },
         {
           name: "Photo Walk",
@@ -33,7 +46,7 @@ module.exports = {
           hostId: 2,
           chatRoomId: 2,
           createdAt: new Date("2024-09-09"),
-          updatedAt: new Date(),
+          updatedAt: now,
         },
         {
           name: "LAN Party",
@@ -42,7 +55,7 @@ module.exports = {
           hostId: 3,
           chatRoomId: 3,
           createdAt: new Date("2025-02-12"),
-          updatedAt: new Date(),
+          updatedAt: now,
         },
         {
           name: "Food Festival",
@@ -51,7 +64,7 @@ module.exports = {
           hostId: 4,
           chatRoomId: 4,
           createdAt: new Date("2026-07-14"),
-          updatedAt: new Date(),
+          updatedAt: now,
         },
       ],
       {}
@@ -60,8 +73,20 @@ module.exports = {
 
   async down(queryInterface) {
     const schema = options.schema || "public";
-    await queryInterface.sequelize.query(
-      `TRUNCATE TABLE "${schema}"."Events" RESTART IDENTITY CASCADE;`
-    );
+    const table = options.tableName;
+    const dialect = queryInterface.sequelize.getDialect();
+
+    if (dialect === "postgres") {
+      await queryInterface.sequelize.query(
+        `TRUNCATE TABLE "${schema}"."${table}" RESTART IDENTITY CASCADE;`
+      );
+    } else if (dialect === "sqlite") {
+      await queryInterface.sequelize.query(`DELETE FROM "${table}";`);
+      await queryInterface.sequelize.query(
+        `DELETE FROM sqlite_sequence WHERE name='${table}';`
+      );
+    } else {
+      await queryInterface.bulkDelete(options, null, {});
+    }
   },
 };

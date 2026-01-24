@@ -9,24 +9,38 @@ if (process.env.NODE_ENV === "production") {
 
 module.exports = {
   async up(queryInterface) {
-    // ✅ Figure out EXACT fully qualified table name
     const schema = options.schema || "public";
     const table = options.tableName;
 
-    console.log("SEED-USERS schema/table:", schema, table);
+    const dialect = queryInterface.sequelize.getDialect();
 
-    // ✅ Hard reset the exact table we will insert into
-    // CASCADE clears dependent rows; RESTART IDENTITY resets ids
-    await queryInterface.sequelize.query(
-      `TRUNCATE TABLE "${schema}"."${table}" RESTART IDENTITY CASCADE;`
-    );
+    // ✅ Reset table contents + IDs in a DB-specific way
+    if (dialect === "postgres") {
+      // Postgres supports TRUNCATE + restart identity + cascade
+      await queryInterface.sequelize.query(
+        `TRUNCATE TABLE "${schema}"."${table}" RESTART IDENTITY CASCADE;`
+      );
+    } else if (dialect === "sqlite") {
+      // SQLite does NOT support TRUNCATE
+      await queryInterface.sequelize.query(`DELETE FROM "${table}";`);
 
-    // ✅ PROOF: show what's in the table after truncation (should be empty)
+      // Reset AUTOINCREMENT counter (only applies if table uses AUTOINCREMENT)
+      await queryInterface.sequelize.query(
+        `DELETE FROM sqlite_sequence WHERE name='${table}';`
+      );
+    } else {
+      // Fallback: works for most dialects (MySQL, etc.)
+      await queryInterface.bulkDelete(options, null, {});
+    }
+
+    // ✅ PROOF: show table is empty after reset
     const after = await queryInterface.sequelize.query(
-      `SELECT id FROM "${schema}"."${table}" ORDER BY id;`,
+      dialect === "postgres"
+        ? `SELECT id FROM "${schema}"."${table}" ORDER BY id;`
+        : `SELECT id FROM "${table}" ORDER BY id;`,
       { type: Sequelize.QueryTypes.SELECT }
     );
-    console.log("Users AFTER TRUNCATE:", after); // must be []
+    console.log("Users AFTER RESET:", after);
 
     // ✅ Insert WITHOUT id fields
     await queryInterface.bulkInsert(
@@ -86,14 +100,16 @@ module.exports = {
           photo: null,
           createdAt: new Date(),
           updatedAt: new Date(),
-        }
+        },
       ],
       {}
     );
 
     // ✅ PROOF: show ids after insert
     const final = await queryInterface.sequelize.query(
-      `SELECT id, username FROM "${schema}"."${table}" ORDER BY id;`,
+      dialect === "postgres"
+        ? `SELECT id, username FROM "${schema}"."${table}" ORDER BY id;`
+        : `SELECT id, username FROM "${table}" ORDER BY id;`,
       { type: Sequelize.QueryTypes.SELECT }
     );
     console.log("Users AFTER INSERT:", final);
@@ -102,9 +118,20 @@ module.exports = {
   async down(queryInterface) {
     const schema = options.schema || "public";
     const table = options.tableName;
-    await queryInterface.sequelize.query(
-      `TRUNCATE TABLE "${schema}"."${table}" RESTART IDENTITY CASCADE;`
-    );
+    const dialect = queryInterface.sequelize.getDialect();
+
+    if (dialect === "postgres") {
+      await queryInterface.sequelize.query(
+        `TRUNCATE TABLE "${schema}"."${table}" RESTART IDENTITY CASCADE;`
+      );
+    } else if (dialect === "sqlite") {
+      await queryInterface.sequelize.query(`DELETE FROM "${table}";`);
+      await queryInterface.sequelize.query(
+        `DELETE FROM sqlite_sequence WHERE name='${table}';`
+      );
+    } else {
+      await queryInterface.bulkDelete(options, null, {});
+    }
   },
 };
 

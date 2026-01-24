@@ -10,28 +10,50 @@ if (process.env.NODE_ENV === "production") {
 module.exports = {
   async up(queryInterface) {
     const schema = options.schema || "public";
+    const table = options.tableName;
+    const dialect = queryInterface.sequelize.getDialect();
 
-    // ✅ Reset Media every deploy (prevents duplicates / unique / FK weirdness)
-    await queryInterface.sequelize.query(
-      `TRUNCATE TABLE "${schema}"."Media" RESTART IDENTITY CASCADE;`
-    );
+    // ✅ Reset Media per dialect
+    if (dialect === "postgres") {
+      await queryInterface.sequelize.query(
+        `TRUNCATE TABLE "${schema}"."${table}" RESTART IDENTITY CASCADE;`
+      );
+    } else if (dialect === "sqlite") {
+      await queryInterface.sequelize.query(`DELETE FROM "${table}";`);
+      await queryInterface.sequelize.query(
+        `DELETE FROM sqlite_sequence WHERE name='${table}';`
+      );
+    } else {
+      await queryInterface.bulkDelete(options, null, {});
+    }
+
+    // ✅ Build SELECTs that work on both DBs
+    const usersSql =
+      dialect === "postgres"
+        ? `SELECT id FROM "${schema}"."Users" ORDER BY id;`
+        : `SELECT id FROM "Users" ORDER BY id;`;
+
+    const eventsSql =
+      dialect === "postgres"
+        ? `SELECT id FROM "${schema}"."Events" ORDER BY id;`
+        : `SELECT id FROM "Events" ORDER BY id;`;
 
     // ✅ Grab real user ids (so FK never fails)
-    const users = await queryInterface.sequelize.query(
-      `SELECT id FROM "${schema}"."Users" ORDER BY id`,
-      { type: QueryTypes.SELECT }
-    );
+    const users = await queryInterface.sequelize.query(usersSql, {
+      type: QueryTypes.SELECT,
+    });
     if (!users.length) throw new Error("No users found to seed Media.userId");
 
-    // ✅ Grab real event ids (eventId is nullable in your schema, but we can still attach)
-    const events = await queryInterface.sequelize.query(
-      `SELECT id FROM "${schema}"."Events" ORDER BY id`,
-      { type: QueryTypes.SELECT }
-    );
+    // ✅ Grab real event ids (eventId is nullable, but we attach anyway)
+    const events = await queryInterface.sequelize.query(eventsSql, {
+      type: QueryTypes.SELECT,
+    });
     if (!events.length) throw new Error("No events found to seed Media.eventId");
 
     const userIds = users.map((u) => u.id);
     const eventIds = events.map((e) => e.id);
+
+    const now = new Date();
 
     await queryInterface.bulkInsert(
       options,
@@ -46,8 +68,8 @@ module.exports = {
           sizeBytes: 245123,
           originalName: "seed1.jpg",
           mediaType: "image",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          createdAt: now,
+          updatedAt: now,
         },
         {
           userId: userIds[1] ?? userIds[0],
@@ -59,8 +81,8 @@ module.exports = {
           sizeBytes: 312890,
           originalName: "seed2.jpg",
           mediaType: "image",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          createdAt: now,
+          updatedAt: now,
         },
         {
           userId: userIds[2] ?? userIds[0],
@@ -72,8 +94,8 @@ module.exports = {
           sizeBytes: 9450123,
           originalName: "seed3.mp4",
           mediaType: "video",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          createdAt: now,
+          updatedAt: now,
         },
         {
           userId: userIds[3] ?? userIds[0],
@@ -85,8 +107,8 @@ module.exports = {
           sizeBytes: 12045012,
           originalName: "seed4.mp4",
           mediaType: "video",
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          createdAt: now,
+          updatedAt: now,
         },
       ],
       {}
@@ -95,8 +117,20 @@ module.exports = {
 
   async down(queryInterface) {
     const schema = options.schema || "public";
-    await queryInterface.sequelize.query(
-      `TRUNCATE TABLE "${schema}"."Media" RESTART IDENTITY CASCADE;`
-    );
+    const table = options.tableName;
+    const dialect = queryInterface.sequelize.getDialect();
+
+    if (dialect === "postgres") {
+      await queryInterface.sequelize.query(
+        `TRUNCATE TABLE "${schema}"."${table}" RESTART IDENTITY CASCADE;`
+      );
+    } else if (dialect === "sqlite") {
+      await queryInterface.sequelize.query(`DELETE FROM "${table}";`);
+      await queryInterface.sequelize.query(
+        `DELETE FROM sqlite_sequence WHERE name='${table}';`
+      );
+    } else {
+      await queryInterface.bulkDelete(options, null, {});
+    }
   },
 };

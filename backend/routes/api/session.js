@@ -126,32 +126,51 @@ router.post(
     });
   }
 );
-// ! Log out
-router.delete(
-  '/',
-  (_req, res) => {
-    res.clearCookie('token');
-    return res.json({ message: 'success' });
-  }
-);
-//! GET session user if any
-router.get('/restore', restoreUser, async (req, res) => {
-  if (!req.user) return res.json({ user: null });
 
-  const freshUser = await User.findByPk(req.user.id);
+// ! Logout
+router.delete('/', (_req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+    path: '/', // important if you set it
+  });
 
-  const safeUser = {
-    id: freshUser.id,
-    email: freshUser.email,
-    username: freshUser.username,
-    firstName: freshUser.firstName,
-    lastName: freshUser.lastName,
-    bio: freshUser.bio || null,
-    photo: freshUser.photo || null,
-  };
-
-  return res.json({ user: safeUser });
+  return res.json({ message: 'success' });
 });
+
+//! GET session user if any
+router.get("/restore", restoreUser, async (req, res) => {
+  try {
+    if (!req.user) return res.json({ user: null });
+
+    const freshUser = await User.findByPk(req.user.id);
+
+    // ✅ KEY FIX: user was deleted but cookie still exists
+    if (!freshUser) {
+      // optional but recommended: kill the bad cookie
+      res.clearCookie("token");
+      return res.json({ user: null });
+    }
+
+    const safeUser = {
+      id: freshUser.id,
+      email: freshUser.email,
+      username: freshUser.username,
+      firstName: freshUser.firstName,
+      lastName: freshUser.lastName,
+      bio: freshUser.bio || null,
+      photo: freshUser.photo || null,
+    };
+
+    return res.json({ user: safeUser });
+  } catch (err) {
+    console.error("❌ /restore crashed:", err);
+    res.clearCookie("token"); // optional safety
+    return res.json({ user: null }); // ✅ never 500 here
+  }
+});
+
 
 
 router.post("/demouser", async (req, res) => {

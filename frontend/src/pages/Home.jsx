@@ -63,6 +63,11 @@ function Home() {
     setCreateChatModal(true)
   }
 
+  const photo = sessionUser?.photo?.trim();
+  const cacheBust = photo
+    ? (photo.includes("?") ? "&" : "?") + "v=" + Date.now()
+    : "";
+
   return (
     <div className='home-box'>
       <div className='event-container'>
@@ -85,16 +90,12 @@ function Home() {
           <h1>Welcome, {sessionUser.username}!</h1>
           <img
             className="propic"
-            key={sessionUser?.photo || "default"} // 🔑 forces re-render
-            src={
-              sessionUser?.photo?.trim()
-                ? `${sessionUser.photo}?v=${Date.now()}` // 🔥 cache bust
-                : logo
-            }
+            key={photo || "default"}
+            src={photo ? `${photo}` : {logo} }
             alt="profile"
             onError={(e) => {
-              console.error("❌ image failed:", sessionUser?.photo);
-              e.currentTarget.src = logo; // fallback
+              console.error("❌ image failed:", photo);
+              e.currentTarget.src = logo;
             }}
           />
 
