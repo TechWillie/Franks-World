@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { signup, updateMyProfileImageThunk } from "../store/session";
 import { createMediaThunk } from "../store/media";
 import "./SignupForm.css"
