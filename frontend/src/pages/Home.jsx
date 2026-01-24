@@ -64,9 +64,6 @@ function Home() {
   }
 
   const photo = sessionUser?.photo?.trim();
-  const cacheBust = photo
-    ? (photo.includes("?") ? "&" : "?") + "v=" + Date.now()
-    : "";
 
   return (
     <div className='home-box'>
