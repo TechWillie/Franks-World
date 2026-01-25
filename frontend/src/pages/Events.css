@@ -1,90 +1,225 @@
+/* =========================
+   EVENTS PAGE (DESKTOP)
+   ========================= */
+
+.event-body{
+  display: grid;
+  grid-template-columns: minmax(260px, 360px) 1fr; /* left list / right details */
+  gap: 20px;
+  padding: 20px;
+  height: calc(100vh - 120px); /* adjust if navbar differs */
+  box-sizing: border-box;
+}
+
+/* LEFT column list (desktop) */
 .events-container{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    /* color: azure; */
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 
-  .events-container h1{
-    font-size: 3rem;
-    margin-bottom: 2rem;
-  }
+  overflow-y: auto;
+  overflow-x: hidden;
 
-  .event-card{
+  padding-right: 6px;
+  min-height: 0;
+}
+
+.events-container h1{
+  font-size: 3rem;
+  margin-bottom: 2rem;
+}
+
+/* cards (base) */
+.event-card{
   border-style: double;
   background-color: rgba(93, 93, 90, 0.2);
   padding: 10px;
   border-radius: 8px;
   box-sizing: border-box;
+  transition: transform 0.12s ease;
+}
+
+.event-card img{
+  width: 80%;
+  height: 80%;
+  border-radius: 28px;
+  margin-bottom: 10px;
+}
+
+.event-card p{
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.event-card button{
+  background-color: #646460;
+  color: #ede8e8;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.event-card button:hover{ background-color: #a9ab9f; }
+.event-card button:focus{ outline: none; }
+.event-card button:active{ background-color: #878b5a; }
+.event-card button:disabled{
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* RIGHT details (desktop) */
+.single-container{
+  background-color: rgba(217, 203, 98, 0.3);
+  padding: 10px;
+  border-radius: 15px;
+  width: 100%;
+
+  position: sticky;
+  top: 90px; /* adjust to match your fixed navbar height */
+  align-self: start;
+
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+}
+
+/* =========================
+   MOBILE (CAROUSEL + ARROWS)
+   ========================= */
+
+@media (max-width: 768px) {
+
+  /* stack: top list, bottom details */
+  .event-body{
+    grid-template-columns: 1fr;
+    height: calc(100vh - 110px); /* adjust if your navbar is taller/shorter */
+    gap: 10px;
+    padding: 10px;
+    box-sizing: border-box;
   }
+
+  /* TOP: horizontal scroll row (no buttons) */
+  .events-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 10px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+
+    /* tighter = more room for details */
+    height: 150px;
+    padding: 6px 6px 10px;
+
+    box-sizing: border-box;
+    min-height: 0;
+  }
+
+  /* smaller, snug cards */
+  .event-card{
+    flex: 0 0 210px;     /* card width */
+    height: 100%;
+    padding: 8px;
+    border-radius: 10px;
+
+    overflow: hidden;
+    scroll-snap-align: start;
+
+    background-color: rgba(93, 93, 90, 0.2);
+    border-style: double;
+    box-sizing: border-box;
+  }
+
+  /* image tighter */
   .event-card img{
-    width: 80%;
-    height: 80%;
-    border-radius: 28px;
-    margin-bottom: 10px;
-    
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 6px;
   }
 
   .event-card p{
-    font-size: 1rem;
-    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    margin: 0 0 6px;
+    line-height: 1.1;
   }
 
   .event-card button{
-    background-color: #646460;
-    color: #ede8e8;
-    border: none;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
+    padding: 0.35rem 0.7rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+  }
+
+  /* blended horizontal scrollbar (Chrome/Edge) */
+  .events-container::-webkit-scrollbar{
+    height: 8px;
+  }
+  .events-container::-webkit-scrollbar-track{
+    background: rgba(255,255,255,0.06);
     border-radius: 10px;
   }
-
-  .event-card button:hover{
-    background-color: #a9ab9f;
+  .events-container::-webkit-scrollbar-thumb{
+    background: rgba(0,0,0,0.22);
+    border-radius: 10px;
+    border: 2px solid rgba(255,255,255,0.08);
+  }
+  .events-container::-webkit-scrollbar-thumb:hover{
+    background: rgba(0,0,0,0.32);
   }
 
-  .event-card button:focus{
-    outline: none;
-  }
-
-  .event-card button:active{
-    background-color: #878b5a;
-  }
-
-  .event-card button:disabled{
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-
-.event-body{
-  /* background-color: aqua; */
-  display: flex; 
-  justify-content: space-around;
-}
-
-  .single-container{
-    background-color: rgba(217, 203, 98, 0.3);
-    padding: 10px;
-    border-radius: 15px;
-    width: 100%;
-
-  }
-
-@media (max-width: 768px) {
+  /* Firefox */
   .events-container{
-    overflow: auto;
-    display: flex;
-    /* grid-template-columns: repeat(2, 1fr); */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,0.28) rgba(255,255,255,0.06);
   }
 
-  .event-card{
-    max-width: fit-content;
+  /* BOTTOM: details panel gets the rest of the screen + scrolls */
+  .single-container{
+    position: relative;
+    top: auto;
+
+    height: calc(100vh - 110px - 150px - 30px); /* nav - topRow - gap */
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 12px;
+    border-radius: 15px;
+    background-color: rgba(217, 203, 98, 0.3);
+
+    min-height: 0;
+    box-sizing: border-box;
   }
 
-  .event-body{
+  /* optional: blended vertical scrollbar for details */
+  .single-container::-webkit-scrollbar{
+    width: 8px;
+  }
+  .single-container::-webkit-scrollbar-track{
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+  }
+  .single-container::-webkit-scrollbar-thumb{
+    background: rgba(0,0,0,0.22);
+    border-radius: 10px;
+    border: 2px solid rgba(255,255,255,0.08);
+  }
+
+  /* future-proof media in details */
+  .single-container img,
+  .single-container video{
+    max-width: 100%;
+    border-radius: 12px;
     display: block;
+  }
+  .single-container video{
+    max-height: 320px;
   }
 }

@@ -10,3 +10,29 @@ body {
     background-attachment: fixed;
     z-index: 1;
 }
+
+/* NAVBAR MUST NOT BLOCK PAGE INPUT */
+
+.navbar {
+  pointer-events: auto;
+}
+
+/* EVERYTHING BELOW NAVBAR MUST ACCEPT INPUT */
+.page-body,
+.main-container,
+.message-container,
+.input-field,
+.the-messages {
+  pointer-events: auto !important;
+}
+
+/* Kill any invisible overlays */
+.menu-overlay,
+.mobile-overlay,
+
+
+/* Fix body scroll lock */
+html, body {
+  overflow-y: auto !important;
+  height: auto !important;
+}

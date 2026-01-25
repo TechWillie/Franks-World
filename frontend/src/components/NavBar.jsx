@@ -8,6 +8,7 @@ import { BsFillHouseFill, BsPersonVcard, BsPersonWalking } from "react-icons/bs"
 import "../components/NavBar.css"
 import { logout } from "../store/session";
 import { FiMenu } from "react-icons/fi";
+import newlogo from "../assets/media/pictures/new logo.png"
 
 function Navbar({loginClick, signupClick}) {
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ function Navbar({loginClick, signupClick}) {
   
   return (
     <nav className="navbar">
-      <h2 className="logo">theHype...</h2>
+      <img className="logo" src={newlogo} alt="" />
       <button className="menu-toggle" onClick={mobileMenuToggle} ref={mobileMenu}>
         <FiMenu />
       </button>

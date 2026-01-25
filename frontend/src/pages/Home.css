@@ -1,14 +1,25 @@
 .home-box{
-    border-style: double;
-    border-color: bisque;
-    display: grid;
-    grid-template-columns: 2fr 1fr; /* left and right columns */
-    grid-template-rows: auto auto;
-    gap: 20px;
-    padding: 20px;
-    padding-top: 60px;
-}
+  border-style: double;
+  border-color: bisque;
 
+  display: grid;
+
+  /* responsive columns (keeps your 2-col feel but adapts) */
+  grid-template-columns: minmax(280px, 2fr) minmax(240px, 1fr);
+
+  /* let rows size naturally */
+  grid-auto-rows: min-content;
+
+  gap: 20px;
+  padding: 20px;
+  padding-top: 60px;
+
+  /* keeps things from overflowing on smaller screens */
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
 @media (max-width: 768px) {
   .home-box {
     grid-template-columns: 1fr; 
@@ -126,4 +137,21 @@ height: 150px;
   border-radius: 50%;
   object-fit: cover;
   display: block;
+  margin-bottom: 1cm;
+}
+
+.current-events-scroll {
+  width: 100%;
+  max-width: 620px;
+
+  /* scroll box */
+  max-height: 340px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding: 12px 14px;
+  border-radius: 12px;
+
+  background: rgba(0,0,0,0.18);
+  backdrop-filter: blur(3px);
 }

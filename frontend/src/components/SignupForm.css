@@ -1,64 +1,120 @@
-
-
-
 .modal-background {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0; /* top:0 right:0 bottom:0 left:0 */
   background-color: rgba(0, 0, 0, 0.7);
+
   display: flex;
   justify-content: center;
   align-items: center;
+
+  padding: 16px;              /* ✅ prevents edge cut-off on small screens */
   z-index: 100;
+
+  overflow-y: auto;           /* ✅ allows whole modal to scroll if super small */
 }
 
+/* Modal panel */
 .modal-content {
-    border-style: double;
-  width: 25%;
+  border-style: double;
+
+  width: min(520px, 92vw);    /* ✅ responsive width: max 520px but fits phones */
+  max-height: min(86vh, 760px); /* ✅ keeps it from going off-screen */
+  overflow-y: auto;           /* ✅ internal scroll when content is tall */
+
   display: flex;
   flex-direction: column;
-  background-color: transparent;
+  gap: 10px;
+
+  background-color: rgba(0, 0, 0, 0.18);  /* still “transparent” but readable */
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 12px;
   z-index: 101;
-  align-items: center;
-  
+
+  align-items: stretch;       /* ✅ inputs fill width */
+  box-sizing: border-box;
 }
 
-.modal-content h2{
-    margin-bottom: 20px;
-    text-align: center;
-    color: rgb(89, 159, 229);
+/* Title */
+.modal-content h2 {
+  margin: 0 0 10px;
+  text-align: center;
+  color: rgb(89, 159, 229);
 }
 
-.modal-content input{
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 15px;
-    background-color: transparent;
-    color: rgb(229, 234, 239);
+/* Inputs */
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  box-sizing: border-box;
+
+  margin-bottom: 10px;
+  padding: 10px;
+
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 15px;
+
+  background-color: rgba(0,0,0,0.15);
+  color: rgb(229, 234, 239);
+  outline: none;
 }
 
-.modal-content textarea{
-    background-color: rgb(19, 61, 176, 0.30);
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    height: 80px;
-    /* background-color: transparent; */
-    color: rgb(89, 159, 229);
+.modal-content textarea {
+  border-radius: 20px;
+  min-height: 90px;
+  max-height: 180px;
+  resize: vertical;
+  color: rgb(89, 159, 229);
 }
 
-.modal-content button{
-    padding: 10px;
-    background-color: rgb(89, 159, 229);
-    color: rgb(10, 6, 6);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+/* Focus glow */
+.modal-content input:focus,
+.modal-content textarea:focus {
+  border-color: rgba(89, 159, 229, 0.75);
+  box-shadow: 0 0 0 3px rgba(89, 159, 229, 0.20);
+}
+
+/* Buttons */
+.modal-content button {
+  padding: 10px;
+  background-color: rgb(89, 159, 229);
+  color: rgb(10, 6, 6);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Better spacing if you have multiple buttons in a row */
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+.modal-actions button {
+  width: 100%;
+}
+
+/* ✅ Nice transparent scrollbar */
+.modal-content::-webkit-scrollbar {
+  width: 10px;
+}
+.modal-content::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+}
+.modal-content::-webkit-scrollbar-thumb {
+  background: rgba(89, 159, 229, 0.25);
+  border-radius: 10px;
+  border: 2px solid rgba(0,0,0,0.18);
+}
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(89, 159, 229, 0.45);
+}
+
+/* Firefox */
+.modal-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(89, 159, 229, 0.35) rgba(255,255,255,0.06);
 }

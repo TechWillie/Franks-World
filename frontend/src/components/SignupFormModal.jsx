@@ -143,10 +143,12 @@ const SignupFormModal = ({show, onClose}) => {
                 <input type="password" value={repeatPassword} placeholder=" Confirm Password"
                 onChange={(e) => setRepeatPassword(e.target.value)} required />
               </label>
-              <button type="button"
-              onClick={handleSubmit}
-              >Sign Up</button>
-              <button type="button" onClick={() => onClose()}>Cancel</button>
+              <div className="modal-actions">
+                <button type="button"
+                onClick={handleSubmit}
+                >Sign Up</button>
+                <button type="button" onClick={() => onClose()}>Cancel</button>
+              </div>
             </form>
           </div>
         </div>

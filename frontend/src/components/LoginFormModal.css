@@ -1,46 +1,66 @@
+/* FULLSCREEN OVERLAY (ALWAYS ON TOP) */
 .backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;                 /* top:0 right:0 bottom:0 left:0 */
+  width: 100vw;
+  height: 100vh;
+
   background-color: rgba(0, 0, 0, 0.7);
+
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 200;
+
+  /* must beat navbar z-index */
+  z-index: 2147483647;
+
+  /* prevent weird click-through issues */
+  pointer-events: auto;
 }
 
+/* MODAL PANEL */
 .login-form {
+  width: min(420px, 92vw);  /* responsive */
+  max-height: 85vh;         /* keeps it on screen */
+  overflow: auto;           /* scroll inside if needed */
+
   display: flex;
   flex-direction: column;
-  background-color: transparent;
+
+  background-color: rgba(0,0,0,0.10);
   backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+
   padding: 20px;
-  border-radius: 5px;
-  z-index: 101;
+  border-radius: 12px;
+
+  /* this only matters inside backdrop, but keep it high */
+  z-index: 2147483647;
+
+  border: double rgba(255,255,255,0.35);
 }
 
+/* text + inputs */
 .login-form h2{
-    margin-bottom: 20px;
-    text-align: center;
-    color: rgb(89, 159, 229);
+  margin-bottom: 20px;
+  text-align: center;
+  color: rgb(89, 159, 229);
 }
 
 .login-form input{
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: transparent;
-    color: rgb(89, 159, 229);
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 10px;
+  background-color: rgba(0,0,0,0.20);
+  color: rgb(229, 234, 239);
 }
 
 .login-form button{
-    padding: 10px;
-    background-color: rgb(89, 159, 229);
-    color: rgb(10, 6, 6);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 10px;
+  background-color: rgb(89, 159, 229);
+  color: rgb(10, 6, 6);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
 }

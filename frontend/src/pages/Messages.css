@@ -1,40 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Schoolbell&display=swap');
 
-
-/* make sure no background container can sit above UI */
-
 .title{
   color: azure;
   background-color: rgb(84, 71, 95);
 }
 
-
 .main-container{
-  /* background-color: brown; */
   display: grid;
-  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.message-container, .board-container {
-  /* background-color: brown; */
- border-style: double;
+/* Shared panel styles */
+.message-container,
+.board-container {
+  border-style: double;
   display: grid;
-  /* flex-direction: column; */
   grid-row: 1/2;
-  /* height: 95%; */
-  
-  
   justify-content: center;
-  /* height: 100vh; */
+
   color: rgb(8, 7, 8);
   font-size: 1.5rem;
   font-weight: 500;
-  
+
   padding: 10px;
+  box-sizing: border-box;
 }
 
 .board-container{
-  /* background-color: blueviolet; */
   align-items: center;
   width: 90%;
 }
@@ -49,22 +42,29 @@
   cursor: pointer;
   font-size: 1rem;
   font-weight: 500;
-  
 }
 
+/* ✅ Message layout: header / messages(scroll) / input */
 .message-container{
- display: flex;
+  display: flex;
   flex-direction: column;
-  height: 100%;       /* Controls entire message panel height */
+
+  /* IMPORTANT:
+     Don't trap page scroll with overflow hidden + fixed vh height on mobile.
+     We'll handle scroll in .the-messages instead.
+  */
+  width: 100%;
+  min-height: 0;
   position: relative;
   z-index: 1;
 }
 
 .the-messages{
-   flex: 1;            /* Takes all available space */
-  overflow-y: auto;   /* Scrolls messages */
+  flex: 1 1 auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding-right: 5px;
-  /* z-index: 100; */
+  min-height: 0;
 }
 
 .the-messages p{
@@ -87,75 +87,85 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  
 }
 
 .boardrooms{
   overflow: auto;
 }
 
+/* ✅ Input stays usable but doesn't overpower nav / page */
 .input-field{
   display: flex;
   gap: 10px;
-  z-index: 9999;      /* Always clickable */
-  background: white;  /* Prevents see-through overlap */
+
+  background: white;
   padding: 10px;
   border-top: double;
+
+  /* keep it above messages, but not above the whole app */
+  z-index: 5;
+  position: relative;
+
   pointer-events: auto;
+  box-sizing: border-box;
 }
 
+/* =========================
+   MOBILE FIXES
+   ========================= */
 @media (max-width: 768px) {
-   .main-container {   
-     display: flex;    
-     flex-direction: column; /* Stack elements vertically */    
-    width: 100%; /* Ensure it takes full width */  
-  }  
-  .board-container {    
-    width: 100%; /* Make the board container full width */    
-    order: 1; /* Ensure it comes first */  
-  }  
-  .message-container {    
-    width: 100%; /* Make the message container full width */    
-    order: 2; /* Ensure it comes second */    
-    display: flex; /* Use flex to allow scrolling */    
-    flex-direction: column; /* Stack messages vertically */  
-  }  
-  .the-messages {    
-    flex: 1; /* Allow messages to take available space */    
-    overflow-y: auto; /* Enable scrolling for messages */  
-  }  
-  .input-field {    width: 100%; /* Full width for the input field */    
-    padding: 10px; /* Adjust padding as needed */  
+
+  /* ✅ ensure page can scroll normally (prevents snap-to-bottom loop) */
+  html, body {
+    height: auto;
+    overflow-y: auto;
+    overscroll-behavior: auto;
   }
-  
-}
 
-/* ---------- DROP-IN OVERRIDE (paste at very end of your CSS) ---------- */
+  .main-container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+     margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
 
-/* make message container a column so header -> scroll -> input is enforced */
-.message-container {
-  display: flex !important;
-  flex-direction: column !important;
-  position: relative !important;
-  height: 80vh !important;    /* keeps the panel height stable */
-  overflow: hidden !important;
-}
+  .board-container{
+    width: 100%;
+    order: 1;
+  }
 
-/* messages area: scroll inside panel and sit behind the input */
-.the-messages {
-  position: relative !important;
-  z-index: 1 !important;         /* make sure messages are under the input */
-  flex: 1 1 auto !important;
-  overflow-y: auto !important;
-  padding-bottom: 12px !important;
-}
+  .message-container{
+    width: 100%;
+    order: 2;
+    display: flex;
+    flex-direction: column;
 
-/* input: guarantee it's on top and receives pointer events */
-.input-field {
-  position: relative !important;
-  z-index: 2147483647 !important; /* highest safe integer z-index to beat other rules */
-  pointer-events: auto !important;
+    /* ✅ allow normal flow; no vh trapping */
+    height: auto;
+    overflow: visible !important;
+    min-height: 0;
+  }
 
+  /* ✅ Give messages their own scroll window on mobile */
+  .the-messages{
+    max-height: 55vh;      /* adjust if you want more/less messages area */
+    overflow-y: auto;
+    min-height: 0;
+  }
+
+  /* ✅ Sticky input at bottom without forcing viewport jumps */
+  .input-field{
+    width: 100%;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+
+    /* slight translucency fits your vibe */
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
 }
 
 

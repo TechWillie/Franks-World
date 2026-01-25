@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 95%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,8 +13,7 @@
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
+  height: 100px;
 }
 
 .menu-toggle{
@@ -54,12 +53,12 @@
     /* display: flex; */
     display: flex;
     position: absolute;
-    top: 10%; /* Moves top edge down 50% of parent's height */
+    top: 10%;
     left: 50%; /* Moves left edge right 50% of parent's width */
     transform: translate(-50%, -50%); /* Shifts element back up/left by 50% of *its own* size */
 
     
-    margin-top: 40%;
+    margin-top: 25%;
     
     background-color: rgb(177, 190, 102, 0.8);
     
@@ -123,3 +122,37 @@ button:hover {
 }
 
 
+/* ✅ MOBILE NAV ALWAYS CLICKABLE ABOVE CHAT UI */
+@media (max-width: 768px) {
+  .navbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 9999999 !important; /* above message input + overlays */
+  }
+
+  /* if your toggle has its own class/id, this guarantees click */
+  .menu-toggle,
+  .hamburger,
+  #menu-toggle,
+  .nav-toggle {
+    position: relative !important;
+    z-index: 10000000 !important;
+    pointer-events: auto !important;
+  }
+
+  /* ✅ keep chat page from overlapping the navbar area */
+  .main-container,
+  .message-container,
+  .board-container {
+    margin-top: 90px !important; /* adjust to your navbar height */
+  }
+
+  /* ✅ stop message input from covering the whole screen */
+  .input-field {
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 2 !important; /* not infinity; let navbar win */
+  }
+}
