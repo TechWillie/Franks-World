@@ -9,6 +9,8 @@ import Messages from '../pages/Messages';
 import Events from '../pages/Events';
 import LoginFormModal from '../components/LoginFormModal';
 import SignupFormModal from '../components/SignupFormModal';
+import TestInput from "../pages/TestInput";
+
 
 
 const MainLayout = () => {
@@ -33,6 +35,7 @@ const Router = () => (
       <Route path="/peeps" element={<AFewPeople />} />
       <Route path="/messages" element={<Messages />} />
       <Route path='/events' element={<Events />} />
+      <Route path="/test" element={<TestInput />} />
     </Route>
   </Routes>
 );
