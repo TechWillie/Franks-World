@@ -199,7 +199,6 @@ const Messages = () => {
                 }}
                 onChange={(e) => setMessageInput(e.target.value)}
                 placeholder={!boardId ? "Select a board first..." : "Type a message..."}
-                disabled={!boardId}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
@@ -208,7 +207,7 @@ const Messages = () => {
                 }}
                 autoComplete="off"
               />
-              <button onClick={putMsgTogether} disabled={!boardId}>
+              <button onClick={putMsgTogether}>
                 Post
               </button>
             </div>

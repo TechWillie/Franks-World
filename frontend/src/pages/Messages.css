@@ -6,6 +6,7 @@
 }
 
 .main-container{
+  margin-top: 50px;
   display: grid;
   width: 100%;
   box-sizing: border-box;

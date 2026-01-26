@@ -61,7 +61,7 @@ module.exports = {
         {
           userId: userIds[0],
           eventId: eventIds[0],
-          url: "https://picsum.photos/200/300",
+          url: "https://firebasestorage.googleapis.com/v0/b/the-hype-f3b75.firebasestorage.app/o/events%2Fbackyard%20house.jpg?alt=media&token=f82cee5a-bd87-4ffc-825f-19ac02fc2edd",
           storagePath: "web-uploads/seed1.jpg",
           folder: "web-uploads",
           contentType: "image/jpeg",
@@ -74,7 +74,7 @@ module.exports = {
         {
           userId: userIds[1] ?? userIds[0],
           eventId: eventIds[1] ?? eventIds[0],
-          url: "https://picsum.photos/200/300",
+          url: "https://firebasestorage.googleapis.com/v0/b/the-hype-f3b75.firebasestorage.app/o/events%2Fhouse%20rent%20kitchen.jpg?alt=media&token=b9e215de-e2a1-4bb7-9162-d3d1009f8132",
           storagePath: "web-uploads/seed2.jpg",
           folder: "web-uploads",
           contentType: "image/jpeg",
@@ -87,7 +87,7 @@ module.exports = {
         {
           userId: userIds[2] ?? userIds[0],
           eventId: eventIds[2] ?? eventIds[0],
-          url: "https://picsum.photos/200/300",
+          url: "https://firebasestorage.googleapis.com/v0/b/the-hype-f3b75.firebasestorage.app/o/events%2Flabs%20ret.jpg?alt=media&token=d195ea78-bd7f-41e3-96bd-1c63d8e4cd1e",
           storagePath: "web-uploads/seed3.mp4",
           folder: "web-uploads",
           contentType: "video/mp4",
@@ -100,7 +100,7 @@ module.exports = {
         {
           userId: userIds[3] ?? userIds[0],
           eventId: eventIds[3] ?? eventIds[0],
-          url: "https://picsum.photos/200/300",
+          url: "https://firebasestorage.googleapis.com/v0/b/the-hype-f3b75.firebasestorage.app/o/events%2Fliving%20room.jpg?alt=media&token=7ec2ce89-5424-4599-a231-ac4bbb8493fc",
           storagePath: "web-uploads/seed4.mp4",
           folder: "web-uploads",
           contentType: "video/mp4",

@@ -34,7 +34,7 @@ function Navbar({loginClick, signupClick}) {
 
   useEffect(() => {
     function outsideToggle(ev){
-      ev.preventDefault()
+      // ev.preventDefault()
       setTimeout(() => {
       if (
         mobileOutsideTouch.current &&

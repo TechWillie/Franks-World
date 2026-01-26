@@ -38,6 +38,7 @@ module.exports = {
           chatRoomId: 1,
           createdAt: new Date("2025-01-21"),
           updatedAt: now,
+          description: "A day out with the kids. A real family affair",
         },
         {
           name: "Photo Walk",
@@ -47,6 +48,7 @@ module.exports = {
           chatRoomId: 2,
           createdAt: new Date("2024-09-09"),
           updatedAt: now,
+          description: "Pull out the red carpet. Strut your stuff",
         },
         {
           name: "LAN Party",
@@ -56,6 +58,7 @@ module.exports = {
           chatRoomId: 3,
           createdAt: new Date("2025-02-12"),
           updatedAt: now,
+          description: "Local Area Networking fiesta. Bring drinks and portfolio..!",
         },
         {
           name: "Food Festival",
@@ -65,6 +68,7 @@ module.exports = {
           chatRoomId: 4,
           createdAt: new Date("2026-07-14"),
           updatedAt: now,
+          description: "For the fattie in us all. Please serve yourself..",
         },
       ],
       {}

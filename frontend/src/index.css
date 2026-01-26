@@ -16,6 +16,9 @@ body {
 .navbar {
   pointer-events: auto;
 }
+.page-body{
+  margin-top: 5px;
+}
 
 /* EVERYTHING BELOW NAVBAR MUST ACCEPT INPUT */
 .page-body,

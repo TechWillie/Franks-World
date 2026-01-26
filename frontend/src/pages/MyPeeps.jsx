@@ -17,9 +17,11 @@ function MyPeeps() {
         <div className='peeps'>
           {users.map(user => (
             <div key={user.id} className='peep'>
+              {console.log(user)}
               <h3>{user.username}</h3>
               <p>{user.email}</p>
-              {user.bio && <p>{user.bio}</p>}
+              <p>{user.bio || "No Bio..."}</p>
+              <img src={user.photo} alt="" />
             </div>
           ))}
         </div>
