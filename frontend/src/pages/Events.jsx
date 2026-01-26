@@ -3,7 +3,7 @@ import "./Events.css"
 import { useEffect, useState } from "react";
 import { fetchEventsThunk } from "../store/events";
 import UpdateDelete from "../components/UpdateDelete";
-import { fetchMediaThunk, fetchMediaByEventIdThunk } from "../store/media";
+import { fetchMediaThunk,  } from "../store/media";
 
 const Events = () => {
   const dispatch = useDispatch();
@@ -12,7 +12,6 @@ const Events = () => {
   const sessionUser = useSelector((state) => state.session.user || {});
   const eventsArr = Object.values(events);
   const [isEvent, setIsEvent] = useState(null);
-  const [photosArr, setPhotosArr] = useState([]);
   const [selectEvent, setSelectEvent] = useState(null);
   // console.log("events:", eventsArr, events);
   console.log("⚠️⚠️media object", media);
@@ -24,7 +23,7 @@ const Events = () => {
     dispatch(fetchEventsThunk());
     dispatch(fetchMediaThunk())
   }, [dispatch]);
-  console.log("Arrsy of photos", photosArr);
+
   
   const EventPage = (eventObj) => {
     console.log("the event obj for the box", Object.values(eventObj));
