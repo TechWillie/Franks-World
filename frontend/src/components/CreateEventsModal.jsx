@@ -41,7 +41,13 @@ const CreateEventModal = ({ onClose }) => {
     // If you want to store the uploaded image URL on the event:
     // const payload = { ...eventObj, imageUrl: eventUpload?.url ?? null };
 
-    const data = await dispatch(createEventThunk(eventObj));
+   const payload = {
+  ...eventObj,
+  imageUrl: eventUpload?.url ?? null
+};
+
+const data = await dispatch(createEventThunk(payload));
+
 
     if (data?.errors) {
       setSubmitted(false);
