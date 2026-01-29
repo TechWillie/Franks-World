@@ -133,7 +133,7 @@ const Messages = () => {
   }, [boardMsgArr.length, boardId]);
 
   return (
-    <div className="body">
+    <div className="page-body">
       {sessionUser ? (
         <div className="main-container">
           <div className="board-container">

@@ -9,6 +9,8 @@ import { fetchEventsThunk } from '../store/events'
 import { fetchMediaThunk } from '../store/media'
 // import UploadFile from "../components/UploadFile";
 import logo from "../assets/media/pictures/frankslogo.png"
+import UserEvents from '../components/UserEvents'
+
 
 
  
@@ -67,16 +69,7 @@ function Home() {
 
   return (
     <div className='home-box'>
-      <div className='event-container'>
-        <h1>Most Current Events</h1>
-         {sortedEvents.map((event) => (
-          <div className='current-events-scroll' key={event.id} >
-            <h3>{event.name}</h3>
-            <p>Created: {event?.createdAt}</p>
-            
-          </div>
-        ))}
-      </div>
+      
       <div className='session'>
       {!sessionUser ? (
         <div>
@@ -112,23 +105,24 @@ function Home() {
         </div>
       )}
         <>
-          {sessionUser && 
-            <>
+          {sessionUser &&
+            <div className="user-events-panel">
             <h1>Your Events</h1>
-            
-            {eventsArr.filter(event => event.hostId === sessionUser.id)
-                      .map((event) => (
-              
-              <div key={event.id} className="user-event-card">
-                <h3>{event.name}</h3>
-                <p>{event.description}</p>
-                <p>{event.eventDate}</p>
-              </div>
-            ))}
-            </>
+            <UserEvents eventsArr={eventsArr} sessionUser={sessionUser} />
+            </div>
           }
             
         </>
+      </div>
+      <div className='event-container'>
+        <h1>Most Current Events</h1>
+         {sortedEvents.map((event) => (
+          <div className='current-events-scroll' key={event.id} >
+            <h3>{event.name}</h3>
+            <p>Created: {event?.createdAt}</p>
+            
+          </div>
+        ))}
       </div>
    </div>
   )

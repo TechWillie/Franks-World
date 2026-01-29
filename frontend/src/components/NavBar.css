@@ -86,9 +86,23 @@
 }
 
   
-  .nav-links li a:hover {
-    text-decoration: underline;
-  }
+  .nav-links li a {
+  color: white;
+  transition: 0.2s ease;
+}
+
+.nav-links li a:hover {
+  color: #c2cc99;
+  text-decoration: underline;
+}
+
+/* ACTIVE PAGE */
+.nav-links li a.active {
+  color: #ffd700;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
   
 .dropdown-menu{
     position: absolute;
@@ -154,5 +168,12 @@ button:hover {
     position: sticky !important;
     bottom: 0 !important;
     z-index: 2 !important; /* not infinity; let navbar win */
+  }
+}
+
+@media (max-width: 480px) {
+  /* mobile styles */
+  .nav-links.open{
+    top: 50px;
   }
 }

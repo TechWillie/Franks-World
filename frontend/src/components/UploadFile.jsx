@@ -83,7 +83,7 @@ export default function UploadFile({
 
   return (
     <div style={{ display: "grid", gap: 12, maxWidth: 520 }}>
-      <h3 style={{ margin: 0 }}>Upload to Firebase Storage</h3>
+      <h3 style={{ margin: 0 }}>Please upload Image</h3>
 
       <input type="file" accept={accept} onChange={onPick} />
 
@@ -99,7 +99,7 @@ export default function UploadFile({
           <img
             src={url}
             alt="upload preview"
-            style={{ width: "100%", borderRadius: 12 }}
+            style={{ width: "50%", borderRadius: 15 }}
           />
         </div>
       ) : null}

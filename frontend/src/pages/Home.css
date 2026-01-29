@@ -2,12 +2,8 @@
   border-style: double;
   border-color: bisque;
 
-  display: grid;
+  /* display: grid; */
 
-  /* responsive columns (keeps your 2-col feel but adapts) */
-  grid-template-columns: minmax(280px, 2fr) minmax(240px, 1fr);
-
-  /* let rows size naturally */
   grid-auto-rows: min-content;
 
   gap: 20px;
@@ -17,118 +13,139 @@
   /* keeps things from overflowing on smaller screens */
   width: 100%;
   max-width: 1200px;
+  min-width: 0;
   margin: 0 auto;
   box-sizing: border-box;
 }
+
+.user-events-container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 6px;
+
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+
+  overflow-x: auto;
+  overflow-y: hidden; 
+  padding: 10px;
+
+  background-color: rgba(255, 255, 255, 0.4);
+  color: rgb(16, 16, 17);
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  font-weight: 900;
+}
+
+
+
+
 @media (max-width: 768px) {
   .home-box {
     grid-template-columns: 1fr; 
-     
-    
   }
-
-  
 }
 
-
 .home-body{
-   position: relative;
-   margin-top: 40px;
-    /* height: 30vh; */
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    /* background-color: rgba(255, 255, 255, 0.5); */
+  position: relative;
+  margin-top: 40px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .header{
-    /* background-color: rgb(51, 51, 208); */
-    display: flex;
-    justify-content: center;
-    /* max-width: fit-content; */
-    color: rgb(236, 214, 185);
-    font-size: 30px;
-    font-weight: bolder;
-    background-color: rgb(241, 217, 187, 0.2);
-
+  display: flex;
+  justify-content: center;
+  color: rgb(236, 214, 185);
+  font-size: 30px;
+  font-weight: bolder;
+  background-color: rgb(241, 217, 187, 0.2);
 }
 
 .intro{
-    /* background-color: rgb(60, 60, 204); */
-    height: 50px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 35px;
-    font-weight: 500;
-    color: rgb(234, 224, 207);
-    text-shadow:
+  height: 50px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 35px;
+  font-weight: 500;
+  color: rgb(234, 224, 207);
+  text-shadow:
     -1px -1px 0 black,
      1px -1px 0 black,
     -1px  1px 0 black,
-     1px  1px 0 black; /* Outline effect */
-  
+     1px  1px 0 black;
 }
 
 .quotes{
-color: rgb(243, 192, 104);
-font-size: 20px;
-font-weight: 500;
-height: 150px;
+  color: rgb(243, 192, 104);
+  font-size: 20px;
+  font-weight: 500;
+  height: 150px;
 }
 
 .quotes-container{
-    color: rgb(85, 75, 60);
-    font-size: 15px;
-    font-weight: 500;
-    /* background-color: rgba(102, 101, 104, 0.2); */
-    border-radius: 20px;
-    padding: 15px;
-    width: 50%;
-    grid-column: 1 / 2;
-    grid-row: 1;
+  color: rgb(85, 75, 60);
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 20px;
+  padding: 15px;
+  width: 50%;
+  grid-column: 1 / 2;
+  grid-row: 1;
 }
 
 .event-container{
-    display: flex;
-    flex-direction: column;
-    /* justify-content: center; */
-    align-items: center;
-    /* width: 30%; */
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.4);
-    color: rgb(16, 16, 17);
-    font-family: 'Impact', 'Arial Black', sans-serif; 
-    font-weight: 900;
-    letter-spacing: 2px;
-    grid-column: 1 / 2;
-    grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.4);
+  color: rgb(16, 16, 17);
+  font-family: 'Impact', 'Arial Black', sans-serif; 
+  font-weight: 900;
+  letter-spacing: 2px;
+  grid-column: 1 / 2;
+  grid-row: 2;
 }
-
 
 .session{
-    background-color: rgb(121, 129, 129, 0.5);
-    color: antiquewhite;
-    /* position: relative; */
-    max-width: fit-content;
-    padding: 10px;
-    height: 250px;
-    border-radius: 20px;
-    /* margin-left: auto; */
-    display: flex;
-    gap: 50px; 
+  background-color: rgb(121, 129, 129, 0.5);
+  color: antiquewhite;
+  /* max-width: 100%; */
+  /* width: 100%; */
+  padding: 10px;
+  height: 100%;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  /* overflow-x: hidden; */
+  /* ✅ IMPORTANT in flex layouts: allows children to overflow/scroll */
+  min-width: 0;
+  width: 100%;
 }
+
 .pic{
-    width: 50px;
-    border-radius: 40%;
+  width: 50px;
+  border-radius: 40%;
 }
 
 .user-event-card{
-     border-style: double;
+  border-style: double;
   background-color: rgba(93, 93, 90, 0.2);
   padding: 10px;
-  border-radius: 8px;
-  box-sizing: border-box;;
+  border-radius: 18px;
+  box-sizing: border-box;
+
+  flex: 0 0 260px;   /* fixed card width */
+  height: 150px;     /* fixed card height */
+
+  /* ✅ 1000 words? scroll INSIDE the card vertically */
+  overflow-y: auto;
+
 }
 
 .propic {
@@ -144,14 +161,36 @@ height: 150px;
   width: 100%;
   max-width: 620px;
 
-  /* scroll box */
   max-height: 340px;
   overflow-y: auto;
-  overflow-x: hidden;
 
   padding: 12px 14px;
   border-radius: 12px;
 
   background: rgba(0,0,0,0.18);
   backdrop-filter: blur(3px);
+}
+
+.user-events-panel{
+  flex: 1 1 auto;   /* take remaining width */
+  min-width: 0;     /* IMPORTANT: allows child overflow to scroll instead of page */
+  max-width: 100%;
+}
+
+/* Slim scrollbar for events row */
+.user-events-container::-webkit-scrollbar {
+  height: 6px;   /* controls thickness */
+}
+
+.user-events-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.user-events-container::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.35);
+  border-radius: 10px;
+}
+
+.user-events-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.55);
 }

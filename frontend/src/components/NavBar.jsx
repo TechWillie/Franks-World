@@ -64,7 +64,7 @@ function Navbar({loginClick, signupClick}) {
       
         <ul className={`nav-links ${isOpen ? "open" : ""}`} ref={mobileOutsideTouch}>
         {/* <ul className='nav-links'> */}
-          <li><NavLink to="/">Home</NavLink></li>
+          <li><NavLink className={({ isActive }) => isActive ? "active" : ""} to="/">Home</NavLink></li>
           <li><NavLink to="/events" >Events</NavLink></li>
           <li><NavLink to="/messages" >Chatter Box</NavLink></li>
           <li><NavLink to="/peeps" >My Peeps</NavLink></li>

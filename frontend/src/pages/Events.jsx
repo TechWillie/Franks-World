@@ -47,7 +47,6 @@ const Events = () => {
 
   return (
     <div className="page-body">
-      <h1 className="header">Events</h1>
       <div className="event-body">
       
           <div className="events-container">

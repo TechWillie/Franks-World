@@ -17,7 +17,7 @@ body {
   pointer-events: auto;
 }
 .page-body{
-  margin-top: 5px;
+  margin-top: 25px;
 }
 
 /* EVERYTHING BELOW NAVBAR MUST ACCEPT INPUT */
@@ -38,4 +38,11 @@ body {
 html, body {
   overflow-y: auto !important;
   height: auto !important;
+}
+
+@media (max-width: 480px) {
+  /* mobile styles */
+  .nav-links.open{
+    top: 500px;
+  }
 }

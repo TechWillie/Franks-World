@@ -12,8 +12,7 @@ function MyPeeps() {
   }, [dispatch])
   console.log('Users array:', users);
   return (
-    <div className='body'>
-        <h1 className='header'>My Peeps..</h1>
+    <div className='page-body'>
         <div className='peeps'>
           {users.map(user => (
             <div key={user.id} className='peep'>
