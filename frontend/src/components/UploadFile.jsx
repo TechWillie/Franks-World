@@ -1,3 +1,4 @@
+// UploadFile.jsx
 import { useState } from "react";
 import { storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -7,6 +8,12 @@ export default function UploadFile({
   accept = "image/*",
   maxMB = 10,
   onUploaded,
+
+  // ✅ NEW (optional) callbacks — won’t affect your user photo flow if you don’t pass them
+  onUploadStart,
+  onUploadEnd,
+  onPickFile,
+  onError,
 }) {
   const [file, setFile] = useState(null);
   const [pct, setPct] = useState(0);
@@ -24,17 +31,22 @@ export default function UploadFile({
     const maxBytes = maxMB * 1024 * 1024;
     if (f.size > maxBytes) {
       setFile(null);
-      setErr(`File too large. Max ${maxMB}MB.`);
+      const msg = `File too large. Max ${maxMB}MB.`;
+      setErr(msg);
+      onError?.(new Error(msg));
       return;
     }
 
     setFile(f);
+    onPickFile?.(f); // ✅ tells parent a file was selected
   };
 
   const onUpload = async () => {
     if (!file) return;
 
     try {
+      onUploadStart?.(); // ✅ parent can disable submit immediately
+
       setErr("");
       setUrl("");
       setPct(0);
@@ -64,20 +76,23 @@ export default function UploadFile({
       // ✅ show preview
       setUrl(downloadUrl);
 
-      // ✅ notify parent
+      // ✅ notify parent (this is your existing logic)
       const payload = {
         url: downloadUrl,
-        storagePath: path,        // ✅ rename
+        storagePath: path,
         folder,
         contentType: file.type,
-        sizeBytes: file.size,     // ✅ rename
+        sizeBytes: file.size,
         originalName: file.name,
       };
-      onUploaded?.(payload);
 
+      onUploaded?.(payload);
+      onUploadEnd?.(payload); // ✅ parent knows upload+preview is ready
     } catch (e) {
       console.error("❌ Upload error:", e);
       setErr(e?.message || String(e));
+      onError?.(e);
+      onUploadEnd?.(null); // ✅ end even on error
     }
   };
 

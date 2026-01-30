@@ -96,16 +96,27 @@ router.post("/", requireAuth, async (req, res) => {
       mediaType: mediaType || inferMediaType(contentType),
     });
 
-    const user = await User.findByPk(req.user.id);
-    user.photo = url;
-    await user.save();
-
     return res.status(201).json(created);
   } catch (error) {
     console.error("Error creating media:", error);
     return res.status(500).json({ error: "new media Internal Server Error" });
   }
 });
+
+// !! Add photo to user
+router.put("/me/photo", requireAuth, async (req, res) => {
+  const { url } = req.body;
+
+  const user = await User.findByPk(req.user.id);
+
+  if (!user) return res.status(404).json({ error: "User not found" });
+
+  user.photo = url;
+  await user.save();
+
+  return res.json(user);
+});
+
 
 
 // ! Update media

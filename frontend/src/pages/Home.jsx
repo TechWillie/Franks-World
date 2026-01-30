@@ -11,11 +11,6 @@ import { fetchMediaThunk } from '../store/media'
 import logo from "../assets/media/pictures/frankslogo.png"
 import UserEvents from '../components/UserEvents'
 
-
-
- 
-
-
 function Home() {
 
    const store = useStore();
@@ -67,6 +62,8 @@ function Home() {
 
   const photo = sessionUser?.photo?.trim();
 
+  
+
   return (
     <div className='home-box'>
       
@@ -88,9 +85,6 @@ function Home() {
               e.currentTarget.src = logo;
             }}
           />
-
-
-          
           {Object.values(mediaObj).map((media) => (
             <div key={media.id}>
               {media.type === 'image' && sessionUser.id === media.userId && (

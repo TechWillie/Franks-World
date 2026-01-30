@@ -25,7 +25,6 @@ const addMessage = (message) => ({
 });
 //! Thunk action creators
 export const createMessageThunk = (message) => async (dispatch) => {
-  console.log("from redux store thunk message:", message);
   
   const response = await csrfFetch('/api/messages', {
     method: 'POST',
@@ -39,7 +38,9 @@ export const createMessageThunk = (message) => async (dispatch) => {
      dispatch(addMessage(data));
   }
 };
+
 export const updateMessageThunk = (message) => async (dispatch) => {
+
   const response = await csrfFetch(`/api/messages/${message.id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },

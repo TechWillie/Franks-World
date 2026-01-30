@@ -31,7 +31,6 @@ const addMedia = (media) => ({
 // media payload expected:
 // { eventId?, url, path, folder?, contentType?, size?, originalName?, mediaType? }
 export const createMediaThunk = (mediaPayload) => async (dispatch) => {
-  console.log("🟦 createMediaThunk payload:", mediaPayload);
   try {
     const res = await csrfFetch("/api/media", {
       method: "POST",
@@ -94,8 +93,6 @@ export const deleteMediaThunk = (mediaId) => async (dispatch) => {
 
 // Fetch all media
 export const fetchMediaThunk = () => async (dispatch) => {
-  console.log("⚠️⚠️MEDIA IMPORTED");
-  
   try {
     const res = await csrfFetch("/api/media");
     if (res.ok) {
