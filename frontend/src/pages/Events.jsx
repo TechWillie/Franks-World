@@ -13,11 +13,11 @@ const Events = () => {
   const eventsArr = Object.values(events);
   const [isEvent, setIsEvent] = useState(null);
   const [selectEvent, setSelectEvent] = useState(null);
-  // console.log("events:", eventsArr, events);
-  console.log("⚠️⚠️media object", media);
-  console.log(Array.isArray(media));
+  // // console.log("events:", eventsArr, events);
+  // console.log("⚠️⚠️media object", media);
+  // console.log(Array.isArray(media));
   const mediaArray = Object.values(media)
-  console.log("👍👍 Media array :", mediaArray);
+  // console.log("👍👍 Media array :", mediaArray);
   
   useEffect(() => {
     dispatch(fetchEventsThunk());
@@ -26,9 +26,9 @@ const Events = () => {
 
   
   const EventPage = (eventObj) => {
-    console.log("the event obj for the box", Object.values(eventObj));
+    // console.log("the event obj for the box", Object.values(eventObj));
     const event = Object.values(eventObj)[0];
-    console.log("event", event);
+    // console.log("event", event);
     
     return(
       <div className="single-event-container">

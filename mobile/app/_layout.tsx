@@ -17,7 +17,7 @@ const [fontsLoaded] = useFonts({
   Schoolbell: Schoolbell_400Regular,
 });
 
-console.log('fontsLoaded:', fontsLoaded);
+// console.log('fontsLoaded:', fontsLoaded);
 
 
 export default function RootLayout() {

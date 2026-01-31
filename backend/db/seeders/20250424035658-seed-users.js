@@ -40,7 +40,7 @@ module.exports = {
         : `SELECT id FROM "${table}" ORDER BY id;`,
       { type: Sequelize.QueryTypes.SELECT }
     );
-    console.log("Users AFTER RESET:", after);
+    // console.log("Users AFTER RESET:", after);
 
     // ✅ Insert WITHOUT id fields
     await queryInterface.bulkInsert(
@@ -112,7 +112,7 @@ module.exports = {
         : `SELECT id, username FROM "${table}" ORDER BY id;`,
       { type: Sequelize.QueryTypes.SELECT }
     );
-    console.log("Users AFTER INSERT:", final);
+    // console.log("Users AFTER INSERT:", final);
   },
 
   async down(queryInterface) {

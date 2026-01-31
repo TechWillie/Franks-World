@@ -25,13 +25,13 @@ const CreateChatboardModal = ({ onClose }) => {
     
     if (name) {
       const newChatt = {name, isPrivate: false};
-      console.log("Form submitted", name);
+      // console.log("Form submitted", name);
       // setChatboardObj({ name });
       dispatch(createChatboardThunk(newChatt));
       navigate('/messages')
       onClose();
     } else {
-      console.log("Name is required");
+      // console.log("Name is required");
       
     }
   };

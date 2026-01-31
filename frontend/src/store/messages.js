@@ -19,7 +19,7 @@ const updateMessage = (message) => ({
   payload: message
 });
 
-const addMessage = (message) => ({
+export const addMessage = (message) => ({
   type: ADD_MESSAGE,
   payload: message
 });
@@ -36,6 +36,7 @@ export const createMessageThunk = (message) => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
      dispatch(addMessage(data));
+     return data;
   }
 };
 
@@ -59,7 +60,7 @@ export const updateMessageThunk = (message) => async (dispatch) => {
       credentials: "include"
     });
     if (response.ok) {
-      console.log("Deleted message Id:", message.id);
+      // console.log("Deleted message Id:", message.id);
       
       dispatch(removeMessage(message.id));
     }

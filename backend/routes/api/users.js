@@ -15,14 +15,13 @@ const { handleValidationErrors } = require('../../utils/validation');
   try {
     const users = await User.findAll();
     const plainUsersArr = users.map(user => user.toJSON());
-    console.log(plainUsersArr); // Log the plain users array
+    // console.log(plainUsersArr); // Log the plain users array
     return res.json(plainUsersArr); 
   } catch (error) {
     console.error('Error fetching users:', error);
     return res.status(500).json({ error: 'Something went wrong' });
   }
 });
-
 
 //! Get a user by ID
 router.get('/:id', async (req, res) => {
@@ -32,10 +31,7 @@ router.get('/:id', async (req, res) => {
 
 // ! Add the pic if uploaded
 router.put("/me/photo", requireAuth, async (req, res) => {
-  console.log("🔥 HIT /api/users/me/photo", {
-    userId: req.user?.id,
-    body: req.body,
-  });
+  // console.log("🔥 HIT /api/users/me/photo" ,{userId: req.user?.id,body: req.body,});
 
   const { photo } = req.body;
 

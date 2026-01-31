@@ -1,26 +1,84 @@
 #!/usr/bin/env node
 // backend/bin/www/
-// Here, you will be starting your Express application to listen for server requests 
-// only after authenticating your database connection.
+console.log("🔥 BIN/WWW LOADED - SOCKET SERVER SHOULD BE ACTIVE");
 
-// Import environment variables
 require('dotenv').config();
 
-const { port } = require('../config');
+const http = require("http");
+const { Server } = require("socket.io");
+
+const { port, environment } = require("../config");
+const isProduction = environment === "production";
 
 const app = require('../app');
 const db = require('../db/models');
 
-// Check the database connection before starting the app
+// ✅ Create HTTP server from Express app (required for Socket.IO)
+const server = http.createServer(app);
+
+// ✅ Socket.IO attached to the HTTP server
+const io = new Server(server, {
+  cors: {
+    origin: isProduction
+      ? ["https://franks-world.onrender.com"]
+      : ["http://localhost:5173"],
+    credentials: true,
+  },
+});
+
+// ✅ Socket events
+io.on("connection", (socket) => {
+  console.log("✅ socket connected:", socket.id);
+
+  socket.on("chatMessage", (payload) => {
+      // broadcast to all clients
+      io.emit("chatMessage", payload);
+    });
+
+    socket.on("joinRoom", ({ roomId }) => {
+    socket.join(`room:${roomId}`);
+    console.log(`🔵 ${socket.id} joined room:${roomId}`);
+  });
+
+  socket.on("leaveRoom", ({ roomId }) => {
+    socket.leave(`room:${roomId}`);
+    console.log(`🟡 ${socket.id} left room:${roomId}`);
+  });
+
+  // payload should include roomId and message data
+  socket.on("roomMessage", (payload, cb) => {
+  const roomId = payload?.roomId;
+
+  console.log("📩 SERVER roomMessage:", roomId, payload?.message?.id);
+
+  if (!roomId) return;
+
+  // optional ACK back to sender
+  if (typeof cb === "function") {
+    cb({ ok: true, roomId });
+  }
+
+  // 🔥 broadcast to everyone else in that room
+  socket.to(`room:${roomId}`).emit("roomMessage", payload);
+});
+
+
+
+  socket.on("disconnect", () => {
+    console.log("❌ socket disconnected:", socket.id);
+  });
+});
+
+// Check DB connection before starting server
 db.sequelize
   .authenticate()
   .then(() => {
-    console.log('Database connection success! Sequelize is ready to use...');
-
-    // Start listening for connections
-    app.listen(port, () => console.log(`Listening on port ${port}...`));
+    // ✅ Start listening with the HTTP server (NOT app.listen)
+    server.listen(port, () => {
+      console.log(`✅Server Listening on port ${port}...`);
+    });
   })
   .catch((err) => {
-    console.log('Database connection failure.');
+    console.error("❌ Database connection failure.");
     console.error(err);
   });

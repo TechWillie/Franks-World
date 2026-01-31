@@ -7,7 +7,6 @@ if (process.env.NODE_ENV === "production") {
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    console.log("MEDIA SCHEMA ENV:", process.env.SCHEMA, "OPTIONS:", options),
     await queryInterface.createTable(
       "Media",
       {

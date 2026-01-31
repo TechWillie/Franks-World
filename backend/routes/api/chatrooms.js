@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     const chatrooms = await ChatRoom.findAll();
     return res.json(chatrooms);
   } catch (error) {
-    console.log('Error fetching chatrooms:', error);
+    // console.log('Error fetching chatrooms:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
     return res.json(chatroom);
 
   } catch (error) {
-    console.log('Error fetching chatroom:', error);
+    // console.log('Error fetching chatroom:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });

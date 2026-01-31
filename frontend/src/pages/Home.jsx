@@ -17,9 +17,9 @@ function Home() {
   const sessionFromSelector = useSelector((state) => state.session?.user);
 
   useEffect(() => {
-    console.log("🧠 selector session.user:", sessionFromSelector);
-    console.log("🏪 store.getState().session.user:", store.getState().session?.user);
-    console.log("🏪 store object identity:", store);
+    // console.log("🧠 selector session.user:", sessionFromSelector);
+    // console.log("🏪 store.getState().session.user:", store.getState().session?.user);
+    // console.log("🏪 store object identity:", store);
   }, [sessionFromSelector, store]);
 
   const dispatch = useDispatch()
@@ -51,12 +51,12 @@ function Home() {
 
   
   const clickOnEvents = () => {
-    console.log("clicked on events", eventsArr)
+    // console.log("clicked on events", eventsArr)
     setCreateEventsModal(true)
   }
 
   const clickOnChatters = () => {
-    console.log("clicked on chatters")
+    // console.log("clicked on chatters")
     setCreateChatModal(true)
   }
 

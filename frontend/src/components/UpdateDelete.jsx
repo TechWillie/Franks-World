@@ -11,7 +11,7 @@ const UpdateDelete = ({ event, onClose }) => {
 
   useEffect(() => {
         function handleClickOutside(event) {
-             console.log('Clicked:', event.target);
+             // console.log('Clicked:', event.target);
           if (update.current && !update.current.contains(event.target)) {
             onClose(); // Close modal if click is outside the form
           }

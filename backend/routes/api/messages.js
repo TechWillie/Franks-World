@@ -13,13 +13,13 @@ router.get('/', async (req, res) => {
         include: [
           {
             model: User,
-            attributes: ['id', 'username', 'email'],
+            attributes: ['id', 'username', 'email', 'photo'],
           },
         ],
       }
     );
     const plainMessagesArr = messages.map(message => message.toJSON());
-    console.log(plainMessagesArr);
+    // console.log(plainMessagesArr);
     return res.json(plainMessagesArr);
   } catch (error) {
     console.error('Error fetching messages:', error);

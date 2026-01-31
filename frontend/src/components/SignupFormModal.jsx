@@ -30,7 +30,7 @@ const SignupFormModal = ({show, onClose}) => {
     const handleSubmit = async (e) => {
       e.preventDefault();
       e.stopPropagation();
-      console.log("🧾 handleSubmit fired")
+      // console.log("🧾 handleSubmit fired")
       setErrors([]);
 
       const newUser = {
@@ -59,10 +59,10 @@ const SignupFormModal = ({show, onClose}) => {
           return;
         }
       
-        console.log("✅ User is authenticated at this point", profileUpload);
+        // console.log("✅ User is authenticated at this point", profileUpload);
         
         if (profileUpload?.url && profileUpload?.storagePath) {
-          console.log("🚀 about to POST /api/media with:", profileUpload);
+          // console.log("🚀 about to POST /api/media with:", profileUpload);
           const mediaRow = await dispatch(
             createMediaThunk({
               url: profileUpload.url,
@@ -77,7 +77,7 @@ const SignupFormModal = ({show, onClose}) => {
             })
           );
 
-          console.log("✅ mediaRow returned:", mediaRow);
+          // console.log("✅ mediaRow returned:", mediaRow);
           await dispatch(updateMyProfileImageThunk(mediaRow.url));
           onClose();
           return mediaRow
@@ -126,7 +126,7 @@ const SignupFormModal = ({show, onClose}) => {
                 accept="image/*"
                 maxMB={10}
                 onUploaded={(payload) => {
-                  console.log("✅ parent received upload payload:", payload);
+                  // console.log("✅ parent received upload payload:", payload);
                   setProfileUpload(payload)
                 }}
               />

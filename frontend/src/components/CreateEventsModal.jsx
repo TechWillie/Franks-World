@@ -31,7 +31,7 @@ const CreateEventModal = ({ onClose }) => {
     chatRoomId: null,
   });
 
-  console.log("🧩 CreateEventModal RENDERED - version A");
+  // console.log("🧩 CreateEventModal RENDERED - version A");
 
   useEffect(() => {
     if (sessionUser?.id) {
@@ -42,9 +42,10 @@ const CreateEventModal = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("🟦 SUBMIT fired");
-    console.log("🟦 eventPic at submit:", eventPic);
-    console.log(
+    // console.log("🟦 SUBMIT fired");
+    // console.log("🟦 eventPic at submit:", eventPic);
+    // console.log
+    (
       "🟦 SUBMIT has url?",
       !!eventPic?.url,
       "has storagePath?",
@@ -66,7 +67,7 @@ const CreateEventModal = ({ onClose }) => {
 
     // ✅ Create event
     const res = await dispatch(createEventThunk(eventObj));
-    console.log("🟩 createEventThunk returned:", res);
+    // console.log("🟩 createEventThunk returned:", res);
 
     if (res?.errors) {
       console.error("❌ createEventThunk errors:", res.errors);
@@ -103,11 +104,11 @@ const CreateEventModal = ({ onClose }) => {
       };
 
       try {
-        console.log("🟨 createMediaThunk payload:", mediaPayload);
+        // console.log("🟨 createMediaThunk payload:", mediaPayload);
 
         const createdMedia = await dispatch(createMediaThunk(mediaPayload));
 
-        console.log("🟩 createMediaThunk result:", createdMedia);
+        // console.log("🟩 createMediaThunk result:", createdMedia);
 
         if (createdMedia?.errors) {
           console.error(
@@ -128,7 +129,7 @@ const CreateEventModal = ({ onClose }) => {
         }
       }
     } else {
-      console.log("ℹ️ No event image uploaded — creating event without media.");
+      // console.log("ℹ️ No event image uploaded — creating event without media.");
     }
 
     onClose();
@@ -177,7 +178,7 @@ const CreateEventModal = ({ onClose }) => {
               accept="image/*"
               maxMB={10}
               onUploaded={(payload) => {
-                console.log("✅ event upload payload:", payload);
+                // console.log("✅ event upload payload:", payload);
                 setEventPic(payload);
                 setUploading(false);
               }}

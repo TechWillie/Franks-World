@@ -4,7 +4,7 @@ import { updateMessageThunk, deleteMessageThunk } from "../store/messages";
 import "./EditDeleteMessage.css"
 
 const EditDelete = ({ message, onClose }) => {
-  console.log("message from EDitDelete:", message.content, message);
+  // console.log("message from EDitDelete:", message.content, message);
   const dispatch = useDispatch();
   const [messageContent, setMessageContent] = useState(message.content);
   const modalRef = useRef();

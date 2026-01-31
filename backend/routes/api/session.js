@@ -72,7 +72,7 @@ router.post(
         photo: user.photo || null,
       };
 
-      console.log("The user:", safeUser);
+      // console.log("The user:", safeUser);
       await setTokenCookie(res, user);
   
       return res.json({
@@ -87,9 +87,9 @@ router.post(
   '/login',
   // validateLogin,
   async (req, res, next) => {
-     console.log('BODY RECEIVED:', req.body);
+     // console.log('BODY RECEIVED:', req.body);
     const { credential, password } = req.body;
-    console.log("The request body:", req.body);
+    // console.log("The request body:", req.body);
     
     const user = await User.unscoped().findOne({
       where: {

@@ -25,7 +25,7 @@ export const login = (creds, pass) => async (dispatch) => {
     body: JSON.stringify({ credential: creds, password: pass })
 });
 const data = await response.json();
-console.log("Response body", data);
+// console.log("Response body", data);
   if (response.ok) {
     dispatch(setSessionUser(data.user));
   }
@@ -63,7 +63,7 @@ export const restoreUser = () => async (dispatch) => {
 
 // ! Add profile pic
 export const updateMyProfileImageThunk = (photo) => async (dispatch) => {
-  console.log("New User Photo", photo);
+  // console.log("New User Photo", photo);
 
   const res = await csrfFetch("/api/users/me/photo", {
     method: "PUT",
@@ -73,7 +73,7 @@ export const updateMyProfileImageThunk = (photo) => async (dispatch) => {
   });
 
   const data = await res.json();
-  console.log("PUT /api/users/me/photo RESPONSE:", data);
+  // console.log("PUT /api/users/me/photo RESPONSE:", data);
 
   if (!res.ok) {
     console.error("❌ updateMyProfileImageThunk failed:", res.status, data);
@@ -92,7 +92,7 @@ export const updateMyProfileImageThunk = (photo) => async (dispatch) => {
 // ! logout
 // store/session.js or wherever you manage session state
 export const logout = () => async (dispatch) => {
-  console.log("Hit logout thunk");
+  // console.log("Hit logout thunk");
   
   const response = await csrfFetch('/api/session', {
     method: 'DELETE',
@@ -100,7 +100,7 @@ export const logout = () => async (dispatch) => {
   });
 
   if (response.ok) {
-    console.log("ACTuallyloggged out");
+    // console.log("ACTuallyloggged out");
     
     dispatch(setSessionUser(null));
   }

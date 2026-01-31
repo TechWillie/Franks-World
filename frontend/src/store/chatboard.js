@@ -27,15 +27,10 @@ export const fetchChatboardThunk = () => async (dispatch) => {
   const response = await csrfFetch('/api/chatrooms');
   if (response.ok) {
     const chatboards = await response.json();
-    chatboards.forEach(board => {
-
-      console.log("chatboards foreach:", board.createdAt);
-    })
-    
     dispatch(setChatboard(chatboards));
     }};
 export const createChatboardThunk = (chatboard) => async (dispatch) => {
-  console.log("chatboard to thunk:", chatboard);
+  // console.log("chatboard to thunk:", chatboard);
   
     const response = await csrfFetch('/api/chatrooms', {
     method: 'POST',

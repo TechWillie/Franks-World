@@ -1,9 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchMessagesThunk, createMessageThunk } from "../store/messages";
+import { fetchMessagesThunk, createMessageThunk, addMessage } from "../store/messages";
 import { fetchChatboardThunk } from "../store/chatboard";
 import EditDelete from "../components/EditDeleteMessage";
 import "./Messages.css";
+import { socket } from "../socket";
+import { LuMessageSquareText } from "react-icons/lu";
+
+
 
 const Messages = () => {
   const dispatch = useDispatch();
@@ -25,16 +29,10 @@ const Messages = () => {
   // Tracks whether we should force-scroll (enter room / after sending)
   const forceScrollRef = useRef(false);
 
-  // ✅ Track if user is currently typing/focused (prevents polling interference)
-  const isTypingRef = useRef(false);
-
   // ---------- click outside to close edit/delete ----------
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        outsideEditRef.current &&
-        !outsideEditRef.current.contains(event.target)
-      ) {
+      if (outsideEditRef.current && !outsideEditRef.current.contains(event.target)) {
         setShowEditDeleteId(null);
       }
     };
@@ -49,29 +47,48 @@ const Messages = () => {
     dispatch(fetchMessagesThunk());
   }, [dispatch]);
 
-  // ---------- polling (but don't poll while typing) ----------
+  // ---------- join/leave socket room when board changes ----------
   useEffect(() => {
-    const timer = setInterval(() => {
-      // ✅ If input is focused/typing, skip refresh to avoid killing mobile keyboard
-      if (isTypingRef.current) return;
-      dispatch(fetchMessagesThunk());
-    }, 2000);
+    if (!boardId) return;
+    console.log("➡️ CLIENT joinRoom", boardId);
+    socket.emit("joinRoom", { roomId: boardId });
 
-    return () => clearInterval(timer);
-  }, [dispatch]);
+    return () => {
+      socket.emit("leaveRoom", { roomId: boardId });
+    };
+  }, [boardId]);
+
+  // ---------- listen for live room messages ----------
+  useEffect(() => {
+    const handler = (payload) => {
+      console.log("📥 CLIENT got roomMessage:", payload);
+      
+      
+      // payload: { roomId, message }
+      if (!payload?.roomId || !payload?.message) return;
+      if (payload.roomId !== boardId) return;
+
+      // 🔥 inject into redux so UI updates instantly
+      dispatch(addMessage(payload.message));
+
+      // scroll only if user is near bottom or we forced it
+      // (optional: we already handle scroll in separate effect)
+    };
+
+    socket.on("roomMessage", handler);
+    return () => socket.off("roomMessage", handler);
+  }, [boardId, dispatch]);
 
   const enterRoom = (chatBoardId, name) => {
     setBoardId(chatBoardId);
     setRoomName(name);
 
-    // When switching rooms, we DO want to land at the bottom once.
+    // When switching rooms, land at the bottom once.
     forceScrollRef.current = true;
 
-    // ✅ Avoid mobile keyboard weirdness: never force focus on small screens
+    // Desktop focus only
     const isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
-    if (!isSmallScreen) {
-      setTimeout(() => inputRef.current?.focus(), 0);
-    }
+    if (!isSmallScreen) setTimeout(() => inputRef.current?.focus(), 0);
   };
 
   // Memoize so it doesn't create a "new array" every render
@@ -87,6 +104,7 @@ const Messages = () => {
     return count;
   };
 
+  // ---------- send message (REST first, then socket) ----------
   const putMsgTogether = async () => {
     if (!sessionUser) return;
     if (!boardId) return;
@@ -99,21 +117,38 @@ const Messages = () => {
     };
 
     try {
-      await dispatch(createMessageThunk(newMessage));
+      // IMPORTANT: your thunk MUST return created message (return data)
+      const created = await dispatch(createMessageThunk(newMessage));
+      console.log("🔥🔥⚠️⚠️created from thunk:", created);
+
+      // If your thunk doesn't return, created will be undefined.
+      // Fix thunk: after dispatch(addMessage(data)) -> return data;
+      if (created) {
+        socket.emit(
+          "roomMessage",
+          { roomId: boardId, message: created },
+          (ack) => {
+            console.log("✅ ACK from server:", ack);
+          }
+        );
+        
+        console.log("📤 emitted roomMessage", { roomId: boardId, messageId: created?.id });
+
+      }
+
       setMessageInput("");
 
-      // After YOU send a message, you probably want to see it.
+      // After sending, jump to bottom
       forceScrollRef.current = true;
 
-      // ✅ Desktop only re-focus
       const isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
       if (!isSmallScreen) inputRef.current?.focus();
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
-  // ✅ Smart auto-scroll
+  // ---------- smart auto-scroll ----------
   useEffect(() => {
     const wrap = messagesWrapRef.current;
     if (!wrap) return;
@@ -133,120 +168,106 @@ const Messages = () => {
   }, [boardMsgArr.length, boardId]);
 
   return (
-    <div className="page-body">
-      {sessionUser ? (
-        <div className="main-container">
-          <div className="board-container">
-            <h1>Welcome {sessionUser.username}</h1>
-            <h2>All Message Boards</h2>
+    <div className="chatroom-body">
+  {/* LEFT: rooms list */}
+  <div className="board-container">
+    {sessionUser ? <h1>Welcome {sessionUser.username}</h1> : <h1>Message Boards</h1>}
+    <h2>All Chatrooms</h2>
 
-            {chatBoards.map((chatBoard) => (
-              <div key={chatBoard.id}>
-                <button onClick={() => enterRoom(chatBoard.id, chatBoard.name)}>
-                  {chatBoard.name}
-                </button>
-              </div>
-            ))}
-          </div>
+    {chatBoards.map((chatBoard) => (
+      <div key={chatBoard.id} className="board-row">
+        <button
+          className={boardId === chatBoard.id ? "active-room" : ""}
+          onClick={() => enterRoom(chatBoard.id, chatBoard.name)}
+        >
+          {chatBoard.name}: {numOfmsgs(chatBoard.id)} <LuMessageSquareText />
+        </button>
+      </div>
+    ))}
+  </div>
 
-          <div className="message-container">
-            <h2>{roomName} Message Board</h2>
+  {/* RIGHT: messages */}
+  <div className="main-container">
+    <div className="message-container">
+      <h2>{roomName ? `${roomName} Message Board` : "Select a chatroom"}</h2>
 
-            <div className="the-messages" ref={messagesWrapRef}>
-              {boardMsgArr.map((message) => (
-                <div key={message.id}>
-                  {sessionUser.id === message.userId ? (
-                    <div className="msg-edit">
-                      <p className="schoolbell-regular">
-                        {message.User?.username || "unknown"}: {message.content}
-                      </p>
+      <div className="the-messages" ref={messagesWrapRef}>
+        {boardMsgArr.map((message) => {
+          const isMine = sessionUser?.id === message.userId;
+          const photo = message.User?.photo || "/default-avatar.png";
 
-                      {showEditDeleteId === message.id && (
-                        <div ref={outsideEditRef}>
-                          <EditDelete
-                            message={message}
-                            onClose={() => setShowEditDeleteId(null)}
-                          />
-                        </div>
-                      )}
-
-                      <button onClick={() => setShowEditDeleteId(message.id)}>
-                        Edit
-                      </button>
-                    </div>
-                  ) : (
-                    <p className="schoolbell-regular">
-                      {message.User?.username || "Unknown User"}:{" "}
-                      {message.content}
-                    </p>
-                  )}
-                </div>
-              ))}
-
-              <div ref={bottomOfMsgs} />
-            </div>
-
-            <div className="input-field">
-              <input
-                type="text"
-                value={messageInput}
-                ref={inputRef}
-                onFocus={() => {
-                  isTypingRef.current = true;
+          return (
+            <div key={message.id} className={`msg-row ${isMine ? "mine" : "theirs"}`}>
+              <img
+                src={photo}
+                alt=""
+                style={{
+                  width: "32px", height: "32px", borderRadius: "50%",
+                  objectFit: "cover", marginRight: "8px", verticalAlign: "middle", flexShrink: 0,
                 }}
-                onBlur={() => {
-                  isTypingRef.current = false;
-                }}
-                onChange={(e) => setMessageInput(e.target.value)}
-                placeholder={!boardId ? "Select a board first..." : "Type a message..."}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    putMsgTogether();
-                  }
-                }}
-                autoComplete="off"
               />
-              <button onClick={putMsgTogether}>
-                Post
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="main-container">
-          <div className="board-container">
-            <h1>Please Log In or Sign Up to Post Messages</h1>
-            <h2>All Message Boards</h2>
 
-            <div className="boardrooms">
-              {chatBoards.map((chatBoard) => (
-                <div key={chatBoard.id}>
-                  <button onClick={() => enterRoom(chatBoard.id, chatBoard.name)}>
-                    {chatBoard.name}: {numOfmsgs(chatBoard.id)}
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
 
-          <div className="message-container">
-            <h2>{roomName} Message Board</h2>
+              <div className="msg-content">
+                <span className="schoolbell-regular msg-text">
+                  <span className="msg-username">
+                    {message.User?.username || "Unknown User"}:
+                  </span>{" "}
+                  {message.content}
+                </span>
 
-            <div className="the-messages" ref={messagesWrapRef}>
-              {boardMsgArr.map((message) => (
-                <div key={message.id}>
-                  <p className="schoolbell-regular">
-                    {message.User?.username || "unknown"}: {message.content}
-                  </p>
-                </div>
-              ))}
-              <div ref={bottomOfMsgs} />
+                {isMine && (
+                  <div className="msg-actions" ref={outsideEditRef}>
+                    {showEditDeleteId === message.id && (
+                      <EditDelete
+                        message={message}
+                        onClose={() => setShowEditDeleteId(null)}
+                      />
+                    )}
+
+                    <button
+                      className="msg-edit-btn"
+                      onClick={() => setShowEditDeleteId(message.id)}
+                    >
+                      Edit
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          );
+        })}
+
+        <div ref={bottomOfMsgs} />
+      </div>
+
+      {/* input */}
+      {sessionUser && (
+        <div className="input-field">
+          <input
+            type="text"
+            value={messageInput}
+            ref={inputRef}
+            onChange={(e) => setMessageInput(e.target.value)}
+            placeholder={!boardId ? "Select a board first..." : "Type a message..."}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                putMsgTogether();
+              }
+            }}
+            autoComplete="off"
+            disabled={!boardId}
+          />
+          <button onClick={putMsgTogether} disabled={!boardId}>
+            Post
+          </button>
         </div>
       )}
     </div>
+  </div>
+</div>
+
   );
 };
 

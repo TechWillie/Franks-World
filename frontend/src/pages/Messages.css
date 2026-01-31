@@ -5,20 +5,29 @@
   background-color: rgb(84, 71, 95);
 }
 
-.main-container{
-  margin-top: 50px;
+.chatroom-body{
   display: grid;
-  width: 100%;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  padding: 10px;
+  height: calc(100vh - 120px);
   box-sizing: border-box;
 }
 
+
+/* RIGHT SIDE WRAPPER */
+.main-container{
+  height: 100%;
+  min-height: 0;               /* ✅ CRITICAL */
+  width: 100%;
+}
+
 /* Shared panel styles */
-.message-container,
-.board-container {
+.board-container,
+.message-container {
   border-style: double;
-  display: grid;
-  grid-row: 1/2;
-  justify-content: center;
+  display: flex;
+  flex-direction: column;
 
   color: rgb(8, 7, 8);
   font-size: 1.5rem;
@@ -26,11 +35,14 @@
 
   padding: 10px;
   box-sizing: border-box;
+  min-height: 0;             /* ✅ CRITICAL */
 }
 
+/* LEFT PANEL */
 .board-container{
   align-items: center;
-  width: 90%;
+  width: 100%;               /* ✅ remove 90% */
+  overflow-y: auto;         /* ✅ scroll rooms */
 }
 
 .board-container button{
@@ -45,27 +57,25 @@
   font-weight: 500;
 }
 
-/* ✅ Message layout: header / messages(scroll) / input */
-.message-container{
-  display: flex;
-  flex-direction: column;
-
-  /* IMPORTANT:
-     Don't trap page scroll with overflow hidden + fixed vh height on mobile.
-     We'll handle scroll in .the-messages instead.
-  */
-  width: 100%;
-  min-height: 0;
-  position: relative;
-  z-index: 1;
+.board-container button.active-room{
+  color: rgb(228, 218, 34);
+  background-color: rgba(0,0,0,0.3);
+  border-color: rgb(228, 218, 34);
 }
 
+
+/* RIGHT PANEL */
+.message-container{
+  height: 100%;             /* ✅ fill column */
+  min-height: 0;           /* ✅ allow scroll child */
+}
+
+/* MESSAGE LIST */
 .the-messages{
-  flex: 1 1 auto;
+  flex: 1;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   padding-right: 5px;
-  min-height: 0;
+  min-height: 0;           /* ✅ CRITICAL */
 }
 
 .the-messages p{
@@ -77,16 +87,13 @@
   font-family: "Schoolbell", cursive;
   font-weight: 400;
   font-style: normal;
-
-  overflow-x: auto;
-  word-wrap: break-word;
   word-break: break-word;
 }
 
+/* MESSAGE ROW */
 .msg-edit{
   background-color: rgb(155, 154, 153, 0.4);
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
 }
 
@@ -94,21 +101,39 @@
   overflow: auto;
 }
 
-/* ✅ Input stays usable but doesn't overpower nav / page */
+/* INPUT BAR */
 .input-field{
   display: flex;
   gap: 10px;
-
   background: white;
   padding: 10px;
   border-top: double;
+  flex-shrink: 0;          /* ✅ NEVER collapse */
+}
 
-  /* keep it above messages, but not above the whole app */
-  z-index: 5;
-  position: relative;
+/* MOBILE STACK */
+@media (max-width: 768px){
+  .chatroom-body{
+    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;                 /* ✅ reduce huge gap */
+    padding: 6px;            /* ✅ reduce outer padding */
+    height: 100vh; 
 
-  pointer-events: auto;
-  box-sizing: border-box;
+  }
+
+   .board-container{
+    order: 1;
+    padding: 6px;            /* ✅ smaller */
+    border-width: 1px;
+  }
+
+  .main-container{
+    order: 2;
+    /* flex: 1; */
+    min-height: 0;
+  } 
 }
 
 /* =========================

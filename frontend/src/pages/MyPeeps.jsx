@@ -10,13 +10,12 @@ function MyPeeps() {
   useEffect(() =>{
     dispatch(fetchUsers())
   }, [dispatch])
-  console.log('Users array:', users);
+  // console.log('Users array:', users);
   return (
     <div className='page-body'>
         <div className='peeps'>
           {users.map(user => (
             <div key={user.id} className='peep'>
-              {console.log(user)}
               <h3>{user.username}</h3>
               <p>{user.email}</p>
               <p>{user.bio || "No Bio..."}</p>

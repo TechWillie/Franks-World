@@ -12,8 +12,6 @@ const t = (name) =>
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    console.log("EVENTS SCHEMA ENV:", process.env.SCHEMA, "OPTIONS:", options);
-
     await queryInterface.createTable(
       "Events",
       {
