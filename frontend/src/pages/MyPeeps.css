@@ -2,39 +2,71 @@
   padding-top: 60px;
 }
 
+/* GRID */
 .peeps{
-  left: 0%;  
-  width: 90%;
-  color: antiquewhite;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 equal-width columns */
-  gap: 10px;
-  padding: 20px;
-  justify-items: center;
   width: 100%;
- 
+  display: grid;
+
+  /* ✅ Responsive columns: always at least 2, then grows */
+  grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
+
+  gap: 18px;
+  padding: 20px;
+  justify-content: center;
 }
 
+
+/* CARD */
 .peep{
-  border-color: antiquewhite;
-  border-style: double;
-  border-radius: .45cm;
+  width: 100%;
+  max-width: 280px;     /* uniform card width */
+  height: 520px;       /* uniform card height */
+
+  border: double antiquewhite;
+  border-radius: 12px;
   box-sizing: border-box;
-  padding: 2%;
-  background-color: rgb(63, 65, 25, 0.6);
+  padding: 8px;
+
+  background-color: rgba(63, 65, 25, 0.6);
+
+  display: flex;
+  flex-direction: column;
+
+  transition: transform .2s ease, box-shadow .2s ease;
+  overflow-y: auto;
 }
+
+/* Hover (no layout jump) */
 .peep:hover{
   background-color: rgba(109, 113, 44, 0.8);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  transform: scale(1.10);
+  transform: scale(1.04);
 }
 
-.peeps img {
+/* IMAGE */
+.peep img {
   width: 100%;
-  height: 180px;        /* <- pick your card image height */
-  object-fit: cover;   /* <- crops instead of stretches */
-  display: block;
-  border-radius: 12px;
+  height: 160px;        /* MID SIZE IMAGE */
+  object-fit: cover;
+  border-radius: 10px;
 }
 
+/* CONTENT BELOW IMAGE */
+.peep-content{
+  flex: 1;
+  padding-top: 6px;
+  text-align: center;
+}
 
+.event-pics{
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.pic{
+  width: 80px !important;
+  max-height: 60%;
+}
