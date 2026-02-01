@@ -5,6 +5,7 @@ import { fetchEventsThunk } from "../store/events";
 import UpdateDelete from "../components/UpdateDelete";
 import { fetchMediaThunk,  } from "../store/media";
 
+
 const Events = () => {
   const dispatch = useDispatch();
   const events = useSelector((state) => state.events || {});
@@ -13,35 +14,61 @@ const Events = () => {
   const eventsArr = Object.values(events);
   const [isEvent, setIsEvent] = useState(null);
   const [selectEvent, setSelectEvent] = useState(null);
-  // // console.log("events:", eventsArr, events);
-  // console.log("⚠️⚠️media object", media);
-  // console.log(Array.isArray(media));
-  const mediaArray = Object.values(media)
-  // console.log("👍👍 Media array :", mediaArray);
-  
+
   useEffect(() => {
     dispatch(fetchEventsThunk());
     dispatch(fetchMediaThunk())
-  }, [dispatch]);
-
-  
-  const EventPage = (eventObj) => {
-    // console.log("the event obj for the box", Object.values(eventObj));
-    const event = Object.values(eventObj)[0];
-    // console.log("event", event);
     
-    return(
-      <div className="single-event-container">
-        <h1>{event?.name}</h1> 
-        {event.description 
-        ? (<p>{event.description}</p>) 
-        : <p>no description yet!..</p>}
-        {event.eventDate
-        ? (<p>{event.eventDate}</p>)
-        : <p>no date yet!..</p>}
-      </div>
-    )
-  }
+  }, [dispatch]);
+  
+  console.log("🚨⚠️ Media object", Object.values(media));
+  const mediaArr = Object.values(media)
+  console.log("🔥🔥 Media Array", mediaArr[0]);
+  
+  
+ const EventPage = ({ event }) => {
+  const eventPics = mediaArr.filter(
+    (m) => Number(m.eventId) === Number(event.id)
+  );
+
+  return (
+    <div className="single-event-container">
+      <h1>{event.name}</h1>
+
+      {event.description ? (
+        <p>{event.description}</p>
+      ) : (
+        <p>no description yet!..</p>
+      )}
+
+      {event.eventDate ? <span>{event.eventDate}</span> : <span>no date yet!..</span>}
+
+      {eventPics.length === 0 ? (
+        <p>No event pics yet.</p>
+      ) : (
+        eventPics.map((m) => (
+          <img
+            key={m.id || m.url}
+            src={m.url}
+            alt="Event"
+            style={{
+              width: "30%",
+              maxWidth: "520px",
+              height: "160px",
+              objectFit: "cover",
+              borderRadius: "8px",
+              marginTop: "10px",
+              marginRight: "6px"
+            }}
+          />
+        ))
+      )}
+    </div>
+  );
+};
+
+
+
 
 
 
@@ -59,7 +86,7 @@ const Events = () => {
     >
       <h2>{event.name}</h2>
 
-      {mediaArray
+      {mediaArr
         .filter((m) => m.eventId === event.id) 
         .map((m) => (
           <img
@@ -90,7 +117,7 @@ const Events = () => {
 
           
         <div className="single-container">
-          {selectEvent && <EventPage evenObj={selectEvent} />}
+          {selectEvent && <EventPage event={selectEvent} />}
         </div>
       </div>
     </div>
