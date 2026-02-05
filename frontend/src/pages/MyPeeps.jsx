@@ -17,17 +17,15 @@ function MyPeeps() {
     dispatch(fetchUsers())
     dispatch(fetchMediaThunk())
     dispatch(fetchEventsThunk())
+    dispatch(fetchEventByIdThunk())
   }, [dispatch])
   // console.log('Users array:', users);
 
   const mediaArr = Object.values(media)
   console.log("⚠️⚠️Merdia array :" , media);
   
-  console.log("🔥⚠️🔥 events array :", eventsArr);
+  console.log("🔥⚠️🔥 events by Id :", eventsById);
   
-  
-  
-
   return (
   <div className="page-body">
     <div className="peeps">
