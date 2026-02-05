@@ -31,8 +31,8 @@ export const fetchEventsThunk = () => async (dispatch) => {
   if (response.ok) {
     const events = await response.json();
     dispatch(setEvents(events));
+    return events
   }
-  return events
 }
 
 export const fetchEventByIdThunk = (eventId) => async (dispatch) => {
