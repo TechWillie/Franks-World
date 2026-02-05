@@ -11,7 +11,7 @@ import { BrowserRouter} from 'react-router-dom';
 
 const store = configureStore();
 
-if (process.env.NODE_ENV !== 'production') {
+if (import.meta.env.DEV) {
   window.store = store;
 }
 

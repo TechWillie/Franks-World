@@ -3,13 +3,18 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
+const cleanGlobals = (g) =>
+  Object.fromEntries(
+    Object.entries(g).map(([k, v]) => [k.trim(), v])
+  )
+
 export default [
   { ignores: ['dist'] },
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: cleanGlobals(globals.browser),
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },

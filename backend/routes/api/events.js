@@ -40,10 +40,10 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const event = await Event.findByPk(req.params.id, {
-            // order: [['createdAt', 'DESC']],
+            order: [['createdAt', 'DESC']],
             include:{
                 model: User,
-                attributes: ['id', 'username'],
+                attributes: ['id', 'username', 'email'],
             }
         });
         

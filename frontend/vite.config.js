@@ -22,6 +22,5 @@ export default defineConfig(({ mode }) => ({
     },
   },
   optimizeDeps: {
-    include: ['redux-thunk'],  // 👈 ADD THIS
-  },
+    include: ['redux-thunk'],
 }));

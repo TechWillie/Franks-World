@@ -31,7 +31,21 @@ export const fetchEventsThunk = () => async (dispatch) => {
   if (response.ok) {
     const events = await response.json();
     dispatch(setEvents(events));
-  }}
+  }
+  return events
+}
+
+export const fetchEventByIdThunk = (eventId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/events/${eventId}`);
+
+  if (response.ok) {
+    const event = await response.json();
+    dispatch(setSingleEvent(event));
+    return event;
+  }
+};
+
+
 export const createEventThunk = (event) => async (dispatch) => {
   
     const response = await csrfFetch('/api/events', {
