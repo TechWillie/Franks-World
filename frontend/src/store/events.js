@@ -2,12 +2,18 @@ const ADD_EVENT = 'events/ADD_EVENT';
 const REMOVE_EVENT = 'events/REMOVE_EVENT';
 const UPDATE_EVENT = 'events/UPDATE_EVENT';
 const SET_EVENTS = 'events/SET_EVENTS';
+const SET_SINGLE_EVENT = "events/SET_SINGLE_EVENT";
 import { csrfFetch } from './csrf';
 
 //! Action creators
 const setEvents = (events) => ({
   type: SET_EVENTS,
   payload: events
+});
+
+const setSingleEvent = (event) => ({
+  type: SET_SINGLE_EVENT,
+  payload: event,
 });
 
 const addEvent = (event) => ({
@@ -95,6 +101,12 @@ export const deleteEventThunk = (eventId) => async (dispatch) => {
           newState[event.id] = event;
         });
         return newState;}
+      case SET_SINGLE_EVENT: {
+        return {
+          ...state,
+          [action.payload.id]: action.payload,
+        };
+      }
       case ADD_EVENT:
         return { ...state, [action.payload.id]: action.payload };
       case REMOVE_EVENT:{
