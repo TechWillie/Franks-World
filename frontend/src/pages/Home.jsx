@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 // import { quotes } from '../components/justSaying'
 import './Home.css'
-import { useSelector, useDispatch, useStore } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { fetchChatboardThunk } from '../store/chatboard'
 import CreateEventModal from '../components/CreateEventsModal'
 import CreateChatboardModal from '../components/CreateChatterModal'
@@ -13,15 +13,6 @@ import UserEvents from '../components/UserEvents'
 
 function Home() {
 
-   const store = useStore();
-  const sessionFromSelector = useSelector((state) => state.session?.user);
-
-  useEffect(() => {
-    // console.log("🧠 selector session.user:", sessionFromSelector);
-    // console.log("🏪 store.getState().session.user:", store.getState().session?.user);
-    // console.log("🏪 store object identity:", store);
-  }, [sessionFromSelector, store]);
-
   const dispatch = useDispatch()
   const sessionUser = useSelector(state => state.session.user)
  
@@ -30,19 +21,12 @@ function Home() {
   // const [index, setIndex] = useState(0)
   const [createEventsModal, setCreateEventsModal] = useState(false)
   const [createChatModal, setCreateChatModal] = useState(false)
+  
   const eventsArr = Object.values(eventsObj)
   const sortedEvents = Object.values(eventsArr).sort((a, b) => {
-  return new Date(b.createdAt) - new Date(a.createdAt);
-});
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
  
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setIndex((prevIndex) => (prevIndex + 1) % quotes.length)
-  //   }, 5000) // every 3 seconds
-  //   return () => clearInterval(interval) // cleanup on unmount
-  // }, [])
-
-
   useEffect(() => {
     dispatch(fetchChatboardThunk());
     dispatch(fetchEventsThunk());
@@ -61,8 +45,6 @@ function Home() {
   }
 
   const photo = sessionUser?.photo?.trim();
-
-  
 
   return (
     <div className='home-box'>
