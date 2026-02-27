@@ -50,7 +50,8 @@ export const signup = (user) => async (dispatch) => {
   }
 
   const errData = await response.json();
-  throw errData;
+  console.error("Signup failed:", errData);
+  setErrors(errData?.errors || [errData?.message || "Signup failed. Please try again."]);
 };
 
 // ! restore User
