@@ -35,23 +35,23 @@ const data = await response.json();
 
 // ! Sign up
 export const signup = (user) => async (dispatch) => {
-    // const { firstName, lastName, username, email, password, bio = null } = user;
-    const response = await csrfFetch('/api/session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(user)
+  const response = await csrfFetch('/api/session', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(user)
   });
 
   if (response.ok) {
-    const data = await response.json(); // { user: {...} }
+    const data = await response.json();
     dispatch(setSessionUser(data.user));
     return data.user;
   }
 
   const errData = await response.json();
   console.error("Signup failed:", errData);
-  setErrors(errData?.errors || [errData?.message || "Signup failed. Please try again."]);
+
+  throw errData;
 };
 
 // ! restore User

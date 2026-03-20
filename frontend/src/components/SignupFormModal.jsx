@@ -4,11 +4,9 @@ import { signup, updateMyProfileImageThunk } from "../store/session";
 import { createMediaThunk } from "../store/media";
 import UploadFile from "../components/UploadFile";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth, storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
-
 
 import "./SignupForm.css";
 
@@ -76,7 +74,7 @@ const SignupFormModal = ({ show, onClose }) => {
       try {
         await createUserWithEmailAndPassword(auth, email, password);
       } catch (e) {
-        if (e?.code === "auth/email-already-in-use") {
+        if (e.code === "auth/email-already-in-use") {
           await signInWithEmailAndPassword(auth, email, password);
         } else {
           throw e;
