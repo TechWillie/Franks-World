@@ -32,7 +32,7 @@ module.exports = {
       [
         {
           name: "Picnic Day",
-          eventDate: new Date("2025-05-15"),
+          eventDate: "2025-05-15",
           placeId: 1,
           hostId: 1,
           chatRoomId: 1,
@@ -42,7 +42,7 @@ module.exports = {
         },
         {
           name: "Photo Walk",
-          eventDate: new Date("2025-06-01"),
+          eventDate: "2025-06-01",
           placeId: 2,
           hostId: 2,
           chatRoomId: 2,
@@ -52,7 +52,7 @@ module.exports = {
         },
         {
           name: "LAN Party",
-          eventDate: new Date("2025-06-20"),
+          eventDate: "2025-06-20",
           placeId: 3,
           hostId: 3,
           chatRoomId: 3,
@@ -62,7 +62,7 @@ module.exports = {
         },
         {
           name: "Food Festival",
-          eventDate: new Date("2025-07-10"),
+          eventDate: "2025-07-10",
           placeId: 4,
           hostId: 4,
           chatRoomId: 4,

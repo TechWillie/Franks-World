@@ -81,11 +81,17 @@ function Home() {
         </div>
       )}
         <>
-          {sessionUser &&
+          {sessionUser && eventsArr.length > 0 ?
+            (
             <div className="user-events-panel">
             <h1>Your Events</h1>
             <UserEvents eventsArr={eventsArr} sessionUser={sessionUser} />
             </div>
+            ) : (
+              <div>
+              <h2>No events to display</h2>
+              </div>
+            )
           }
             
         </>
