@@ -18,21 +18,32 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
 
-if (!isProduction) {
-  app.use(cors());
-}
+const allowedOrigins = isProduction
+  ? [
+      'https://franks-world.onrender.com',
+      'https://welcometothehype.com',
+      'https://www.welcometothehype.com',
+    ]
+  : ['http://localhost:5173'];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
 
 app.use(
   helmet.crossOriginResourcePolicy({
     policy: 'cross-origin',
   })
 );
-// ✅ CSRF RESTORE ROUTE BEFORE csrf middleware
+//  ✅ CSRF middleware must run before routes that call req.csrfToken()
 app.use(
   csurf({
     cookie: {
       secure: isProduction,
-      sameSite: isProduction && 'Lax',
+      sameSite: isProduction ? 'Lax' : undefined,
       httpOnly: true,
     },
   })

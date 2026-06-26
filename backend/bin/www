@@ -17,11 +17,17 @@ const db = require('../db/models');
 const server = http.createServer(app);
 
 // ✅ Socket.IO attached to the HTTP server
+const allowedOrigins = isProduction
+  ? [
+      "https://franks-world.onrender.com",
+      "https://welcometothehype.com",
+      "https://www.welcometothehype.com",
+    ]
+  : ["http://localhost:5173"];
+
 const io = new Server(server, {
   cors: {
-    origin: isProduction
-      ? ["https://franks-world.onrender.com"]
-      : ["http://localhost:5173"],
+    origin: allowedOrigins,
     credentials: true,
   },
 });
