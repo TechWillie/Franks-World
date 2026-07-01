@@ -1,11 +1,11 @@
 import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { signup, updateMyProfileImageThunk } from "../store/session";
-import { createMediaThunk } from "../store/media";
-import UploadFile from "../components/UploadFile";
+import { signup, updateMyProfileImageThunk } from "../../store/session";
+import { createMediaThunk } from "../../store/media";
+import UploadFile from "../UploadFile";
 
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { auth, storage } from "../firebase";
+import { auth, storage } from "../../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import "./SignupForm.css";

@@ -7,9 +7,16 @@ import Navbar from '../components/NavBar';
 // import ChatBox from '../components/ChatBox';
 import Messages from '../pages/Messages';
 import Events from '../pages/Events';
-import LoginFormModal from '../components/LoginFormModal';
-import SignupFormModal from '../components/SignupFormModal';
+import LoginFormModal from '../components/login signup/LoginFormModal';
+import SignupFormModal from '../components/login signup/SignupFormModal';
 import TestInput from "../pages/TestInput";
+
+import PrivacyPolicy from '../pages/PrivacyPolicy.jsx';
+import Terms from '../pages/Terms.jsx';
+import Support from '../pages/Support.jsx';
+import DeleteAccount from '../pages/DeleteAccount.jsx';
+
+import Footer from "../components/Footer/Footer.jsx";
 
 
 
@@ -24,6 +31,7 @@ const MainLayout = () => {
     <LoginFormModal show={showLogin} onClose={() => setShowLogin(false)} />
     <SignupFormModal show={showSignup} onClose={() => setShowSignup(false)} />
     <Outlet />
+    <Footer />
   </div>
   );
 };
@@ -36,6 +44,10 @@ const Router = () => (
       <Route path="/messages" element={<Messages />} />
       <Route path='/events' element={<Events />} />
       <Route path="/test" element={<TestInput />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/support" element={<Support />} />
+      <Route path="/delete-account" element={<DeleteAccount />} />
     </Route>
   </Routes>
 );

@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import "./LoginFormModal.css";
 import { useDispatch } from "react-redux";
-import { login } from "../store/session";
+import { login } from "../../store/session";
 
 function LoginFormModal({ show, onClose }) {
   const modalRef = useRef(null);
