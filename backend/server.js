@@ -15,12 +15,16 @@ const isProduction = process.env.NODE_ENV === "production";
 // then origin can be same-origin and you can keep this simple.
 // If frontend is a different domain (separate Render service), add it to allowedOrigins.
 const allowedOrigins = isProduction
-  ? ["https://franks-world.onrender.com"]
+  ? [
+      "https://welcometothehype.com",
+      "https://www.welcometothehype.com",
+      "https://franks-world.onrender.com",
+    ]
   : ["http://localhost:5173"];
 
 const io = new Server(server, {
   cors: {
-    origin: isProduction ? allowedOrigins : allowedOrigins,
+    origin: akllowedOrigins,
     credentials: true,
   },
 });
