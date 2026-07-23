@@ -1,21 +1,24 @@
-import { io } from "socket.io-client";
+import { io } from 'socket.io-client';
 
-const API = "http://localhost:8000";
+const SOCKET_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.PROD
+    ? window.location.origin
+    : 'http://localhost:8000');
 
-export const socket = io(API, {
+export const socket = io(SOCKET_URL, {
   withCredentials: true,
-  transports: ["websocket", "polling"], // allow fallback
+  transports: ['websocket', 'polling'],
 });
 
-// ---- DEBUG LOGS (temporary) ----
-socket.on("connect", () => {
-  console.log("✅ SOCKET CONNECTED:", socket.id);
+socket.on('connect', () => {
+  console.log('✅ SOCKET CONNECTED:', socket.id);
 });
 
-socket.on("connect_error", (err) => {
-  console.error("❌ SOCKET CONNECT ERROR:", err.message);
+socket.on('connect_error', (err) => {
+  console.error('❌ SOCKET CONNECT ERROR:', err.message);
 });
 
-socket.on("disconnect", (reason) => {
-  console.warn("⚠️ SOCKET DISCONNECTED:", reason);
+socket.on('disconnect', (reason) => {
+  console.warn('⚠️ SOCKET DISCONNECTED:', reason);
 });
