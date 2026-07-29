@@ -1,11 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import { createEventThunk } from "../store/events";
-import { createMediaThunk } from "../store/media";
-import { storage } from "../firebase";
 import UploadFile from "./UploadFile";
 import "./CreateEvents.css";
 
@@ -39,43 +36,84 @@ const CreateEventModal = ({ onClose }) => {
     }
   }, [sessionUser?.id]);
 
-  const uploadEventImage = async (file) => {
-    if (!file) return null;
+  const getCsrfToken = async () => {
+    const response = await fetch("/api/csrf/restore", {
+      method: "GET",
+      credentials: "include",
+    });
 
-    if (!sessionUser?.id) {
-      throw new Error("You must be logged in to upload an event image.");
+    let data = null;
+
+    try {
+      data = await response.json();
+    } catch {
+      data = null;
     }
 
-    const safeFileName = file.name.replace(
-      /[^a-zA-Z0-9._-]/g,
-      "_"
-    );
+    if (!response.ok) {
+      throw new Error(
+        data?.error ||
+          data?.message ||
+          "Could not restore the security token."
+      );
+    }
 
-    const folder = `events/${sessionUser.id}`;
-    const storagePath = `${folder}/${Date.now()}-${safeFileName}`;
+    const csrfToken =
+      data?.["XSRF-Token"] ||
+      data?.csrfToken ||
+      null;
 
-    const imageReference = ref(storage, storagePath);
+    if (!csrfToken) {
+      throw new Error(
+        "The server did not return a security token."
+      );
+    }
 
-    const uploadSnapshot = await uploadBytes(
-      imageReference,
-      file,
-      {
-        contentType: file.type || "image/jpeg",
-      }
-    );
+    return csrfToken;
+  };
 
-    const downloadUrl = await getDownloadURL(
-      uploadSnapshot.ref
-    );
+  const uploadEventImage = async (file, eventId) => {
+    if (!file) return null;
 
-    return {
-      url: downloadUrl,
-      storagePath: uploadSnapshot.ref.fullPath,
-      folder,
-      contentType: file.type || "image/jpeg",
-      sizeBytes: file.size,
-      originalName: file.name,
-    };
+    if (!eventId) {
+      throw new Error(
+        "The event must be created before uploading its image."
+      );
+    }
+
+    const csrfToken = await getCsrfToken();
+
+    const formData = new FormData();
+
+    formData.append("file", file);
+    formData.append("eventId", String(eventId));
+
+    const response = await fetch("/api/media/upload", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "XSRF-TOKEN": csrfToken,
+      },
+      body: formData,
+    });
+
+    let data = null;
+
+    try {
+      data = await response.json();
+    } catch {
+      data = null;
+    }
+
+    if (!response.ok) {
+      throw new Error(
+        data?.error ||
+          data?.message ||
+          `Image upload failed with status ${response.status}.`
+      );
+    }
+
+    return data;
   };
 
   const handleSubmit = async (event) => {
@@ -86,11 +124,17 @@ const CreateEventModal = ({ onClose }) => {
     setFormError("");
 
     if (!sessionUser?.id) {
-      setFormError("You must be logged in to create an event.");
+      setFormError(
+        "You must be logged in to create an event."
+      );
       return;
     }
 
-    if (!eventObj.name.trim()) {
+    const trimmedName = eventObj.name.trim();
+    const trimmedDescription =
+      eventObj.description.trim();
+
+    if (!trimmedName) {
       setFormError("Please enter an event name.");
       return;
     }
@@ -102,73 +146,46 @@ const CreateEventModal = ({ onClose }) => {
 
     setSubmitted(true);
 
+    let createdEvent = null;
+
     try {
       const eventResponse = await dispatch(
         createEventThunk({
           ...eventObj,
-          name: eventObj.name.trim(),
-          description: eventObj.description.trim(),
+          name: trimmedName,
+          description: trimmedDescription,
           hostId: sessionUser.id,
         })
       );
 
       if (eventResponse?.errors) {
-        const errorMessage = Array.isArray(eventResponse.errors)
+        const errorMessage = Array.isArray(
+          eventResponse.errors
+        )
           ? eventResponse.errors.join(", ")
           : String(eventResponse.errors);
 
         throw new Error(errorMessage);
       }
 
-      const createdEvent =
+      createdEvent =
         eventResponse?.event ??
         eventResponse?.payload ??
         eventResponse;
 
       if (!createdEvent?.id) {
         throw new Error(
-          "The event was not created because no event ID was returned."
+          "The event was not created because the server did not return an event ID."
         );
       }
 
       if (selectedFile) {
         setUploading(true);
 
-        const uploadedImage = await uploadEventImage(
-          selectedFile
+        await uploadEventImage(
+          selectedFile,
+          createdEvent.id
         );
-
-        const mediaPayload = {
-          url: uploadedImage.url,
-          storagePath: uploadedImage.storagePath,
-          folder: uploadedImage.folder,
-          contentType: uploadedImage.contentType,
-          sizeBytes: uploadedImage.sizeBytes,
-          originalName: uploadedImage.originalName,
-          mediaType: uploadedImage.contentType.startsWith(
-            "video/"
-          )
-            ? "video"
-            : "image",
-          userId: sessionUser.id,
-          eventId: createdEvent.id,
-        };
-
-        const mediaResponse = await dispatch(
-          createMediaThunk(mediaPayload)
-        );
-
-        if (mediaResponse?.errors) {
-          const mediaError = Array.isArray(
-            mediaResponse.errors
-          )
-            ? mediaResponse.errors.join(", ")
-            : String(mediaResponse.errors);
-
-          throw new Error(
-            `The event was created, but the image record failed: ${mediaError}`
-          );
-        }
       }
 
       onClose();
@@ -176,11 +193,18 @@ const CreateEventModal = ({ onClose }) => {
     } catch (error) {
       console.error("CREATE EVENT ERROR:", error);
 
-      setFormError(
+      let errorMessage =
         error instanceof Error
           ? error.message
-          : "The event could not be created."
-      );
+          : "The event could not be created.";
+
+      if (createdEvent?.id && selectedFile) {
+        errorMessage =
+          `The event was created, but its image could not be uploaded. ` +
+          errorMessage;
+      }
+
+      setFormError(errorMessage);
     } finally {
       setUploading(false);
       setSubmitted(false);
@@ -239,6 +263,7 @@ const CreateEventModal = ({ onClose }) => {
               );
 
               setSelectedFile(null);
+
               setFormError(
                 error?.message ||
                   "The selected image could not be used."
