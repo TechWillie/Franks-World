@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
 import { createEventThunk } from "../store/events";
 import { createMediaThunk } from "../store/media";
-import "./CreateEvents.css";
-import { useNavigate } from "react-router-dom";
+import { storage } from "../firebase";
 import UploadFile from "./UploadFile";
+import "./CreateEvents.css";
 
 const CreateEventModal = ({ onClose }) => {
   const navigate = useNavigate();
@@ -14,126 +17,174 @@ const CreateEventModal = ({ onClose }) => {
   const sessionUser = useSelector((state) => state.session.user);
 
   const [submitted, setSubmitted] = useState(false);
-
-  // UploadFile payload after Upload finishes
-  const [eventPic, setEventPic] = useState(null);
-
-  // submit gating (no UploadFile changes needed)
-  const [fileChosen, setFileChosen] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [formError, setFormError] = useState("");
 
   const [eventObj, setEventObj] = useState({
     name: "",
-    hostId: sessionUser?.id,
+    hostId: sessionUser?.id || null,
     description: "",
     eventDate: "",
     placeId: null,
     chatRoomId: null,
   });
 
-  // console.log("🧩 CreateEventModal RENDERED - version A");
-
   useEffect(() => {
     if (sessionUser?.id) {
-      setEventObj((prev) => ({ ...prev, hostId: sessionUser.id }));
+      setEventObj((previousEvent) => ({
+        ...previousEvent,
+        hostId: sessionUser.id,
+      }));
     }
   }, [sessionUser?.id]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const uploadEventImage = async (file) => {
+    if (!file) return null;
 
-    // console.log("🟦 SUBMIT fired");
-    // console.log("🟦 eventPic at submit:", eventPic);
-    // console.log
-    (
-      "🟦 SUBMIT has url?",
-      !!eventPic?.url,
-      "has storagePath?",
-      !!eventPic?.storagePath,
-      "fileChosen?",
-      fileChosen,
-      "uploading?",
-      uploading
+    if (!sessionUser?.id) {
+      throw new Error("You must be logged in to upload an event image.");
+    }
+
+    const safeFileName = file.name.replace(
+      /[^a-zA-Z0-9._-]/g,
+      "_"
     );
 
-    // If a file was chosen, force upload completion before submit
-    if (fileChosen && (uploading || !eventPic?.url || !eventPic?.storagePath)) {
-      console.warn("⚠️ Finish uploading the event image before submitting.");
+    const folder = `events/${sessionUser.id}`;
+    const storagePath = `${folder}/${Date.now()}-${safeFileName}`;
+
+    const imageReference = ref(storage, storagePath);
+
+    const uploadSnapshot = await uploadBytes(
+      imageReference,
+      file,
+      {
+        contentType: file.type || "image/jpeg",
+      }
+    );
+
+    const downloadUrl = await getDownloadURL(
+      uploadSnapshot.ref
+    );
+
+    return {
+      url: downloadUrl,
+      storagePath: uploadSnapshot.ref.fullPath,
+      folder,
+      contentType: file.type || "image/jpeg",
+      sizeBytes: file.size,
+      originalName: file.name,
+    };
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (submitted || uploading) return;
+
+    setFormError("");
+
+    if (!sessionUser?.id) {
+      setFormError("You must be logged in to create an event.");
       return;
     }
 
-    if (submitted) return;
+    if (!eventObj.name.trim()) {
+      setFormError("Please enter an event name.");
+      return;
+    }
+
+    if (!eventObj.eventDate) {
+      setFormError("Please select an event date.");
+      return;
+    }
+
     setSubmitted(true);
 
-    // ✅ Create event
-    const res = await dispatch(createEventThunk(eventObj));
-    // console.log("🟩 createEventThunk returned:", res);
+    try {
+      const eventResponse = await dispatch(
+        createEventThunk({
+          ...eventObj,
+          name: eventObj.name.trim(),
+          description: eventObj.description.trim(),
+          hostId: sessionUser.id,
+        })
+      );
 
-    if (res?.errors) {
-      console.error("❌ createEventThunk errors:", res.errors);
-      setSubmitted(false);
-      return;
-    }
+      if (eventResponse?.errors) {
+        const errorMessage = Array.isArray(eventResponse.errors)
+          ? eventResponse.errors.join(", ")
+          : String(eventResponse.errors);
 
-    // ✅ Normalize possible thunk return shapes
-    const createdEvent =
-      res?.event ??
-      res?.payload ??
-      res; // fallback if thunk returns the event directly
+        throw new Error(errorMessage);
+      }
 
-    if (!createdEvent?.id) {
-      console.error("❌ No createdEvent.id found. Returned value was:", res);
-      setSubmitted(false);
-      return;
-    }
+      const createdEvent =
+        eventResponse?.event ??
+        eventResponse?.payload ??
+        eventResponse;
 
-    // ✅ Create media row if uploaded
-    if (eventPic?.url && eventPic?.storagePath) {
-      const mediaPayload = {
-        url: eventPic.url,
-        storagePath: eventPic.storagePath,
-        folder: `events/${sessionUser?.id || "guest"}`,
-        contentType: eventPic.contentType,
-        sizeBytes: eventPic.sizeBytes,
-        originalName: eventPic.originalName,
-        mediaType: (eventPic.contentType || "").startsWith("video/")
-          ? "video"
-          : "image",
-        userId: sessionUser?.id,
-        eventId: createdEvent.id,
-      };
+      if (!createdEvent?.id) {
+        throw new Error(
+          "The event was not created because no event ID was returned."
+        );
+      }
 
-      try {
-        // console.log("🟨 createMediaThunk payload:", mediaPayload);
+      if (selectedFile) {
+        setUploading(true);
 
-        const createdMedia = await dispatch(createMediaThunk(mediaPayload));
+        const uploadedImage = await uploadEventImage(
+          selectedFile
+        );
 
-        // console.log("🟩 createMediaThunk result:", createdMedia);
+        const mediaPayload = {
+          url: uploadedImage.url,
+          storagePath: uploadedImage.storagePath,
+          folder: uploadedImage.folder,
+          contentType: uploadedImage.contentType,
+          sizeBytes: uploadedImage.sizeBytes,
+          originalName: uploadedImage.originalName,
+          mediaType: uploadedImage.contentType.startsWith(
+            "video/"
+          )
+            ? "video"
+            : "image",
+          userId: sessionUser.id,
+          eventId: createdEvent.id,
+        };
 
-        if (createdMedia?.errors) {
-          console.error(
-            "❌ createMediaThunk returned errors:",
-            createdMedia.errors
+        const mediaResponse = await dispatch(
+          createMediaThunk(mediaPayload)
+        );
+
+        if (mediaResponse?.errors) {
+          const mediaError = Array.isArray(
+            mediaResponse.errors
+          )
+            ? mediaResponse.errors.join(", ")
+            : String(mediaResponse.errors);
+
+          throw new Error(
+            `The event was created, but the image record failed: ${mediaError}`
           );
         }
-      } catch (err) {
-        console.error("🔥 createMediaThunk threw an error:", err);
-
-        if (err?.json) {
-          try {
-            const data = await err.json();
-            console.error("🔥 parsed error json:", data);
-          } catch (parseErr) {
-            console.error("🔥 failed to parse error json:", parseErr);
-          }
-        }
       }
-    } else {
-      // console.log("ℹ️ No event image uploaded — creating event without media.");
-    }
 
-    onClose();
-    navigate("/events");
+      onClose();
+      navigate("/events");
+    } catch (error) {
+      console.error("CREATE EVENT ERROR:", error);
+
+      setFormError(
+        error instanceof Error
+          ? error.message
+          : "The event could not be created."
+      );
+    } finally {
+      setUploading(false);
+      setSubmitted(false);
+    }
   };
 
   return (
@@ -141,62 +192,89 @@ const CreateEventModal = ({ onClose }) => {
       <div
         className="login-form"
         ref={modalRef}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(event) => event.stopPropagation()}
       >
         <h2>Create Event</h2>
 
         <form onSubmit={handleSubmit}>
           <h4>Name of event</h4>
+
           <input
             type="text"
             value={eventObj.name}
-            onChange={(e) => setEventObj({ ...eventObj, name: e.target.value })}
+            onChange={(event) =>
+              setEventObj((previousEvent) => ({
+                ...previousEvent,
+                name: event.target.value,
+              }))
+            }
+            required
           />
 
           <h4>Give us a brief description</h4>
+
           <textarea
             value={eventObj.description}
-            onChange={(e) =>
-              setEventObj({ ...eventObj, description: e.target.value })
+            onChange={(event) =>
+              setEventObj((previousEvent) => ({
+                ...previousEvent,
+                description: event.target.value,
+              }))
             }
           />
 
           <h4>Event image (optional)</h4>
 
-          {/* Detect file selection without changing UploadFile */}
-          <div
-            onChange={(e) => {
-              if (e.target?.type === "file") {
-                setFileChosen(true);
-                setEventPic(null);
-                setUploading(true); // assume they intend to upload
-              }
+          <UploadFile
+            accept="image/*"
+            maxMB={10}
+            onPickFile={(file) => {
+              setSelectedFile(file);
+              setFormError("");
             }}
-          >
-            <UploadFile
-              folder={`events/${sessionUser?.id || "guest"}`}
-              accept="image/*"
-              maxMB={10}
-              onUploaded={(payload) => {
-                // console.log("✅ event upload payload:", payload);
-                setEventPic(payload);
-                setUploading(false);
-              }}
-            />
-          </div>
+            onError={(error) => {
+              console.error(
+                "EVENT IMAGE PICK ERROR:",
+                error
+              );
+
+              setSelectedFile(null);
+              setFormError(
+                error?.message ||
+                  "The selected image could not be used."
+              );
+            }}
+          />
 
           <h4>When is your event?</h4>
+
           <input
             type="date"
             value={eventObj.eventDate}
-            onChange={(e) =>
-              setEventObj({ ...eventObj, eventDate: e.target.value })
+            onChange={(event) =>
+              setEventObj((previousEvent) => ({
+                ...previousEvent,
+                eventDate: event.target.value,
+              }))
             }
+            required
           />
+
+          {formError ? (
+            <div
+              style={{
+                color: "crimson",
+                marginTop: "12px",
+                marginBottom: "12px",
+              }}
+            >
+              {formError}
+            </div>
+          ) : null}
 
           <button
             type="submit"
-            disabled={submitted || (fileChosen && (!eventPic || uploading))}
+            disabled={submitted || uploading}
           >
             {uploading
               ? "Uploading..."
